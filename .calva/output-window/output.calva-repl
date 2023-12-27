@@ -1,0 +1,104 @@
+; This is the Calva evaluation results output window.
+; TIPS: The keyboard shortcut `ctrl+alt+o o` shows and focuses this window
+;   when connected to a REPL session.
+; Please see https://calva.io/output/ for more info.
+; Happy coding! ♥️
+
+; Jacking in...
+; Connecting using "Babashka" project type.
+; You can make Calva auto-select this.
+;   - See https://calva.io/connect-sequences/
+; 
+; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 62201 ; popd
+; Using host:port 127.0.0.1:62201 ...
+; Hooking up nREPL sessions ...
+; Connected session: clj
+; TIPS:
+;   - You can edit the contents here. Use it as a REPL if you like.
+;   - `alt+enter` evaluates the current top level form.
+;   - `ctrl+enter` evaluates the current form.
+;   - `alt+up` and `alt+down` traverse up and down the REPL command history
+;      when the cursor is after the last contents at the prompt
+;   - Clojure lines in stack traces are peekable and clickable.
+; Evaluating code from settings: 'calva.autoEvaluateCode.onConnect.clj'
+nil
+clj꞉user꞉>  ; Use `alt+enter` to evaluate
+clj꞉user꞉> 
+; Jack-in done.
+clj꞉user꞉> 
+(str/split "a b c" #" ")
+["a" "b" "c"]
+clj꞉user꞉> 
+(map int (str/split "12 4 4" #" "))
+; : java.lang.String cannot be cast to java.lang.Character user 
+clj꞉user꞉> 
+(map js/Math.Integer (str/split "12 4 4" #" "))
+; clojure.lang.ExceptionInfo: Could not resolve symbol: js/Math.Integer user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉user꞉> 
+(map Int (str/split "12 4 4" #" "))
+; clojure.lang.ExceptionInfo: Could not resolve symbol: Int user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉user꞉> 
+(map int (str/split "12 4 4" #" "))
+; : java.lang.String cannot be cast to java.lang.Character user 
+clj꞉user꞉> 
+(map clojure.core/int (str/split "12 4 4" #" "))
+; : java.lang.String cannot be cast to java.lang.Character user 
+clj꞉user꞉> 
+(str/split "12 4 4" #" ")
+["12" "4" "4"]
+clj꞉user꞉> 
+(str/split "12 4 4" #" ") 
+["12" "4" "4"]
+clj꞉user꞉> 
+(Integer. "12")
+12
+clj꞉user꞉> 
+(map Integer. (str/split "12 4 4" #" "))
+; clojure.lang.ExceptionInfo: Could not resolve symbol: Integer. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉user꞉> 
+(map #(Integer. %) (str/split "12 4 4" #" "))
+(12 4 4)
+clj꞉user꞉> 
+(defn extract-settings [s] (->> s (str/split #" ") (map #(Integer. %))))
+#<Var@34af05b8: #object[sci.impl.fns$fun$arity_1__1191 0x7499d91 "sci.impl.fns$fun$arity_1__1191@7499d91"]>
+clj꞉user꞉> 
+(extract-settings "12 4 4")
+(12 4 4)
+; java.lang.ClassCastException: java.lang.Long cannot be cast to clojure.lang.IFn user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉user꞉> (extract-settings "12 4 4")
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:35
+clj꞉user꞉> 
+(extract-settings "12 4 4")
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:35
+clj꞉user꞉> 
+(defn extract-settings [s] (-> s (str/split #" ") (map #(Integer. %))))
+#<Var@34af05b8: #object[sci.impl.fns$fun$arity_1__1191 0x7cd348db "sci.impl.fns$fun$arity_1__1191@7cd348db"]>
+clj꞉user꞉> 
+(extract-settings "12 4 4")
+; : Don't know how to create ISeq from: sci.impl.fns$fun$arity_1__1191 user 
+clj꞉user꞉> 
+(defn extract-settings [s] (->> s (str/split #" ") (map #(Integer. %))))
+#<Var@34af05b8: #object[sci.impl.fns$fun$arity_1__1191 0x3f72d03d "sci.impl.fns$fun$arity_1__1191@3f72d03d"]>
+clj꞉user꞉> 
+(extract-settings "12 4 4")
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:35
+clj꞉user꞉> 
+(->> "12 3 6" (str/split #" ") (map #(Integer. %)))
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:15
+clj꞉user꞉> 
+(->> "12 3 6" (map #(Integer. %)) (str/split #" "))
+; java.lang.ClassCastException: clojure.lang.LazySeq cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:35
+clj꞉user꞉> (map #(Integer. %) (str/split "12 4 4" #" "))
+(12 4 4)
+clj꞉user꞉> (into [] (map #(Integer. %) (str/split "12 4 4" #" ")))
+[12 4 4]
+clj꞉user꞉> 
+(into [] (map #(Integer. %) (str/split "12 4 4" #" ")))
+[12 4 4]
+clj꞉user꞉> 
+(defn extract-settings [s] (into [] (map #(Integer. %) (str/split s #" "))))
+#<Var@34af05b8: #object[sci.impl.fns$fun$arity_1__1191 0x267954dc "sci.impl.fns$fun$arity_1__1191@267954dc"]>
+clj꞉user꞉> 
+(extract-settings "12 4 4")
+[12 4 4]
+clj꞉user꞉> 

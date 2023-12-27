@@ -65,7 +65,7 @@ function createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID,
             {"parent-uid": templateBlockUID, 
             "order": 0}, 
         "block": 
-            {"string": `{{[[roam/render]]:((${codeBlockUID})) }}`,
+            {"string": `{{[[roam/render]]:((${codeBlockUID})) }}`, 
             "uid":renderBlockUID}})
 
     // create code header block
@@ -95,6 +95,9 @@ function createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID,
     
 }
 
+export function extractSettings(s) {
+    return s.split(" ").map(Number);
+}
 
 function createCSSBlock(parentUID, cssBlockUID, cssFile, parentString){
     // creates the initial code block and its parent
@@ -126,6 +129,29 @@ function createCSSBlock(parentUID, cssBlockUID, cssFile, parentString){
             {"uid": cssBlockUID,
             "string": blockString}})
 
+}
+
+export function updateTemplateString(renderString, renderStringWSettings){ 
+    // tady jsem přidal 
+
+    let query = `[:find
+        (pull ?node [:block/string :node/title :block/uid])
+      :where
+        (or [?node :block/string ?node-String]
+      [?node :node/title ?node-String])
+        [(clojure.string/includes? ?node-String "${renderString}")]
+      ]`;
+    
+    let result = window.roamAlphaAPI.q(query).flat();
+    result.forEach(block => {
+        const updatedString = renderStringWSettings // block.string.replace(renderString, replacementString);
+        window.roamAlphaAPI.updateBlock({
+          block: {
+            uid: block.uid,
+            string: updatedString
+          }
+        });
+    });
 }
 
 function replaceRenderString(renderString, replacementString){
