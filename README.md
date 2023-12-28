@@ -2,7 +2,7 @@ Nautilus is a Roam Research extension designed for effective, stress-free daily 
 
 Traditional time-boxing solution is be stressful due to rigid schedules; if one fails to keep up, the agenda quickly derails which causes demotivation. Nautilus is more flexible, dynamically repositioning unfinished tasks within your day's remaining open time slots. This reduce stress, improves prioritization and estimation skills, and clarifies feasible tasks at any given moment.
 
-<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/nautilus-example.png" width="300"></img>
+<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/nautilus-example.png" width="600"></img>
 
 _Events (fixed time) are yellow, tasks are blue, done tasks are faint gray_
 
