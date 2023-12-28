@@ -17,22 +17,23 @@ _Events (fixed time) are yellow, tasks are blue, done tasks are faint gray_
 - Tasks **duration defaults to a 15-minute time allocation**, but this can be adjusted generally above in settings or **manually and individually for each task** with simple notation "Mm" or "Mmin", where M is the length of task in minutes (e.g. "Call Jack 10m", "Daily workout 45min").
 - The **order of tasks** in Nautilus spiral **reflects exactly the order of tasks in the list.** 
 - Tasks can be only **forced to follow after a particular event** – by placing them after the event in the task list; for example, setting a run post-lunch. This does not change the order of tasks.
-- Once a task is marked 'DONE' in Roam, (and if you have installed the Todo Trigger extension, described below) it's **tagged with the completion time** in format dHH:MM (e.g. d14:30), which is visually interpreted as a faint grey section on the spiral. It can serve as a visual log of done tasks.
+- Once a task is marked 'DONE' in Roam, (and if you have installed the [Todo Trigger extension](https://github.com/tombarys/roam-depot-nautilus/blob/main/README.md#1-install-todo-trigger-extension-for-better-experience)) it's **tagged with the completion time** in format dHH:MM (e.g. d14:30), which is visually interpreted as a faint grey section on the spiral. It can serve as a visual log of done tasks.
 
 While longer preparation before a work-day seem involved, it greatly aids in conscious day planning and eventual task optimization. 
 
-## Usage
-First make sure that __User code__ is enabled in your settings. This allows custom components in your graph.
+## Installation and setup
+### 1. First make sure that __User code__ is enabled in your settings. This allows custom components in your graph.
 <img src="https://github.com/8bitgentleman/roam-depot-tidy-todos/raw/main/settings.png" width="300"></img>
 
 
-### 1. Install TODO Trigger extension for better experience
+### 2. Install TODO Trigger extension for better experience
 I suggest to install David Vargas's TODO Trigger extension before using Nautilus and setting it to automatically add a timestamp when todo is done. 
 
 <img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/todotrigger.png" width="300"></img>
 
-### 2. Insert the component into your Daily Page
-Easiest way to insert the component is though Roam's native template menu. Simply type `;;` and look for __EXTENSION NAME HERE__
+## Daily usage
+### 1. Insert the component into your Daily Page
+Easiest way to insert the component is though Roam's native template menu. Simply type `;;` and look for "Nautilus".
 <img src="https://github.com/8bitgentleman/roam-depot-tidy-todos/raw/main/template.png" max-width="400"></img>
 
 
