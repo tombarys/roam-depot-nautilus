@@ -11,13 +11,13 @@ _Events (fixed time) are yellow, tasks are blue, done tasks are faint gray_
 
 - Tasks/events are managed as usual **text lists** with simple markdown which Nautilus dynamically visualizes as watch-like visual timeline, based on real-time data.
 - A notable feature is the automatic task **"push-forward," relocating uncompleted tasks** within open time slots in your day.
-- Users write tasks in a very simple format:
-  - **events** are rows containing a time range in 24h format and are fixed to the range (e.g., "12:30-13 Meeting with JK", "9-10 Breakfast")
+- Users define their agenda in a very simple format:
+  - **events** are rows containing a *time range* in 24h format (HH:MM-HH:MM, minutes can be omitted) and are unmovable until the time range is changed by user (e.g., "12:30-13 Meeting with JK", "9-10 Breakfast")
   - **tasks** are all residuing rows that are not events; undone tasks move through a day (e.g., "nearly empty task" "{{[[TODO]]}} another, but important task").
 - Tasks **duration defaults to a 15-minute time allocation**, but this can be adjusted generally above in settings or **manually and individually for each task** with simple notation "Mm" or "Mmin", where M is the length of task in minutes (e.g. "Call Jack 10m", "Daily workout 45min").
 - The **order of tasks** in Nautilus spiral **reflects exactly the order of tasks in the list.** 
 - Tasks can be only **forced to follow after a particular event** – by placing them after the event in the task list; for example, setting a run post-lunch. This does not change the order of tasks.
-- Once a task is marked 'DONE' in Roam, it's **tagged with the completion time** in format dHH:MM (e.g. d14:30), which is visually interpreted as a faint grey section on the spiral. It can serve as a visual log of done tasks.
+- Once a task is marked 'DONE' in Roam, (and if you have installed the Todo Trigger extension, described below) it's **tagged with the completion time** in format dHH:MM (e.g. d14:30), which is visually interpreted as a faint grey section on the spiral. It can serve as a visual log of done tasks.
 
 While longer preparation before a work-day seem involved, it greatly aids in conscious day planning and eventual task optimization. 
 
