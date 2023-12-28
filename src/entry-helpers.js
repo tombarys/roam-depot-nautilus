@@ -95,9 +95,6 @@ function createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID,
     
 }
 
-export function extractSettings(s) {
-    return s.split(" ").map(Number);
-}
 
 function createCSSBlock(parentUID, cssBlockUID, cssFile, parentString){
     // creates the initial code block and its parent
@@ -185,11 +182,11 @@ export function toggleRenderComponent(state, titleblockUID, cssBlockParentUID, v
     let renderPageName = 'roam/render'
     if (state==true) {
         createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID, componentName)
-        createCSSBlock(cssBlockParentUID, cssBlockUID, componentCSSFile, `${componentName} STYLE`);
+        // createCSSBlock(cssBlockParentUID, cssBlockUID, componentCSSFile, `${componentName} STYLE`);
 
     } else if(state==false){
         replaceRenderString(renderString, replacementString)
         removeCodeBlock(titleblockUID)
-        removeCodeBlock(cssBlockParentUID)
+        // removeCodeBlock(cssBlockParentUID)
     }
 }

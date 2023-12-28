@@ -1,8 +1,7 @@
 import { toggleRenderComponent } from "./entry-helpers";
 import { updateTemplateString as updateRenderStringEverywhere } from "./entry-helpers";
-// import { extractSettings } from "./entry-helpers";
 
-const componentName = 'Nautilus' // keep this short
+const componentName = 'Nautilus' 
 const codeBlockUID = `roam-render-${componentName}-cljs`;
 const cssBlockUID = `roam-render-${componentName}-css`;
 const renderStringStart = `{{[[roam/render]]:((${codeBlockUID}))`;
@@ -32,8 +31,8 @@ async function onload({extensionAPI}) {
   const panelConfig = {
     tabTitle: componentName,
     settings: [{id: "desc-length",
-                name: "Description length",
-                description: "Description length in characters",
+                name: "Todo/event title length",
+                description: "Title length (description) in characters. Longer titles will be truncated.",
                 action: {
                   type: "select",
                   default: extensionAPI.settings.get('desc-length') || defaults['desc-length'],
@@ -41,33 +40,39 @@ async function onload({extensionAPI}) {
                   onChange: async (evt) => {
                     let newString = await newRenderString(renderStringStart, extensionAPI, 'desc-length', evt);
                     updateRenderStringEverywhere(renderStringStart, newString);
-                    console.log("Desc-length changed to: ", evt, " and the new renderString is", newString);
+                    // console.log("Desc-length changed to: ", evt, " and the new renderString is", newString);
                   },
                 }
               },
               {id: "todo-duration",
                 name: "Default TODO duration",
-                description: "Default TODO duration in minutes",
+                description: "Default TODO duration in minutes. This is used when you create a new TODO without specifying a duration.",
                 action: {
                   type: "select",
-                  items: [5, 10, 15, 25, 30], // specify your default values here
+                  items: [5, 10, 15, 20, 25, 30], // specify your default values here
                   onChange: async (evt) => {
                     let newString = await newRenderString(renderStringStart, extensionAPI, 'todo-duration', evt);
                     updateRenderStringEverywhere(renderStringStart, newString);
-                    console.log("Todo duration changed to: ", evt, " and the new renderString is", newString);
+                    // console.log("Todo duration changed to: ", evt, " and the new renderString is", newString);
                   },
                 }
               },
           ]
         };
 
-  extensionAPI.settings.set('todo-duration', extensionAPI.settings.get('todo-duration') || defaults['todo-duration']);
-  extensionAPI.settings.set('desc-length', extensionAPI.settings.get('desc-length') || defaults['desc-length']);
+  function setDefaultSettings(extensionAPI, defaults) {
+    const keys = Object.keys(defaults);
+    for (let key of keys) {
+      extensionAPI.settings.set(key, extensionAPI.settings.get(key) || defaults[key]);
+    }
+  }
+
+  setDefaultSettings(extensionAPI, defaults);
   extensionAPI.settings.panel.create(panelConfig);
 
   if (!roamAlphaAPI.data.pull("[*]", [":block/uid", titleblockUID])) {
     // component hasn't been loaded so we add it to the graph
-    toggleRenderComponent(true, titleblockUID, cssBlockParentUID, version, await newRenderString(renderStringStart, extensionAPI, '', ''), replacementString, cssBlockUID, codeBlockUID, componentName)
+    toggleRenderComponent(true, titleblockUID, cssBlockParentUID, version, renderStringStart, replacementString, cssBlockUID, codeBlockUID, componentName)
   }
 
   console.log(`load ${componentName} plugin`)
@@ -75,7 +80,7 @@ async function onload({extensionAPI}) {
 
 function onunload() {
   console.log(`unload ${componentName} plugin`)
-  toggleRenderComponent(false, titleblockUID, cssBlockParentUID, version, newRenderString(renderStringStart, extensionAPI, '', ''), replacementString, cssBlockUID, codeBlockUID, componentName)
+  toggleRenderComponent(false, titleblockUID, cssBlockParentUID, version, renderStringStart, replacementString, cssBlockUID, codeBlockUID, componentName)
 }
 
 export default {

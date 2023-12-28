@@ -1,4 +1,4 @@
-(ns nautilus-roam-12-28-2023
+(ns roam-render-nautilus-v1.0
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -6,9 +6,13 @@
 
 ;; ------ bfu settings ------
 
-(def start-duration 15)
+(def pre-default-duration 15)
 
-(def start-len-limit 22)
+(def pre-legend-len-limit 22)
+
+;; --- to be used maybe later ----
+
+(def shaky false)
 
 
 ;; ------- hard-coded defaults -------
@@ -29,8 +33,6 @@
 
 
 ;; ---------- mostly visual dev settings ------------
-
-(def shaky false)
 
 (def reserve 10) ;; rezerva pro prostor mezi Nautilem a okraji
 
@@ -202,8 +204,8 @@
 
 (defn get-legend-rect
   "vrací nový obdélník legendy, který se nepřekrývá s žádným z rects"
-  [rects text radians radius center-x center-y settings]
-  (let [w (* (/ font-size 1.5) (min (count text) 22 (:legend-len-limit settings)))  ;; šířka obdélníku legendy dle délky textu a cca šířky písma
+  [rects text radians radius center-x center-y]
+  (let [w (* (/ font-size 1.5) (min (count text) legend-len-limit))  ;; šířka obdélníku legendy dle délky textu a cca šířky písma
         h (* 1.2 font-size)                          ;; výška obdélníku legendy dle cca výšky písma
         new-text-rect (if rects
                         (assoc
@@ -285,15 +287,15 @@
          :cleaned-str cleaned-str})
       {:range nil :cleaned-str s})))
 
-(defn parse-duration [s settings]
-  (let [duration-format #"(\d{1,3})(min|m)"]
-    (if-let [duration-match (re-find duration-format s)]
+(defn parse-duration [s]
+  (let [duration-format #"(\d{1,3})(min|m)"
+        duration-match (re-find duration-format s)]
+    (if duration-match
       (let [duration-str (first duration-match)
             cleaned-str (str/replace s duration-str "")]
         {:duration (parse-int (second duration-match))
          :cleaned-str cleaned-str})
-      {:duration (:default-duration settings) :cleaned-str s})))
-
+      {:duration nil :cleaned-str s})))
 
 (defn parse-progress [s]
   (let [progress-format #"(\d{1,3})(\%)"
@@ -349,23 +351,22 @@
       (str/trim)))
 
 (defn parse-row-params [s settings]
-  (let [_ (println "#### STARTUJEME s " s)
+  (let [;_ (println "STARTUJEME s s: " s)
         {:keys [range cleaned-str]} (parse-time-range s)
-        _ (println "range: " range " cleaned-str: " cleaned-str)
-        {:keys [duration cleaned-str]} (parse-duration cleaned-str settings)
-        _ (println "duration before: " duration " cleaned-str: " cleaned-str)
-        #_#__ (println "adjusted duration: " (or duration (:default-duration settings)))
+        ;_ (println "range: " range " cleaned-str: " cleaned-str)
+        {:keys [duration cleaned-str]} (parse-duration cleaned-str)
+        ;_ (println "duration: " duration " cleaned-str: " cleaned-str)
         {:keys [done-at cleaned-str]} (parse-done-time cleaned-str)
-        _ (println "done-time: " done-at " cleaned-str: " cleaned-str)
+        ;_ (println "done-time: " done-at " cleaned-str: " cleaned-str)
         {:keys [done cleaned-str]} (parse-DONE cleaned-str)
-        _ (println "done: " done " cleaned-str: " cleaned-str)
+        ;_ (println "done: " done " cleaned-str: " cleaned-str)
         {:keys [progress cleaned-str]} (parse-progress cleaned-str)
-        _ (println "progress: " progress " cleaned-str: " cleaned-str)
+        ;_ (println "progress: " progress " cleaned-str: " cleaned-str)
         description (parse-rest cleaned-str)
-        _ (println "description: " description)
+        ;_ (println "description: " description)
         event-type (if range :meeting :todo)]
     (-> {:description description
-         :duration duration
+         :duration (or duration (:default-duration settings))
          :start (if done-at (abs (- done-at duration)) (first range))
          :end (or done-at (second range))
          :done done
@@ -466,7 +467,7 @@
 
 (defn slice
   "Vykreslí a vybarví výseč podle zadaných parametrů"
-  [[start-angle end-angle inner-radius outer-radius center-x center-y settings]
+  [[start-angle end-angle inner-radius outer-radius center-x center-y]
    & {:keys [bg-color
              border-color
              legend-rect
@@ -529,7 +530,7 @@
                 :font-weight font-weight
                 :fill (if-not done? (update-opacity-str bg-color "1") (update-opacity-str bg-color "0.2"))}
          (if debug? (str dbg-radians-txt)
-             (str progress-str (subs text 0 (:legend-len-limit settings))))]])
+             (str progress-str (subs text 0 legend-len-limit)))]])
      (when (seq timestamp)
        ;; ⤵ přidá označení hodiny pro šablonu snaila
        [:text  {:x time-text-x :y time-text-y :font-size (- font-size 3) :font-family font-family :color border-color :fill border-color
@@ -547,9 +548,9 @@
         (if debug? (str (round2 start-radians) " / " start-angle) timestamp)])]))
 
 
-(defn snail-blueprint-component [color inner-radius center-x center-y settings]
+(defn snail-blueprint-component [color inner-radius center-x center-y]
   [:g (mapcat (fn [[start end timestamp]]
-                [[slice [start end inner-radius (outer-radius-at timestamp) center-x center-y settings] :border-color color :timestamp (str timestamp)]])
+                [[slice [start end inner-radius (outer-radius-at timestamp) center-x center-y] :border-color color :timestamp (str timestamp)]])
               (concat (map vector (range 0 390 30) (range 30 390 30) (range 9 21))
                       [(vector 0 30 21) (vector 330 360 8)]))])
 
@@ -584,12 +585,12 @@
 ;; (when @show-done-atom? ;; má-li ukazovat hotové úkoly, tak je ukáže v šedé
 ;;        (map (fn [event] [event-slice-component event 1 nil snail-inner-radius nil center-x center-y]) done-todos))
 
-(defn event-slice-component [event index legend-rect inner-radius daily-page? center-x center-y settings]
+(defn event-slice-component [event index legend-rect inner-radius daily-page? center-x center-y]
   (let [{:keys [start-angle end-angle bg-color done outer-radius]} (calculate-slice-params event index daily-page?)
         description (:description event)
         progress (:progress event)]
     [slice
-     [start-angle end-angle inner-radius outer-radius center-x center-y settings]
+     [start-angle end-angle inner-radius outer-radius center-x center-y]
      :bg-color bg-color
      :text description
      :shaky shaky
@@ -600,7 +601,7 @@
 
 (defn events->slices
   "vrací svg vektor všech slice komponentů + seznam obdélníků legendy"
-  [events daily-page-atom? center-x center-y settings]
+  [events daily-page-atom? center-x center-y]
   (loop [i 0
          events (filter #(not= true (:freetime %)) events)
          rects []
@@ -611,14 +612,14 @@
                          (angle->rad (min->angle (:end event))))
             text (:description event)
             radius (nth snail-blueprint-outer-radiuses (mod (quot (int (:start event)) 60) (count snail-blueprint-outer-radiuses)))
-            new-rect (get-legend-rect rects text mid-radians (+ (if mobile? 0 30) radius) center-x center-y settings)]
+            new-rect (get-legend-rect rects text mid-radians (+ (if mobile? 0 30) radius) center-x center-y)]
         (println?debug "RADIUS: " radius)
-        (recur (inc i) (rest events) (conj rects new-rect) (conj all-slice-components (event-slice-component event i new-rect snail-inner-radius @daily-page-atom? center-x center-y settings))))
+        (recur (inc i) (rest events) (conj rects new-rect) (conj all-slice-components (event-slice-component event i new-rect snail-inner-radius @daily-page-atom? center-x center-y))))
       [all-slice-components rects])))
 
 (defn events->new-dimensions
   "vrací nový střed a šířku, aby se události daly zarovnat"
-  [events center-x center-y settings]
+  [events center-x center-y]
   (loop [i 0
          events (filter #(not= true (:freetime %)) events)
          rects []
@@ -632,7 +633,7 @@
                          (angle->rad (min->angle (:end event))))
             text (:description event)
             radius (nth snail-blueprint-outer-radiuses (mod (quot (int (:start event)) 60) (count snail-blueprint-outer-radiuses)))
-            new-rect (get-legend-rect rects text mid-radians (+ (if mobile? 0 30) radius) center-x center-y settings)]
+            new-rect (get-legend-rect rects text mid-radians (+ (if mobile? 0 30) radius) center-x center-y)]
         (println?debug "RADIUS: " radius)
         (pprint?debug new-rect)
         (println?debug "LEFT-MIN: " left-min " RIGHT-MAX: " right-max " WIDTH: " (- right-max left-min))
@@ -642,23 +643,23 @@
        (+ reserve (- center-y top-min))
        (+ (* 3 reserve) (- bottom-max top-min))])))
 
-(defn show-events [events-state daily-page-atom? show-done-atom? page-title dimensions settings]
+(defn show-events [events-state daily-page-atom? show-done-atom? page-title dimensions]
   (let [[events done-todos] @events-state
         old-width (js/Math.round (:width dimensions))
         old-height (js/Math.round (:height dimensions))
-        [center-x suggested-width center-y suggested-height] (events->new-dimensions events (/ old-width 2) (/ old-height 2) settings)
-        [all-slice-components rects] (events->slices events daily-page-atom? center-x center-y settings)]   ;; rects jsou tam jen kvůli debugu, jinak vrací svg vektor
+        [center-x suggested-width center-y suggested-height] (events->new-dimensions events (/ old-width 2) (/ old-height 2))
+        [all-slice-components rects] (events->slices events daily-page-atom? center-x center-y)]   ;; rects jsou tam jen kvůli debugu, jinak vrací svg vektor
     [:svg {:width (str suggested-width) :height (str suggested-height)
            :xmlns "http://www.w3.org/2000/svg"
            :font-family font-family
            :font-size font-size}
      [:g
-      [snail-blueprint-component snail-template-color snail-inner-radius center-x center-y settings]
+      [snail-blueprint-component snail-template-color snail-inner-radius center-x center-y]
       (when  @show-done-atom? ;; má-li ukazovat hotové úkoly, tak je ukáže v šedé
-        (map (fn [event] [event-slice-component event 1 nil snail-inner-radius nil center-x center-y settings]) done-todos))
+        (map (fn [event] [event-slice-component event 1 nil snail-inner-radius nil center-x center-y]) done-todos))
       all-slice-components ;; zobrazení všech událostí
       (when @daily-page-atom?   ;; ukáže aktuální čas pomocí úzké výseče
-        [slice [(- (min->angle @now-time-atom) 1) (+ (min->angle @now-time-atom) 1) 0 center-y center-x center-y settings] :bg-color clock-hand-color])
+        [slice [(- (min->angle @now-time-atom) 1) (+ (min->angle @now-time-atom) 1) 0 center-y center-x center-y] :bg-color clock-hand-color])
       [central-label-component (str/split page-title #"," 2) center-x center-y]
       (when @debug-state-atom ;; čistě pro účely debugu ⤵
         [:g
@@ -691,7 +692,7 @@
 (defn populate-events
   "vrací vektor [eventy, hotové_s_done-at]"
   [block-uid plan-from-time settings]
-  (let [text->events (-> (mapv #(parse-row-params % settings) (get-children-strings block-uid))
+  (let [text->events (-> (mapv parse-row-params (get-children-strings block-uid), settings)
                          (add-start-after))
         filled-day [(-> text->events
                         (fill-day workday-start plan-from-time)) (filter #(:done-at %) text->events)]]
@@ -726,18 +727,15 @@
      (str "debug is on")
      (str "🪲 debug is off"))])
 
-(defn args–>settings [args]
-  (if (> (count args) 1)
-    {:legend-len-limit (int (first args)) :default-duration (int (second args))}
-    {:legend-len-limit start-len-limit :default-duration start-duration}))
-
 (defn main [{:keys [block-uid]} & args]
   (reset-now-time-atom now-time-atom)
   (let [dimensions {:width (if mobile? mob-width desk-width)
                     :height (* 0.7 (if mobile? mob-width desk-width))}
-        show-debug-button? (= :debug (first args))
-        settings (args–>settings args)
-        _ (println "**** Settings: " settings)
+        show-debug-button? (= :debug (last args))
+        arg1 (first args)
+        default-duration (if (and arg1 (>= (int arg1) 5) (<= (int arg1) 30)) (int (first args)) pre-default-duration)
+        settings {:default-duration default-duration
+                  :show-debug-button? show-debug-button?}
         show-done-state (r/atom true)
         daily-page-atom? (r/atom (daily-page? block-uid))
         page-title (page-title block-uid)
