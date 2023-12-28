@@ -22,12 +22,13 @@ _Events (fixed time) are yellow, tasks are blue, done tasks are faint gray_
 While longer preparation before a work-day seem involved, it greatly aids in conscious day planning and eventual task optimization. 
 
 ## Installation and setup
-### 1. First make sure that __User code__ is enabled in your settings. This allows custom components in your graph.
+### 1. First make sure that __User code__ is enabled in your settings. 
+This allows custom components in your graph.
 <img src="https://github.com/8bitgentleman/roam-depot-tidy-todos/raw/main/settings.png" width="300"></img>
 
 
 ### 2. Install TODO Trigger extension for better experience
-I suggest to install David Vargas's TODO Trigger extension before using Nautilus and setting it to automatically add a timestamp when todo is done. 
+I strongly suggest to install great [David Vargas](https://github.com/dvargas92495/roamjs-todo-trigger)'s **Todo Trigger extension** from Roam Depot before using Nautilus and setting it to automatically add a timestamp when todo is done. 
 
 <img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/todotrigger.png" width="300"></img>
 
