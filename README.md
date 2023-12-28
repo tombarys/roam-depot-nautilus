@@ -19,10 +19,13 @@ Nautilus is a Roam Research extension designed for effective, stress-free daily 
 
 ### 1. Install TODO Trigger extension for better experience
 I suggest to install David Vargas's TODO Trigger extension before using Nautilus and setting it to automatically add a timestamp when todo is done. 
-![Alt text](todotrigger.png)
+
+<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/todotrigger.png" width="300"></img>
+
 ### 2. Insert the component into your Daily Page
 Easiest way to insert the component is though Roam's native template menu. Simply type `;;` and look for __EXTENSION NAME HERE__
 <img src="https://github.com/8bitgentleman/roam-depot-tidy-todos/raw/main/settings.png" width="300"></img>
+
 
 ### 3. Put your tasks and events into the children block 
 - Just move a list of your todos there. 
