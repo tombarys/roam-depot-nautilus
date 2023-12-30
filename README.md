@@ -22,9 +22,18 @@ _Events are yellow, tasks are blue – and done tasks are faint gray_
 - Tasks can be only **forced to follow after a particular event** – by placing them after the event in the task list; for example, setting a run post-lunch. This does not change the order of tasks.
 - Once a task is marked 'DONE' in Roam, (and if you have installed the [Todo Trigger extension](https://github.com/tombarys/roam-depot-nautilus/blob/main/README.md#1-install-todo-trigger-extension-for-better-experience)) it's **tagged with the completion time** in format dHH:MM (e.g. d14:30), which is visually interpreted as a faint grey section on the spiral. It can serve as a visual log of tasks that have been done.
 
-While more extended preparation before a workday seems involved, it greatly aids conscious day planning and eventual task optimization. 
 
-## Setup
+### Additional info + tips and tricks
+- Nautilus works pretty well on mobile too.
+- I suggest describing your tasks in a very short (BuJo-like) style. Add detailed description into children blocks of task.
+- References and markdown links are stripped heavily to show only the real name of the task in legend. 
+- You can use references to blocks in your task list. It means you can just `Alt/Option` + drag and drop tasks from other pages or blocks from your graph without rewriting them from scratch.
+- Do your planning in the morning or even the evening before. It seems like Nautilus involves extended preparation before a  workday, but my experience is it greatly aids conscious day planning and eventual task optimization. 
+- I usually add a simple `#Today` tag at the start of the Nautilus render block too – it helps when you want to enter the *click to edit* mode in Roam. For example: `#Today {{[[roam/render]]:((roam-render-Nautilus-cljs)) 22 30}}`.
+- Sorry for some glitches when generating the proper position of the legend in some edge cases. This is MVP – even I am using Nautilis for 6 months without bigger issues, there are still some problems and lot of work has to be done. 
+
+
+## Setup (you do this once)
 ### 1. First, make sure that __User code__ is enabled in your settings. 
 This allows custom components in your graph. 
 
@@ -32,26 +41,34 @@ This allows custom components in your graph.
 
 Technically, the spiral component is a code inserted using a Roam template into a block on a Daily Page. 
 
-
 ### 2. Install the TODO Trigger extension for a better experience
 I strongly suggest installing great [David Vargas](https://github.com/dvargas92495/roamjs-todo-trigger)'s **Todo Trigger extension** from Roam Depot before using Nautilus and setting it to add a timestamp when todo is done automatically. 
 
 <img src="https://github.com/tombarys/roam-depot-nautilus/blob/31e8113651badce77da0eabac5d4a6e4fa657b60/todotrigger.png?raw=true" width="300"></img>
 
-## Daily usage
+
+### 3. Adjust your settings
+
+Additionally, you can easily change two parameters to better suit your needs (in Roam Depot extension Settings):
+- the length of the legend text (longer task description than specified will be stripped from spiral legend)
+- the default duration of the task (when creating a new todo, you can leave it without specifics and it will default to the setting)
+
+Important: All settings will not manifest retroactivelly in old Nautiluses, but just when creating a new instance using the `;;` Nautilus template. 
+
+## Daily use (you do this every day)
 ### 1. Insert the component into your Daily Page
-The easiest way to insert the component is through Roam's native template menu. Type `;;` and look for „Nautilus.“ Press Enter.
-<img src="https://github.com/8bitgentleman/roam-depot-tidy-todos/raw/main/template.png" max-width="400"></img>
+The easiest way to insert the component is through Roam's native template menu. Type `;;` and look for "Nautilus." Press `Enter`.
+
+<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/template1.png" max-width="400"></img>
+
+which inserts this code:
+
+<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/template2.png" max-width="400"></img>
 
 ### 3. Put your tasks and events into the children’s block 
-- Move a list of your todos there. 
+- If you are not able to edit the children of the Nautilus block, just press `Cmd(Ctrl)-Enter` which opens the first block of the page for editing. 
+- Move a list of your todos as a children of the block.
+- You can edit and rearrange children blocks as you wish and see how your work spots are dynamically filled with your tasks. 
 
-## Example 
-
-
-
-
-
-
-
-
+## Credits
+Huge thanks to Roam Slack community, especially to Matt Vogel, which helped me to understand how the Roam Depot extensions (roam/render) work. His [Roam Depot Render Template](https://github.com/8bitgentleman/roam-depot-render-template) is being adopted here. Many thanks to [Adam Kalisz](https://x.com/kaliszad), a developer behind OrgPad (written in ClojureScript) that helped me to grasp functional programming. Thanks to my beta-testers too.
