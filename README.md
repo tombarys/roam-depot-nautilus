@@ -62,16 +62,20 @@ Important: All settings will not manifest retroactivelly in old Nautiluses, but 
 ### 1. Insert the component into your Daily Page
 The easiest way to insert the component is through Roam's native template menu. Type `;;` and look for "Nautilus." Press `Enter`.
 
-<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/template1.png" max-width="400"></img>
+<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/template1.png" max-width="300"></img>
 
 which inserts this code:
 
-<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/template2.png" max-width="400"></img>
+<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/template2.png" max-width="300"></img>
+
+Press `Enter` and `Tab`. Now you can start writing your task list.
 
 ### 3. Put your tasks and events into the children’s block 
-- If you are not able to edit the children of the Nautilus block, just press `Cmd(Ctrl)-Enter` which opens the first block of the page for editing. 
-- Move a list of your todos as a children of the block.
-- You can edit and rearrange children blocks as you wish and see how your work spots are dynamically filled with your tasks. 
+- If you are not able to edit the children of the Nautilus block, try pressing `Cmd(Ctrl)-Enter` which opens the first block of the page for editing. 
+- Move or indent a list of your todos into a children of the block of the Nautilus.
+- From now you can edit and rearrange children blocks as you wish and see how your work spots are dynamically rearranged and filled with your tasks. 
+
+Enjoy!
 
 ## Credits
 Huge thanks to Roam Slack community, especially to Matt Vogel, which helped me to understand how the Roam Depot extensions (roam/render) work. His [Roam Depot Render Template](https://github.com/8bitgentleman/roam-depot-render-template) is being adopted here. Many thanks to [Adam Kalisz](https://x.com/kaliszad), a developer behind OrgPad (written in ClojureScript) that helped me to grasp functional programming. Thanks to my beta-testers too.
