@@ -1,4 +1,4 @@
-import componentCSSFile from "./component.css";
+// import componentCSSFile from "./component.css";
 import clsjFile from "./component.cljs";
 
 function removeCodeBlock(uid){
@@ -95,47 +95,45 @@ function createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID,
     
 }
 
+// function createCSSBlock(parentUID, cssBlockUID, cssFile, parentString){
+//     // creates the initial code block and its parent
+//     // adding this to the roam/css page so users can use it as an example
+//     // if roam/css page doesn't exist then create it
+//     let pageUID = getPageUidByPageTitle('roam/css') || createPage('roam/css');
+//     // create closed parent block
+//     roamAlphaAPI.createBlock(
+//         {"location": 
+//             {"parent-uid": pageUID, 
+//             "order": "last"}, 
+//         "block": 
+//             {"string": `${parentString} [[${uidForToday()}]]`,
+//             "uid":parentUID,
+//             "open":false,
+//             "heading":3}})
 
-function createCSSBlock(parentUID, cssBlockUID, cssFile, parentString){
-    // creates the initial code block and its parent
-    // adding this to the roam/css page so users can use it as an example
-    // if roam/css page doesn't exist then create it
-    let pageUID = getPageUidByPageTitle('roam/css') || createPage('roam/css');
-    // create closed parent block
-    roamAlphaAPI.createBlock(
-        {"location": 
-            {"parent-uid": pageUID, 
-            "order": "last"}, 
-        "block": 
-            {"string": `${parentString} [[${uidForToday()}]]`,
-            "uid":parentUID,
-            "open":false,
-            "heading":3}})
-
-    // create codeblock for the component
-    // I do this so that a user can see what to customize
-    let css = cssFile.toString();
+//     // create codeblock for the component
+//     // I do this so that a user can see what to customize
+//     let css = cssFile.toString();
     
-    let blockString = "```css\n " + css + " ```"
-    roamAlphaAPI
-    .createBlock(
-        {"location": 
-            {"parent-uid": parentUID, 
-            "order": 0}, 
-        "block": 
-            {"uid": cssBlockUID,
-            "string": blockString}})
+//     let blockString = "```css\n " + css + " ```"
+//     roamAlphaAPI
+//     .createBlock(
+//         {"location": 
+//             {"parent-uid": parentUID, 
+//             "order": 0}, 
+//         "block": 
+//             {"uid": cssBlockUID,
+//             "string": blockString}})
 
-}
+// }
 
 export function updateTemplateString(renderString, renderStringWSettings){ 
-    // tady jsem přidal 
-
     let query = `[:find
-        (pull ?node [:block/string :node/title :block/uid])
+        (pull ?node [:block/string :block/uid])
       :where
-        (or [?node :block/string ?node-String]
-      [?node :node/title ?node-String])
+        [?page :node/title "roam/render"]
+        [?node :block/page ?page]
+        [?node :block/string ?node-String]
         [(clojure.string/includes? ?node-String "${renderString}")]
       ]`;
     
@@ -150,6 +148,7 @@ export function updateTemplateString(renderString, renderStringWSettings){
         });
     });
 }
+
 
 function replaceRenderString(renderString, replacementString){
     // replaces the {{[[roam/render]]:((5juEDRY_n))}} string across the entire graph
