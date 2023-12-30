@@ -1,4 +1,6 @@
-Nautilus is a Roam Research extension designed for effective, stress-free daily task planning. It shifts tasks and calendar events into a watch face-like spiral visual system within the Roam interface, acknowledging strongly that tasks vary in duration. 
+# Nautilus for Roam
+
+Nautilus is a Roam Research extension designed for effective, stress-free daily task planning. It presents tasks and calendar events in a watch face-like spiral within the Roam interface, acknowledging strongly that tasks vary in duration. 
 
 Traditional time-boxing solution is be stressful due to rigid schedules; if one fails to keep up, the agenda quickly derails which causes demotivation. Nautilus is more flexible, dynamically repositioning unfinished tasks within your day's remaining open time slots. This reduce stress, improves prioritization and estimation skills, and clarifies feasible tasks at any given moment.
 
