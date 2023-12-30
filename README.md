@@ -1,8 +1,10 @@
-# Nautilus for Roam
+# ꩜ Nautilus for Roam
 
 Nautilus is a Roam Research extension designed for practical, stress-free daily task planning. It presents tasks and calendar events in a watch-face-like spiral within the Roam interface, acknowledging firmly that tasks vary in duration. 
 
 Traditional time-boxing solutions are stressful due to rigid schedules; if one fails to keep up, the agenda quickly derails, which causes demotivation. Nautilus is more flexible, dynamically repositioning unfinished tasks within your day's remaining open time slots. This actually *reduces* stress (try it:), improves prioritization and task planning skills, and mercifully clarifies feasible tasks at any given moment.
+
+Why spiral shape? In my experience, my energy available for doing creative and demanding tasks slowly diminishes during a day – and the shape reflects it. 
 
 <img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/examplewithlegend.png" width="800"></img>
 
@@ -11,15 +13,16 @@ _Events are yellow, tasks are blue – and done tasks are faint gray_
 
 ## General instructions
 
-- Tasks and events are just items of **text list** placed as a children’s block under the Nautilus component. You can use simple notation, which Nautilus dynamically visualizes into a watch-like visual timeline. It works in real time.
-- A notable feature is the automatic task **"push-forward," relocating uncompleted tasks** within open time slots in your day.
+- Tasks and events are just rows of simple **text outline** placed as a children’s block under the Nautilus component. You can use easy "caldown" notation too. Nautilus dynamically visualizes the outline into a watch-like visual timeline. It works in real time.
+- The order and the length of **tasks is sacred** – only you can manually change it.  
+- A notable and the only "automatic" feature of Nautilus is task **"push-forward," relocating uncompleted tasks** within open time slots in your day – taking the present time into account. The spiral reflects time without your intervention.
 - If the component is **not placed into today’s Daily Page**, the red time beam is not shown, and tasks are not pushed into the future. (As it does not make sense, you are reviewing the day’s agenda or planning).
 - You can define your agenda using a straightforward notation:
   - **events** are rows containing a *time range* in 24h format (HH:MM-HH:MM, minutes can be omitted) and are unmovable until the time range is changed by the user (e.g., "12:30-13 Meeting with JK", "9-10 Breakfast")
   - **tasks** are all residuing rows that are not events; undone tasks move through a day (e.g., "nearly empty task" "{{[[TODO]]}} another, but important task").
 - Tasks **duration defaults to a 15-minute time allocation**, but this can generally be adjusted above in settings or **manually and individually for each task** with the simple notation "Mm" or "Mmin“ where M is the length of a task in minutes (e.g., "Call Jack 10m", "Daily workout 45min").
 - The **order of tasks** in Nautilus spiral **reflects exactly the order of tasks in the list.** 
-- Tasks can be only **forced to follow after a particular event** – by placing them after the event in the task list; for example, setting a run post-lunch. This does not change the order of tasks.
+- Tasks can be **forced to follow after a particular event** too – simply by placing them after the event in the task list; for example: to plan "Nap" not before lunch, just put it after it in the list. This does not change the order of tasks.
 - Once a task is marked 'DONE' in Roam, (and if you have installed the [Todo Trigger extension](https://github.com/tombarys/roam-depot-nautilus/blob/main/README.md#1-install-todo-trigger-extension-for-better-experience)) it's **tagged with the completion time** in format dHH:MM (e.g. d14:30), which is visually interpreted as a faint grey section on the spiral. It can serve as a visual log of tasks that have been done.
 
 
