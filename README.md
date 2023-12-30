@@ -40,14 +40,14 @@ _Events are yellow, tasks are blue – and done tasks are faint gray_
 ### 1. First, make sure that __User code__ is enabled in your settings. 
 This allows custom components in your graph. 
 
-<img src="https://github.com/8bitgentleman/roam-depot-tidy-todos/raw/main/settings.png" width="300"></img>
+<img src="https://github.com/8bitgentleman/roam-depot-tidy-todos/raw/main/settings.png" width="400"></img>
 
 Technically, the spiral component is a code inserted using a Roam template into a block on a Daily Page. 
 
 ### 2. Install the TODO Trigger extension for a better experience
 I strongly suggest installing great [David Vargas](https://github.com/dvargas92495/roamjs-todo-trigger)'s **Todo Trigger extension** from Roam Depot before using Nautilus and setting it to add a timestamp when todo is done automatically. 
 
-<img src="https://github.com/tombarys/roam-depot-nautilus/blob/31e8113651badce77da0eabac5d4a6e4fa657b60/todotrigger.png?raw=true" width="300"></img>
+<img src="https://github.com/tombarys/roam-depot-nautilus/blob/31e8113651badce77da0eabac5d4a6e4fa657b60/todotrigger.png?raw=true" width="400"></img>
 
 
 ### 3. Adjust your settings
@@ -62,11 +62,11 @@ Important: All settings will not manifest retroactivelly in old Nautiluses, but 
 ### 1. Insert the component into your Daily Page
 The easiest way to insert the component is through Roam's native template menu. Type `;;` and look for "Nautilus." Press `Enter`.
 
-<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/template1.png" width="300"></img>
+<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/template1.png" width="400"></img>
 
 which inserts this code:
 
-<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/template2.png" width="300"></img>
+<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/template2.png" width="400"></img>
 
 Press `Enter` and `Tab`. Now you can start writing your task list.
 
