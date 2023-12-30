@@ -14,13 +14,13 @@ _Events are yellow, tasks are blue – and done tasks are faint gray_
 ## General instructions
 
 - Tasks and events are just rows of simple **text outline** placed as a children’s block under the Nautilus component. You can use easy "caldown" notation too. Nautilus dynamically visualizes the outline into a watch-like visual timeline. It works in real time.
-- The order and the length of **tasks is sacred** – only you can manually change it.  
+- The order and the length of **tasks are sacred** – only you can manually change it.  
 - A notable and the only "automatic" feature of Nautilus is task **"push-forward," relocating uncompleted tasks** within open time slots in your day – taking the present time into account. The spiral reflects time without your intervention.
 - If the component is **not placed into today’s Daily Page**, the red time beam is not shown, and tasks are not pushed into the future. (As it does not make sense, you are reviewing the day’s agenda or planning).
 - You can define your agenda using a straightforward notation:
-  - **events** are rows containing a *time range* in 24h format (HH:MM-HH:MM, minutes can be omitted) and are unmovable until the time range is changed by the user (e.g., "12:30-13 Meeting with JK", "9-10 Breakfast")
+  - **events** are rows containing a *time range* in 24h format (`HH:MM-HH:MM`, minutes can be omitted) and are fixed until the time range is changed by the user (e.g., "12:30-13 Meeting with JK", "9-10 Breakfast"). 
   - **tasks** are all residuing rows that are not events; undone tasks move through a day (e.g., "nearly empty task" "{{[[TODO]]}} another, but important task").
-- Tasks **duration defaults to a 15-minute time allocation**, but this can generally be adjusted above in settings or **manually and individually for each task** with the simple notation "Mm" or "Mmin“ where M is the length of a task in minutes (e.g., "Call Jack 10m", "Daily workout 45min").
+- **Tasks duration defaults to a 15-minute time allocation**, but this can be adjusted above in Roam Depot extension settings or **individually for each task in your task list** with the simple notation `Mm` or `Mmin` where M is the length of a task in minutes (e.g., "Call Jack 10m", "Daily workout 45min").
 - The **order of tasks** in Nautilus spiral **reflects exactly the order of tasks in the list.** 
 - Tasks can be **forced to follow after a particular event** too – simply by placing them after the event in the task list; for example: to plan "Nap" not before lunch, just put it after it in the list. This does not change the order of tasks.
 - Once a task is marked 'DONE' in Roam, (and if you have installed the [Todo Trigger extension](https://github.com/tombarys/roam-depot-nautilus/blob/main/README.md#1-install-todo-trigger-extension-for-better-experience)) it's **tagged with the completion time** in format dHH:MM (e.g. d14:30), which is visually interpreted as a faint grey section on the spiral. It can serve as a visual log of tasks that have been done.
@@ -30,7 +30,8 @@ _Events are yellow, tasks are blue – and done tasks are faint gray_
 - Nautilus works pretty well on mobile too.
 - I suggest describing your tasks in a very short (BuJo-like) style. Add detailed description into children blocks of task.
 - References and markdown links are stripped heavily to show only the real name of the task in legend. 
-- You can use references to blocks in your task list. It means you can just `Alt/Option` + drag and drop tasks from other pages or blocks from your graph without rewriting them from scratch.
+- You can use "to" in events time range definiton too (e.g., "14:30 to 15:15 My TED Talk"). 
+- You can use Roam references to blocks in your task list. It means you can just `Alt/Option` + drag and drop tasks from other pages/blocks without rewriting them from scratch.
 - Do your planning in the morning or even the evening before. It seems like Nautilus involves extended preparation before a  workday, but my experience is it greatly aids conscious day planning and eventual task optimization. 
 - I usually add a simple `#Today` tag at the start of the Nautilus render block too – it helps when you want to enter the *click to edit* mode in Roam. For example: `#Today {{[[roam/render]]:((roam-render-Nautilus-cljs)) 22 30}}`.
 - Sorry for some glitches when generating the proper position of the legend in some edge cases. This is MVP – even I am using Nautilis for 6 months without bigger issues, there are still some problems and lot of work has to be done. 
@@ -78,4 +79,5 @@ Press `Enter` and `Tab`. Now you can start writing your task list.
 Enjoy!
 
 ## Credits
+
 Huge thanks to Roam Slack community, especially to Matt Vogel, which helped me to understand how the Roam Depot extensions (roam/render) work. His [Roam Depot Render Template](https://github.com/8bitgentleman/roam-depot-render-template) is being adopted here. Many thanks to [Adam Kalisz](https://x.com/kaliszad), a developer behind OrgPad (written in ClojureScript) that helped me to grasp functional programming. Thanks to my beta-testers too.
