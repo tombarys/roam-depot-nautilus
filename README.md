@@ -62,11 +62,11 @@ Important: All settings will not manifest retroactivelly in old Nautiluses, but 
 ### 1. Insert the component into your Daily Page
 The easiest way to insert the component is through Roam's native template menu. Type `;;` and look for "Nautilus." Press `Enter`.
 
-<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/template1.png" max-width="300"></img>
+<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/template1.png" width="300"></img>
 
 which inserts this code:
 
-<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/template2.png" max-width="300"></img>
+<img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/template2.png" width="300"></img>
 
 Press `Enter` and `Tab`. Now you can start writing your task list.
 
