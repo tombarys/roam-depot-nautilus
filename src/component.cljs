@@ -1,38 +1,38 @@
-(ns nautilus-roam-12-29-2023
+(ns nautilus-roam-12-30-2023
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
             [roam.datascript.reactive :as rdr]))
 
-;; ------ bfu settings ------
+
 
 (def start-duration 15)
 
 (def start-len-limit 22)
 
 
-;; ------- hard-coded defaults -------
+
 
 (def workday-start 480)
 
 (def workday-end 1320)
 
-;; -------------- scaling ---------------
+
 
 (defonce mobile? js/window.roamAlphaAPI.platform.isMobile)
 
 (defonce snail-scaler (if mobile? 0.7 1))
 
-(def mob-width 450) ;; startovní hodnota pro šířku na mobilu
+(def mob-width 450) 
 
-(def desk-width 600) ;; startovní hodnota pro šířku na desktopu
+(def desk-width 600) 
 
 
-;; ---------- mostly visual dev settings ------------
+
 
 (def shaky false)
 
-(def reserve 15) ;; rezerva pro prostor mezi Nautilem a okraji
+(def reserve 15) 
 
 (def font-family "Inter, sans-serif")
 
@@ -51,7 +51,7 @@
 
 (def len-central-legend 16)
 
-;; ----------------- colors, darling ---------------
+
 
 (def snail-template-color "#888888")
 
@@ -63,7 +63,7 @@
 (def todo-color-palette
   ["rgba(4,100,132,0.3)", "rgba(8,153,200,0.3)", "rgba(47,186,232,0.3)", "rgba(58,202,249,0.3)"])
 
-;; -------------- debug support ------------
+
 (def debug-state-atom (r/atom false))
 
 (defn safe-prn [s]
@@ -93,7 +93,7 @@
            :width w
            :height h}]])])
 
-;; --------- math is beautiful ---------
+
 
 (def pi js/Math.PI)
 
@@ -103,12 +103,12 @@
 
 (defn sin [x] (js/Math.sin x))
 
-(defn round2 [num]  ;; zaokrouhluje na dvě desetinná místa
+(defn round2 [num]  
   (-> (* num 100)
       (js/Math.round)
       (/ 100.0)))
 
-; (defn parse-int [v] (js/parseInt v))
+
 
 (defn parse-int [v] (int v))
 
@@ -130,9 +130,9 @@
 (defn min->angle [minutes]
   (mod (/ (- minutes 540) 2) 360))
 
-;; --------------- legend collision solution -----------
 
-(defn between [x a b] ;; testuje, zda se x nachází mezi a a b
+
+(defn between [x a b] 
   (and (>= x a) (<= x b)))
 
 (defn collide? [new-rect any-rect]
@@ -149,21 +149,21 @@
              (< nbry tly)
              (> ntly bry)))))
 
-(defn collides? [new-rect rects] ;; testuje, zda se new-rect nepřekrývá s některým z rects
+(defn collides? [new-rect rects] 
   (boolean (some #(collide? new-rect %) rects)))
 
 (defn iterate-rect-place
-  "vrací nové souřadnice new-rect, který se nepřekrývá s žádným z rects; 
-   radians je úhel, pod kterým se new-rect snaží nejdřív umístit; 
-   radius je vzdálenost od středu; 
+  "vrací nové souřadnice new-rect, který se nepřekrývá s žádným z rects
+   radians je úhel, pod kterým se new-rect snaží nejdřív umístit
+   radius je vzdálenost od středu
    radians-span je maximální úhlová odchylka
-   text je text legendy, který se vypisuje do konzole pro debug" ;; FIXME odstranit později
+   text je text legendy, který se vypisuje do konzole pro debug" 
   [new-rect rects start-radians start-radius text center]
   (loop [radians start-radians
          radius start-radius
          angle-offset  0
          radius-offset 0
-         counter 0 ;; počet pokusů
+         counter 0 
          trying (if (or (between radians 1.05 2.09) (between radians -2.09 -1.05)) :radius :angle)]
     (let [max-radians-span (/ pi 15)
           min-radians (- radians (/ max-radians-span 2))
@@ -180,7 +180,7 @@
                     " angle-offset: " (round2 angle-offset) " colliding?: " colliding? " counter " counter)
       (if (or (> counter 25) (not colliding?))
         new-rect
-        (if (= trying :radius) ;; zvětšujeme poloměr
+        (if (= trying :radius) 
           (if (< radius max-radius)
             (recur radians
                    (+ start-radius radius-offset)
@@ -205,21 +205,21 @@
 (defn get-legend-rect
   "vrací nový obdélník legendy, který se nepřekrývá s žádným z rects"
   [rects text radians radius center settings]
-  (let [w (* (/ font-size 1.5) (min (count text) 22 (:legend-len-limit settings)))  ;; šířka obdélníku legendy dle délky textu a cca šířky písma
-        h (* 1.2 font-size)                          ;; výška obdélníku legendy dle cca výšky písma
+  (let [w (* (/ font-size 1.5) (min (count text) 22 (:legend-len-limit settings)))  
+        h (* 1.2 font-size)                          
         new-text-rect (if rects
                         (assoc
-                         (iterate-rect-place {:w w :h h}               ;; velikost obdélníku legendy
-                                             rects                     ;; úložiště obdélníků legendy 
-                                             (- radians)               ;; směr pokusu o 1. umístění
-                                             radius                    ;; vzdálenost od středu
+                         (iterate-rect-place {:w w :h h}               
+                                             rects                     
+                                             (- radians)               
+                                             radius                    
                                              text
                                              center)
-                         :text text)                                   ;; FIXME jen pro debug              
+                         :text text)                                   
                         {})]
     new-text-rect))
 
-;; --------------- o`clock ----------------------
+
 
 (defonce now-time-atom (r/atom 0))
 
@@ -230,7 +230,7 @@
                                (.getMinutes now))))
    10000))
 
-;; -------------- roam db queries ----------
+
 
 (defn page-title [block-uid]
   (str (rd/q
@@ -260,7 +260,7 @@
       (str b (get-block-str u) a)
       s)))
 
-;; ---------------- helpers ----------------------
+
 
 (defn update-opacity-str [color opacity]
   (let [s (subs color 0 (- (count color) 5))
@@ -271,7 +271,7 @@
   (if shaky (- (rand-int 4) 2) 0))
 
 
-;; --------------- text parsers --------------------
+
 
 (defn time-str-to-minutes [time-str]
   (let [[h m] (str/split time-str #":")]
@@ -328,43 +328,43 @@
 
 (defn parse-rest [s]
   (-> s
-      ;; Remove specific Roam markers (TODO, DONE, etc.)
+      
       (str/replace #"\{\{\[\[TODO\]\]\}\}" "")
       (str/replace #"\{\{\[\[DONE\]\]\}\}" "")
 
-      ;; Extract and format links
+      
       (str/replace #"\[\[(.*?)\]\]" "$1")
       (str/replace #"\[(.*?)\]\((.*?)\)" "$1")
 
-      ;; Remove other special formatting (bold, italic, etc.)
+      
       (str/replace #"\*\*(.*?)\*\*" "$1")
       (str/replace #"\_\_(.*?)\_\_" "$1")
       (str/replace #"\^\^(.*?)\^\^" "$1")
 
-      ;; Replace custom tags with their symbols or texts
+      
       (str/replace #"\#hoří" "🔥")
       (str/replace #"\#čekám" "⏳")
       (str/replace #"\#hluboká" "📵")
       (str/replace #"\#cesta" "cesta➡︎")
 
-      ;; Trim whitespace
+      
       (str/trim)))
 
 (defn parse-row-params [s settings]
-  (let [;_ (println "#### STARTUJEME s " s)
+  (let [
         {:keys [range cleaned-str]} (parse-time-range s)
-        ; _ (println "range: " range " cleaned-str: " cleaned-str)
+        
         {:keys [duration cleaned-str]} (parse-duration cleaned-str settings)
-        ; _ (println "duration before: " duration " cleaned-str: " cleaned-str)
+        
         #_#__ (println "adjusted duration: " (or duration (:default-duration settings)))
         {:keys [done-at cleaned-str]} (parse-done-time cleaned-str)
-        ; _ (println "done-time: " done-at " cleaned-str: " cleaned-str)
+        
         {:keys [done cleaned-str]} (parse-DONE cleaned-str)
-        ; _ (println "done: " done " cleaned-str: " cleaned-str)
+        
         {:keys [progress cleaned-str]} (parse-progress cleaned-str)
-        ; _ (println "progress: " progress " cleaned-str: " cleaned-str)
+        
         description (parse-rest cleaned-str)
-        ; _ (println "description: " description)
+        
         event-type (if range :meeting :todo)]
     (-> {:description description
          :duration duration
@@ -375,7 +375,7 @@
          :progress (or progress 0)}
         (assoc event-type true))))
 
-;; --------------- fill day ----------------------
+
 
 (defn fill-day [events workday-start plan-from-time]
   (let [sorted-events (sort-by #(if (:meeting %) (:start %) 0) events)
@@ -387,7 +387,7 @@
            time workday-start
            result []]
       (if (and (empty? todos) (empty? meetings))
-        (conj result {:freetime true :start time :end workday-end})  ; Day is over (no todos or meetings left)
+        (conj result {:freetime true :start time :end workday-end})  
         (if (< time plan-from-time)
           (let [time (max time workday-start)
                 next-meeting (first meetings)]
@@ -396,15 +396,15 @@
                 (recur todos meetings (min plan-from-time (:start next-meeting)) (conj result {:freetime true :start time :end (min plan-from-time (:start next-meeting))}))
                 (recur todos (rest meetings) (:end next-meeting) (conj result next-meeting)))
               (recur todos [] plan-from-time (conj result {:freetime true :start time :end plan-from-time}))))
-          (let [time (max time workday-start) ; Ensure time doesn't fall before workday-start
+          (let [time (max time workday-start) 
                 next-todo (first todos)
                 next-meeting (first meetings)]
             (if next-meeting
               (if (> (:start next-meeting) time)
-                ;; pokud další meeting začíná později než aktuální čas
+                
                 (if (and next-todo (< (+ time (:duration next-todo)) (:start next-meeting)) (<= (:start-after next-todo) time))
-                    ;; pokud je další todo a končí dřív než další meeting začíná, 
-                    ;; a současně začíná po start-after (tedy konci předchozího meetingu, po němž bylo umístěno v seznamu)
+                    
+                    
                   (recur (rest todos) meetings (+ time (:duration next-todo)) (conj result (assoc next-todo :start time :end (+ time (:duration next-todo)))))
                   (recur todos meetings (:start next-meeting) (conj result {:freetime true :start time :end (:start next-meeting)})))
                 (recur todos (rest meetings) (:end next-meeting) (conj result next-meeting)))
@@ -412,7 +412,7 @@
                 (recur (rest todos) [] (+ time (:duration next-todo)) (conj result (assoc next-todo :start time :end (+ time (:duration next-todo)))))
                 (recur [] [] time result)))))))))
 
-;; --------------- reading Roam database ----------------------
+
 
 (defn eval-state [*get-children]
   (:block/children @*get-children))
@@ -426,14 +426,14 @@
          (->> @*children
               (sort-by :block/order)))))
 
-;; --------------- slice component ----------------------
+
 
 (defn bent-line-component
-  [legend-start-x legend-start-y text-x text-y color]  ;; TODO upravit výpočet pro zakončení na nejbližší straně rectu (vyžaduje úhel)
+  [legend-start-x legend-start-y text-x text-y color]  
   (let [new-text-x text-x
         new-text-y (+ 3 text-y)
         middle-legend-text-x (/ (+ legend-start-x new-text-x) 2)
-        middle-legend-text-y (+ (/ (+ legend-start-y new-text-y) 2) 10)] ; increase 30 to make line more bent
+        middle-legend-text-y (+ (/ (+ legend-start-y new-text-y) 2) 10)] 
     [:g
      [:path {:d (str "M " legend-start-x "," legend-start-y " Q "
                      middle-legend-text-x "," middle-legend-text-y " "
@@ -474,11 +474,11 @@
              legend-rect
              text
              timestamp
-             stroke-dasharray ;; typ obrysu
+             stroke-dasharray 
              font-weight
-             shaky      ;; "unsure hand style" allowed
+             shaky      
              done?
-             progress]}]  ;; has the todo been done?
+             progress]}]  
   (let [#_#_hovered (r/atom false)
         start-radians (angle->rad (+ start-angle (shake-if shaky)))
         end-radians (angle->rad (+ end-angle (shake-if shaky)))
@@ -490,10 +490,10 @@
         [legend-x legend-y] [(:x legend-rect) (:y legend-rect)]
         [legend-w legend-h] [(:w legend-rect) (:h legend-rect)]
         legend-radians (- (:radians legend-rect))
-        [legend-line-end-x legend-line-end-y] (cond (and (< legend-radians pi) (> legend-radians (/ pi 2))) [(+ legend-x (* 5/6 legend-w)) (+ legend-y legend-h)] ; levý horní
-                                                    (and (< legend-radians (/ pi 2)) (> legend-radians 0)) [legend-x (+ legend-y legend-h)] ; pravý horní
-                                                    (and (< legend-radians 0) (> legend-radians (- (/ pi 2)))) [legend-x legend-y] ; pravý dolní
-                                                    :else [(+ legend-x (* 5/6 legend-w)) legend-y]) ; levý dolní
+        [legend-line-end-x legend-line-end-y] (cond (and (< legend-radians pi) (> legend-radians (/ pi 2))) [(+ legend-x (* 5/6 legend-w)) (+ legend-y legend-h)] 
+                                                    (and (< legend-radians (/ pi 2)) (> legend-radians 0)) [legend-x (+ legend-y legend-h)] 
+                                                    (and (< legend-radians 0) (> legend-radians (- (/ pi 2)))) [legend-x legend-y] 
+                                                    :else [(+ legend-x (* 5/6 legend-w)) legend-y]) 
         time-text-x (+ center-x (* (cos start-radians) (- outer-radius 10)))
         time-text-y (- center-y (* (sin start-radians) (- outer-radius 10)))
         border-color (if (= border-color nil) "none" border-color)
@@ -507,7 +507,7 @@
         progress-str (if (and debug? progress) (str progress " % ") "")]
     [:g
      (when @debug-state-atom  [:circle {:cx center-x :cy center-y :r 4 :fill "red"}])
-     ;; ⤵ tohle je hlavní componenta – výseč
+     
 
      [:path
       {:d path
@@ -519,7 +519,7 @@
        :stroke border-color}
       #_(when @hovered [:g [:text {:x 20 :y 20} text]])]
 
-     ;; ⤵ přidá legendu události
+     
      (when (and text (not done?))
        [:g
         [bent-line-component legend-line-start-x legend-line-start-y legend-line-end-x legend-line-end-y legend-color]
@@ -531,7 +531,7 @@
          (if debug? (str dbg-radians-txt)
              (str progress-str (subs text 0 (:legend-len-limit settings))))]])
      (when (seq timestamp)
-       ;; ⤵ přidá označení hodiny pro šablonu snaila
+       
        [:text  {:x time-text-x :y time-text-y :font-size (- font-size 3) :font-family font-family :color border-color :fill border-color
                 :transform (str "rotate(" (if
                                            (or (>= start-angle 270)
@@ -601,8 +601,8 @@
      :done done?
      :outer-radius outer-radius}))
 
-;; (when @show-done-atom? ;; má-li ukazovat hotové úkoly, tak je ukáže v šedé
-;;        (map (fn [event] [event-slice-component event 1 nil snail-inner-radius nil center-x center-y]) done-todos))
+
+
 
 (defn event-slice-component [event index legend-rect inner-radius daily-page? center settings]
   (let [{:keys [start-angle end-angle bg-color done outer-radius]} (calculate-slice-params event index daily-page?)
@@ -671,26 +671,26 @@
         old-height (js/Math.round (:height dimensions))
         [center-x suggested-width center-y suggested-height] (events->new-dimensions events {:center-x (/ old-width 2) :center-y (/ old-height 2)} settings)
         center {:center-x center-x :center-y center-y}
-        [all-slice-components rects] (events->slices events daily-page-atom? center settings)]   ;; rects jsou tam jen kvůli debugu, jinak vrací svg vektor
+        [all-slice-components rects] (events->slices events daily-page-atom? center settings)]   
     [:svg {:width (str suggested-width) :height (str suggested-height)
            :xmlns "http://www.w3.org/2000/svg"
            :font-family font-family
            :font-size font-size}
      [:g
       [snail-blueprint-component snail-template-color snail-inner-radius center settings]
-      (when  @show-done-atom? ;; má-li ukazovat hotové úkoly, tak je ukáže v šedé
+      (when  @show-done-atom? 
         (map (fn [event] [event-slice-component event 1 nil snail-inner-radius nil center settings]) done-todos))
-      all-slice-components ;; zobrazení všech událostí
-      (when @daily-page-atom?   ;; ukáže aktuální čas pomocí úzké výseče
+      all-slice-components 
+      (when @daily-page-atom?   
         [slice [(- (min->angle @now-time-atom) 1) (+ (min->angle @now-time-atom) 1) 0 center-y center settings] :bg-color clock-hand-color])
       [central-label-component (split-and-trim page-title len-central-legend) center]
-      (when @debug-state-atom ;; čistě pro účely debugu ⤵
+      (when @debug-state-atom 
         [:g
          [draw-debug-rects rects]
          [:text {:x "0" :y "450" :text-anchor "start"}
           "Suggested w: " suggested-width
-          ;" Width: " (:width @dimensions-atom)
-          ;" Height: " (:height @dimensions-atom)
+          
+          
           " Center-x: " (:center-x center)
           " Center-y: " (js/Math.round center-y)]
          [:circle {:cx (:center-x center) :cy (:center-y center) :r 200 :fill "none" :stroke "black" :stroke-width 1}]])]]))
@@ -721,8 +721,8 @@
                         (fill-day workday-start plan-from-time)) (filter #(:done-at %) text->events)]]
     filled-day))
 
-;; structure of filled-day: [[events] [done-todos]]
-;; structure of events: [{:description "text" :duration 30 :start 0 :end 30 :done? false :done-at nil :start-after 0 :todo true :meeting false :freetime false :progress 0}] }]
+
+
 
 (defn reset-now-time-atom [now-time-atom]
   (reset! now-time-atom
@@ -767,7 +767,7 @@
                     :height (* 0.7 (if mobile? mob-width desk-width))}
         show-debug-button? (= :debug (first args))
         settings (args–>settings args)
-        ; _ (println "**** Settings: " settings)
+        
         show-done-state (r/atom true)
         daily-page-atom? (r/atom (daily-page? block-uid))
         page-title (page-title block-uid)
