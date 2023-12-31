@@ -78,10 +78,8 @@ Press `Enter` and `Tab`. Now you can start writing your task list.
 
 Enjoy!
 
-# Feature Requests, Bugs, and Feedback
-Nautilus is work in progress. I am happy to remove bugs or listen to your feedback! Contact me via https://barys.me. 
-
-# Credits
+# Feature Requests, Bugs, and Feedback and Credits
+Nautilus is work in progress. I am happy to remove bugs or listen to your feedback! Contact me via https://barys.me.
 
 Huge thanks to Roam Slack community, especially to Matt Vogel, which helped me to understand how the Roam Depot extensions (roam/render) work. His [Roam Depot Render Template](https://github.com/8bitgentleman/roam-depot-render-template) is being adopted here. Many thanks to [Adam Kalisz](https://x.com/kaliszad), a developer behind OrgPad (written in ClojureScript) that helped me to grasp functional programming. Thanks to my beta-testers too.
 
