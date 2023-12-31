@@ -71,7 +71,7 @@ which inserts this code:
 
 Press `Enter` and `Tab`. Now you can start writing your task list.
 
-### 3. Put your tasks and events into the children’s block 
+### 2. Put your tasks and events into the children’s block 
 - If you are not able to edit the children of the Nautilus block, try pressing `Cmd(Ctrl)-Enter` which opens the first block of the page for editing. 
 - Move or indent a list of your todos into a children of the block of the Nautilus.
 - From now you can edit and rearrange children blocks as you wish and see how your work spots are dynamically rearranged and filled with your tasks. 
