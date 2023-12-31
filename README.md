@@ -11,7 +11,7 @@ Why spiral shape? In my experience, my energy available for doing creative and d
 _Events are yellow, tasks are blue – and done tasks are faint gray_
 
 
-## General instructions
+## General Instructions
 
 - Tasks and events are just rows of simple **text outline** placed as a children’s block under the Nautilus component. You can use easy "caldown" notation too. Nautilus dynamically visualizes the outline into a watch-like visual timeline. It works in real time.
 - The order and the length of **tasks are sacred** – only you can manually change it.  
@@ -26,7 +26,7 @@ _Events are yellow, tasks are blue – and done tasks are faint gray_
 - Once a task is marked 'DONE' in Roam, (and if you have installed the [Todo Trigger extension](https://github.com/tombarys/roam-depot-nautilus/blob/main/README.md#1-install-todo-trigger-extension-for-better-experience)) it's **tagged with the completion time** in format dHH:MM (e.g. d14:30), which is visually interpreted as a faint grey section on the spiral. It can serve as a visual log of tasks that have been done.
 
 
-### Additional info + tips and tricks
+### Additional Info + Tips and Tricks
 - Nautilus works pretty well on mobile too.
 - I suggest describing your tasks in a very short (BuJo-like) style. Add detailed description into children blocks of task.
 - References and markdown links are stripped heavily to show only the real name of the task in legend. 
@@ -37,7 +37,7 @@ _Events are yellow, tasks are blue – and done tasks are faint gray_
 - Sorry for some glitches when generating the proper position of the legend in some edge cases. This is MVP – even I am using Nautilis for 6 months without bigger issues, there are still some problems and lot of work has to be done. 
 
 
-## Setup (you do this once)
+## Setup (you do this only once)
 ### 1. First, make sure that __User code__ is enabled in your settings. 
 This allows custom components in your graph. 
 
@@ -59,7 +59,8 @@ Additionally, you can easily change two parameters to better suit your needs (in
 
 Important: All settings will not manifest retroactivelly in old Nautiluses, but just when creating a new instance using the `;;` Nautilus template. 
 
-## Daily use (you do this every day)
+## Daily Use (you do this every day)
+
 ### 1. Insert the component into your Daily Page
 The easiest way to insert the component is through Roam's native template menu. Type `;;` and look for "Nautilus." Press `Enter`.
 
