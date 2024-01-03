@@ -6,6 +6,8 @@ dist
 out
 .env.local
 .lsp
+.calva
+.clj-kondo
 
 .DS_Store
 *extension.js
