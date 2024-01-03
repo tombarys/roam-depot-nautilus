@@ -38,7 +38,8 @@ _Events are yellow, tasks are blue – and done tasks are faint gray_
 
 # Quick Start Video
 
-<div style="position: relative; padding-bottom: 72.48322147651007%; height: 0;"><iframe src="https://www.loom.com/embed/c66b99a39a5a4f74b2889ccab467e9eb?sid=5809279e-7deb-44e2-a448-f9de33ba8510" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+[![Video](videothumb.png)](https://www.loom.com/embed/c66b99a39a5a4f74b2889ccab467e9eb?sid=5809279e-7deb-44e2-a448-f9de33ba8510)
+
 
 ## Setup (you do this only once)
 ### 1. First, make sure that __User code__ is enabled in your settings. 
