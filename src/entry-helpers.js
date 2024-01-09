@@ -153,8 +153,7 @@ export function updateTemplateString(renderString, renderStringWSettings){
 function replaceRenderString(renderString, replacementString){
     // replaces the {{[[roam/render]]:((5juEDRY_n))}} string across the entire graph
     // I do this because when the original block is deleted Roam leaves massive codeblocks wherever it was ref'd
-    // also allows me to re-add back if a user uninstalls and then re-installs
-    
+    // also allows me to re-add back if a user uninstalls and then re-installs  
 
     let query = `[:find
         (pull ?node [:block/string :node/title :block/uid])
@@ -177,14 +176,15 @@ function replaceRenderString(renderString, replacementString){
 }
 
 
-export function toggleRenderComponent(state, titleblockUID, cssBlockParentUID, version, renderString, replacementString, cssBlockUID, codeBlockUID, componentName) {
+export function toggleRenderComponent(state, titleblockUID, cssBlockParentUID, version, renderString, replacementString, cssBlockUID, codeBlockUID, componentName, disabledStr) {
     let renderPageName = 'roam/render'
     if (state==true) {
+        replaceRenderString('{{' + componentName + disabledStr, renderString),
         createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID, componentName)
         // createCSSBlock(cssBlockParentUID, cssBlockUID, componentCSSFile, `${componentName} STYLE`);
 
     } else if(state==false){
-        replaceRenderString(renderString, replacementString)
+        replaceRenderString(renderString, replacementString + disabledStr),
         removeCodeBlock(titleblockUID)
         // removeCodeBlock(cssBlockParentUID)
     }

@@ -33,13 +33,12 @@ _Events are yellow, tasks are blue – and done tasks are faint gray_
 - You can use "to" in events time range definiton too (e.g., "14:30 to 15:15 My TED Talk"). 
 - You can use Roam references to blocks in your task list. It means you can just `Alt/Option` + drag and drop tasks from other pages/blocks without rewriting them from scratch.
 - Do your planning in the morning or even the evening before. It seems like Nautilus involves extended preparation before a  workday, but my experience is it greatly aids conscious day planning and eventual task optimization. 
-- I usually add a simple `#Today` tag at the start of the Nautilus render block too – it helps when you want to enter the *click to edit* mode in Roam. For example: `#Today {{[[roam/render]]:((roam-render-Nautilus-cljs)) 22 30}}`.
+- I usually add a prefix `#Today` preceding the Nautilus render block (via Settings). The inserted render blocks looks like this: `#Today {{[[roam/render]]:((roam-render-Nautilus-cljs)) 22 30}}` so clicking later on #Today tag helps me to quickly gather all my old Nautiluses.
 - Sorry for some glitches when generating the proper position of the legend in some edge cases. This is MVP – even I am using Nautilus for 6 months without bigger issues, there are still some problems and lot of work has to be done. 
 
-# Quick Start Video
+## Quick Start Video
 
-[![Video](videothumb.png)](https://www.loom.com/embed/c66b99a39a5a4f74b2889ccab467e9eb?sid=5809279e-7deb-44e2-a448-f9de33ba8510)
-
+[![Video](https://github.com/tombarys/roam-depot-nautilus/blob/e5517dbdf8f873e1e5041219de3da36f376dcfca/videothumb.png)](https://www.loom.com/embed/c66b99a39a5a4f74b2889ccab467e9eb?sid=5809279e-7deb-44e2-a448-f9de33ba8510)
 
 ## Setup (you do this only once)
 ### 1. First, make sure that __User code__ is enabled in your settings. 
