@@ -38,7 +38,9 @@ _Events are yellow, tasks are blue – and done tasks are faint gray_
 
 ## Quick Start Video
 
-[![Video](https://github.com/tombarys/roam-depot-nautilus/blob/e5517dbdf8f873e1e5041219de3da36f376dcfca/videothumb.png)](https://www.loom.com/embed/c66b99a39a5a4f74b2889ccab467e9eb?sid=5809279e-7deb-44e2-a448-f9de33ba8510)
+<img src="https://github.com/tombarys/roam-depot-nautilus/blob/e5517dbdf8f873e1e5041219de3da36f376dcfca/videothumb.png?raw=true" width="600"></img>
+
+[Click here to see the video.](https://www.loom.com/embed/c66b99a39a5a4f74b2889ccab467e9eb?sid=5809279e-7deb-44e2-a448-f9de33ba8510)
 
 ## Setup (you do this only once)
 ### 1. First, make sure that __User code__ is enabled in your settings. 
