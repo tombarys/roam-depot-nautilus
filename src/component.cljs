@@ -666,28 +666,30 @@
 (defn events->new-dimensions
   "Returns a new center and width so that events can be aligned"
   [events center settings]
-  (loop [i 0
-         events (filter #(not= true (:freetime %)) events)
-         rects []
-         left-min (- (:center-x center) (outer-radius-at 9))
-         right-max (+ (:center-x center) (outer-radius-at 14))
-         top-min (- (:center-y center) (outer-radius-at 11))
-         bottom-max (+ (:center-y center) (outer-radius-at 17))]
-    (if-let [event (first events)]
-      (let [mid-radians (pos-sweep-angle-mid
-                         (angle->rad (min->angle (:start event)))
-                         (angle->rad (min->angle (:end event))))
-            text (:description event)
-            radius (nth snail-blueprint-outer-radiuses (mod (quot (int (:start event)) 60) (count snail-blueprint-outer-radiuses)))
-            new-rect (get-legend-rect rects text mid-radians radius center settings)]
+  (let [center-x (:center-x center)
+        center-y (:center-y center)]
+    (loop [i 0
+           events (filter #(not= true (:freetime %)) events)
+           rects []
+           left-min (- center-x (outer-radius-at 9))
+           right-max (+ center-x (outer-radius-at 14))
+           top-min (- center-y (outer-radius-at 11))
+           bottom-max (+ center-y (outer-radius-at 17))]
+      (if-let [event (first events)]
+        (let [mid-radians (pos-sweep-angle-mid
+                           (angle->rad (min->angle (:start event)))
+                           (angle->rad (min->angle (:end event))))
+              text (:description event)
+              radius (nth snail-blueprint-outer-radiuses (mod (quot (int (:start event)) 60) (count snail-blueprint-outer-radiuses)))
+              new-rect (get-legend-rect rects text mid-radians radius center settings)]
         ;(println?debug "RADIUS: " radius)
         ;(pprint?debug new-rect)
         ;(println?debug "LEFT-MIN: " left-min " RIGHT-MAX: " right-max " WIDTH: " (- right-max left-min))
-        (recur (inc i) (rest events) (conj rects new-rect) (min left-min (:x new-rect)) (max right-max (+ (:x new-rect) (:w new-rect))) (min top-min (:y new-rect)) (max bottom-max (+ (:y new-rect) (:h new-rect)))))
-      [(+ reserve (- (:center-x center) left-min))
-       (+ reserve (- right-max left-min))
-       (+ reserve (- (:center-y center) top-min))
-       (+ (* 3 reserve) (- bottom-max top-min))])))
+          (recur (inc i) (rest events) (conj rects new-rect) (min left-min (:x new-rect)) (max right-max (+ (:x new-rect) (:w new-rect))) (min top-min (:y new-rect)) (max bottom-max (+ (:y new-rect) (:h new-rect)))))
+        [(+ reserve (- center-x left-min))
+         (+ reserve (- right-max left-min))
+         (+ reserve (- center-y top-min))
+         (+ (* 3 reserve) (- bottom-max top-min))]))))
 
 (defn split-and-trim [page-title n]
   (map #(subs % 0 (min n (count %))) (str/split page-title #"," 2)))
