@@ -1,4 +1,4 @@
-(ns nautilus-roam-1-8-2024
+(ns nautilus-roam-1-10-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -29,6 +29,7 @@
 
 (def desk-width 600) ;; default start width value on desktop
 
+(def start-svg-rect-ratio 0.7)
 
 ;; ---------- mostly visual dev settings ------------
 
@@ -529,10 +530,10 @@
         (if at-vertex?
           [(+ legend-x (/ legend-w 2)) (+ legend-y (if (< legend-radians 0) 0 legend-h))] ; pokud je legenda na vrcholu, tak je konec čáry uprostřed legendy
           (cond
-            (and (< legend-radians pi) (> legend-radians (/ pi 2))) [(+ legend-x legend-w bent-line-gap #_(if at-vertex? (- (/ legend-w 2)) 0)) (+ legend-y (* legend-h (sin legend-radians)))] ; levý horní
+            (and (< legend-radians pi) (> legend-radians (/ pi 2))) [(+ legend-x legend-w bent-line-gap) (+ legend-y (* legend-h (sin legend-radians)))] ; levý horní
             (and (< legend-radians (/ pi 2)) (> legend-radians 0)) [legend-x (+ legend-y (/ legend-h 2) (* legend-h (/ (sin legend-radians) 2)))] ; pravý horní
             (and (< legend-radians 0) (> legend-radians (- (/ pi 2)))) [legend-x (+ legend-y (* legend-h (/ (cos legend-radians) 2)))] ; pravý dolní
-            :else [(+ legend-x legend-w bent-line-gap #_(if at-vertex? (- (/ legend-w 2)) 0)) (+ legend-y (* (/ (+ (sin legend-radians) 1) 2) legend-h))])) ; levý dolní
+            :else [(+ legend-x legend-w bent-line-gap) (+ legend-y (* (/ (+ (sin legend-radians) 1) 2) legend-h))])) ; levý dolní
         time-text-x (+ center-x (* (cos start-radians) (- outer-radius 10)))
         time-text-y (- center-y (* (sin start-radians) (- outer-radius 10)))
         border-color (if (= border-color nil) "none" border-color)
@@ -541,10 +542,10 @@
         legend-color (if-not done? (update-opacity-str bg-color "1") (update-opacity-str bg-color "0.2"))
         font-weight (if font-weight font-weight "normal")
         path (create-arc-path start-angle end-angle inner-radius outer-radius center)
+        on-left? (or (<= legend-radians (- (/ pi 2))) (>= legend-radians (/ pi 2)))
         debug? @debug-state-atom
         dbg-radians-txt (if debug? (str "slc:" (round2 start-radians) "–>" (round2 end-radians) "/ leg:" (round2 legend-radians)) "")
-        progress-str (if (and debug? progress) (str progress " % ") "")
-        on-left? (or (<= legend-radians (- (/ pi 2))) (>= legend-radians (/ pi 2)))]
+        #_#_progress-str (if (and debug? progress) (str progress " % ") "")]
     [:g
      (when @debug-state-atom  [:circle {:cx center-x :cy center-y :r 4 :fill "red"}])
      ;; ⤵ this is the main component - slice
@@ -552,17 +553,16 @@
       {:d path
        :stroke-dasharray stroke-dasharray
        :fill bg-color
-       ; :on-click #(js/console.log "Dílek " text " odkliknut!")
+       ; :on-click #(js/console.log "Slice " text " clicked!")
        ; #_#_:on-mouse-enter (fn [_] (reset! hovered true))
        ; #_#_:on-mouse-leave (fn [_] (reset! hovered false))
        :stroke border-color}
       #_(when @hovered [:g [:text {:x 20 :y 20} text]])]
-
      ;; ⤵ adds an event legend
      (when (and text (not done?))
        [:g
         [bent-line-component legend-line-start-x legend-line-start-y legend-line-end-x legend-line-end-y legend-color]
-        [:text {:x (+ legend-line-end-x (if on-left? (- bent-line-gap) bent-line-gap) #_(if at-vertex? (/ legend-w 2) 0)) :y (+ legend-y legend-h)
+        [:text {:x (+ legend-line-end-x (if on-left? (- bent-line-gap) bent-line-gap)) :y (+ legend-y legend-h)
                 :text-anchor (if at-vertex?
                                "middle"
                                (if on-left? "end" "start"))
@@ -570,7 +570,7 @@
                 :font-weight font-weight
                 :fill (if-not done? (update-opacity-str bg-color "1") (update-opacity-str bg-color "0.2"))}
          (if debug? (str dbg-radians-txt)
-             (str progress-str (subs text 0 (:legend-len-limit settings))))]])
+             (str #_progress-str (subs text 0 (:legend-len-limit settings))))]])
      (when (seq timestamp)
        ;; ⤵ adds a clock label for the snail template
        [:text  {:x time-text-x :y time-text-y :font-size (- font-size 3) :font-family font-family :color border-color :fill border-color
@@ -594,31 +594,17 @@
               (concat (map vector (range 0 390 30) (range 30 390 30) (range 9 21))
                       [(vector 0 30 21) (vector 330 360 8)]))])
 
-(defn central-label-component [[weekday date] center]
-  (let [[center-x center-y] [(:center-x center) (:center-y center)]]
+(defn central-label-component [[first-row second-row] center]
+  (let [[center-x center-y] [(:center-x center) (:center-y center)]
+        common-attr {:x center-x
+                     :fill "gray"
+                     :alignment-baseline "middle"
+                     :text-anchor "middle"
+                     :font-weight "bold"
+                     :font-size (str (* font-size 4/5))}]
     [:g
-     [:text {:x center-x
-             :y (- center-y (/ font-size 2))
-             :fill "gray"
-             :alignment-baseline "middle"
-             :text-anchor "middle"
-             :font-weight "bold"
-             :font-size (str (* font-size 4/5))}
-      weekday]
-     [:text {:x center-x
-             :y (+ center-y (/ font-size 2))
-             :fill "gray"
-             :alignment-baseline "middle"
-             :text-anchor "middle"
-             :font-weight "bold"
-             :font-size (str (* font-size 4/5))}
-      date]
-     #_(when @debug-state-atom [:text
-                                {:x center-x :y (+ center-y 30)
-                                 :alignment-baseline "middle"
-                                 :text-anchor "middle"
-                                 :font-size font-size}
-                                @now-time-atom])]))
+     [:text (assoc common-attr :y (- center-y (/ font-size 2))) first-row ]
+     [:text (assoc common-attr :y (+ center-y (/ font-size 2))) second-row]]))
 
 
 (defn calculate-slice-params [event index daily-page?]
@@ -797,18 +783,24 @@
      (str "debug is on")
      (str "🪲 debug is off"))])
 
-(defn args–>settings [args]
-  (if (> (count args) 1)
-    {:legend-len-limit (int (first args)) :default-duration (int (second args))}
-    {:legend-len-limit start-len-limit :default-duration start-duration}))
+(defn args->settings [[a1 a2 :as args]]
+  (let [a1 (when a1 (int a1))
+        a2 (when a2 (int a2))]
+  (if (and (>= (count args) 2) 
+           (between a1 15 30) ;; allowed legend len interval
+           (between a2 5 60)) ;; allowed default todo duration interval
+    {:legend-len-limit a1
+     :default-duration a2}
+    {:legend-len-limit start-len-limit
+     :default-duration start-duration})))
 
 (defn main [{:keys [block-uid]} & args]
   (reset-now-time-atom now-time-atom)
   (let [dimensions {:width (if mobile? mob-width desk-width)
-                    :height (* 0.7 (if mobile? mob-width desk-width))}
+                    :height (* start-svg-rect-ratio (if mobile? mob-width desk-width))}
         show-debug-button? (= :debug (first args))
-        settings (args–>settings args)
-        ; _ (println "**** Settings: " settings)
+        settings (args->settings args)
+        #_#__ (println "**** Settings: " settings)
         show-done-state (r/atom true)
         daily-page-atom? (r/atom (daily-page? block-uid))
         page-title (page-title block-uid)
