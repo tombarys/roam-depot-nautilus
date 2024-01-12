@@ -1,4 +1,4 @@
-(ns nautilus-roam-1-10-2024
+(ns nautilus-roam-1-12-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -345,15 +345,15 @@
       {:duration (:default-duration settings) :cleaned-str s})))
 
 
-(defn parse-progress [s]
-  (let [progress-format #"(\d{1,3})(\%)"
-        progress-match (re-find progress-format s)]
-    (if progress-match
-      (let [progress-str (first progress-match)
-            cleaned-str (str/replace s progress-str "")]
-        {:progress (parse-int (second progress-match))
-         :cleaned-str cleaned-str})
-      {:progress nil :cleaned-str s})))
+#_(defn parse-progress [s]
+    (let [progress-format #"(\d{1,3})(\%)"
+          progress-match (re-find progress-format s)]
+      (if progress-match
+        (let [progress-str (first progress-match)
+              cleaned-str (str/replace s progress-str "")]
+          {:progress (parse-int (second progress-match))
+           :cleaned-str cleaned-str})
+        {:progress nil :cleaned-str s})))
 
 (defn parse-done-time [s]
   (let [done-time-format #"d(\d{1,2}(?::\d{1,2})?)"
@@ -374,22 +374,27 @@
        :cleaned-str (str/replace s done-format "")}
       {:done false :cleaned-str s})))
 
+(defn parse-URLs
+  "Extract and format URL links"
+  [s]
+  {:cleaned-str (str/replace s #"\[(.*?)\]\((.*?)\)" "$1")})
+
 (defn parse-rest [s]
   (-> s
       ;; Remove specific Roam markers (TODO, DONE, etc.)
       (str/replace #"\{\{\[\[TODO\]\]\}\}" "")
       (str/replace #"\{\{\[\[DONE\]\]\}\}" "")
 
-      ;; Extract and format links
-      (str/replace #"\[\[(.*?)\]\]" "$1")
-      (str/replace #"\[(.*?)\]\((.*?)\)" "$1")
+      ;; Remove wiki links
+      (str/replace #"\[\[(.*?)\]\]" "$1") 
 
       ;; Remove other special formatting (bold, italic, etc.)
       (str/replace #"\*\*(.*?)\*\*" "$1")
       (str/replace #"\_\_(.*?)\_\_" "$1")
       (str/replace #"\^\^(.*?)\^\^" "$1")
 
-      ;; Replace custom tags with their symbols or texts
+      ;; Replace custom tags with their symbols or texts 
+      ;; TODO for later implementation via Settings
       ; (str/replace #"\#hoří" "🔥")
       ; (str/replace #"\#čekám" "⏳")
       ; (str/replace #"\#hluboká" "📵")
@@ -400,7 +405,8 @@
 
 (defn parse-row-params [s settings]
   (let [;_ (println "#### STARTUJEME s " s)
-        {:keys [range cleaned-str]} (parse-time-range s)
+        {:keys [cleaned-str]} (parse-URLs s) ;; remove URLs – it has to start with this, because URLs can contain other markers
+        {:keys [range cleaned-str]} (parse-time-range cleaned-str)
         ; _ (println "range: " range " cleaned-str: " cleaned-str)
         {:keys [duration cleaned-str]} (parse-duration cleaned-str settings)
         ; _ (println "duration before: " duration " cleaned-str: " cleaned-str)
@@ -409,7 +415,7 @@
         ; _ (println "done-time: " done-at " cleaned-str: " cleaned-str)
         {:keys [done cleaned-str]} (parse-DONE cleaned-str)
         ; _ (println "done: " done " cleaned-str: " cleaned-str)
-        {:keys [progress cleaned-str]} (parse-progress cleaned-str)
+        #_#_{:keys [progress cleaned-str]} (parse-progress cleaned-str)
         ; _ (println "progress: " progress " cleaned-str: " cleaned-str)
         description (parse-rest cleaned-str)
         ; _ (println "description: " description)
@@ -420,7 +426,7 @@
          :end (or done-at (second range))
          :done done
          :done-at (if done done-at nil)
-         :progress (or progress 0)}
+         #_#_:progress (or progress 0)}
         (assoc event-type true))))
 
 ;; --------------- fill day with events and todos ----------------------
@@ -603,7 +609,7 @@
                      :font-weight "bold"
                      :font-size (str (* font-size 4/5))}]
     [:g
-     [:text (assoc common-attr :y (- center-y (/ font-size 2))) first-row ]
+     [:text (assoc common-attr :y (- center-y (/ font-size 2))) first-row]
      [:text (assoc common-attr :y (+ center-y (/ font-size 2))) second-row]]))
 
 
@@ -788,13 +794,13 @@
 (defn args->settings [[a1 a2 :as args]]
   (let [a1 (when a1 (int a1))
         a2 (when a2 (int a2))]
-  (if (and (>= (count args) 2) 
-           (between a1 15 30) ;; allowed legend len interval
-           (between a2 5 60)) ;; allowed default todo duration interval
-    {:legend-len-limit a1
-     :default-duration a2}
-    {:legend-len-limit start-len-limit
-     :default-duration start-duration})))
+    (if (and (>= (count args) 2)
+             (between a1 15 30) ;; allowed legend len interval
+             (between a2 5 60)) ;; allowed default todo duration interval
+      {:legend-len-limit a1
+       :default-duration a2}
+      {:legend-len-limit start-len-limit
+       :default-duration start-duration})))
 
 (defn main [{:keys [block-uid]} & args]
   (reset-now-time-atom now-time-atom)
