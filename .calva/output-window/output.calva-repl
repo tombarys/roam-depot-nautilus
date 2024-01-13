@@ -9,8 +9,8 @@
 ; You can make Calva auto-select this.
 ;   - See https://calva.io/connect-sequences/
 ; 
-; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 51698 ; popd
-; Using host:port 127.0.0.1:51698 ...
+; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 60300 ; popd
+; Using host:port 127.0.0.1:60300 ...
 ; Hooking up nREPL sessions ...
 ; Connected session: clj
 ; TIPS:
@@ -26,10 +26,164 @@ clj꞉user꞉>  ; Use `alt+enter` to evaluate
 clj꞉user꞉> 
 ; Jack-in done.
 clj꞉user꞉> 
-#<Var@3157b8c3: #object[sci.impl.fns$fun$arity_1__1191 0x35b7d4eb "sci.impl.fns$fun$arity_1__1191@35b7d4eb"]>
-clj꞉nautilus-roam-1-10-2024꞉> (parse-links "This is a test [[202010101010]]")
-{:cleaned-str "This is a test 202010101010"}
-clj꞉nautilus-roam-1-10-2024꞉> 
-(parse-links "This is a test [202010101010](https://www.google.com)")
-{:cleaned-str "This is a test 202010101010"}
-clj꞉nautilus-roam-1-10-2024꞉> 
+#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x89b0ebd "sci.impl.fns$fun$arity_1__1191@89b0ebd"]>
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "https://www.notion.so/N")
+{:cleaned-str "https://www.notion.so/N"}
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "[popis](https://www.notion.so/N)")
+{:cleaned-str "popis"}
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}}[popis](https://www.notion.so/N)")
+{:cleaned-str "{{[TODO]]}}[popis"}
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} [popis](https://www.notion.so/N)")
+{:cleaned-str "{{[TODO]]}} [popis"}
+clj꞉nautilus-roam-1-12-2024꞉> 
+#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x706e000a "sci.impl.fns$fun$arity_1__1191@706e000a"]>
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} [popis](https://www.notion.so/N)")
+({:text "[TODO]]}} [popis", :url "https://www.notion.so/N"})
+clj꞉nautilus-roam-1-12-2024꞉> 
+#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x6db8026 "sci.impl.fns$fun$arity_1__1191@6db8026"]>
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} [popis](https://www.notion.so/N)")
+("[TODO]]}} [popis")
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} [popis](https://www.notion.so/N)")
+("[TODO]]}} [popis")
+clj꞉nautilus-roam-1-12-2024꞉> 
+#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0xc426b93 "sci.impl.fns$fun$arity_1__1191@c426b93"]>
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} [popis](https://www.notion.so/N)")
+("[TODO]]}} [popis")
+clj꞉nautilus-roam-1-12-2024꞉> 
+#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x62b299a0 "sci.impl.fns$fun$arity_1__1191@62b299a0"]>
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} [popis](https://www.notion.so/N)")
+("[TODO]]}} [popis")
+clj꞉nautilus-roam-1-12-2024꞉> 
+#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x8b82bb2 "sci.impl.fns$fun$arity_1__1191@8b82bb2"]>
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} [popis](https://www.notion.so/N)")
+("[TODO]]}} [popis")
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} [link](https://www.melvil.cz)")
+("[TODO]]}} [link")
+clj꞉nautilus-roam-1-12-2024꞉> 
+#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x3ff84445 "sci.impl.fns$fun$arity_1__1191@3ff84445"]>
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} [link](https://www.melvil.cz)")
+("link")
+clj꞉nautilus-roam-1-12-2024꞉> 
+#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x67961bfd "sci.impl.fns$fun$arity_1__1191@67961bfd"]>
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} [link](https://www.melvil.cz)")
+(("link"))
+clj꞉nautilus-roam-1-12-2024꞉> 
+#<Var@511dc5f8: #object[sci.impl.fns$fun$arity_1__1191 0x288dab30 "sci.impl.fns$fun$arity_1__1191@288dab30"]>
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} [link](https://www.melvil.cz)")
+(("link"))
+clj꞉nautilus-roam-1-12-2024꞉> 
+(remove-urls "{{[[TODO]]}} [link](https://www.melvil.cz)")
+"{{[TODO]]}} [link"
+clj꞉nautilus-roam-1-12-2024꞉> 
+; : Unclosed character class near index 43
+; (?:\[((?:[^\]])*)\]\(((?:[^\))])*\)|([^[])+)
+;                                            ^ user 
+clj꞉nautilus-roam-1-12-2024꞉> 
+(remove-urls "{{[[TODO]]}} [link](https://www.melvil.cz)")
+"{{[TODO]]}} [link"
+clj꞉nautilus-roam-1-12-2024꞉> 
+; : Unclosed character class near index 43
+; (?:\[((?:[^\]])*)\]\(((?:[^\))])*\)|([^[])+)
+;                                            ^ user 
+clj꞉nautilus-roam-1-12-2024꞉> 
+#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x45db99af "sci.impl.fns$fun$arity_1__1191@45db99af"]>
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} [link](https://www.melvil.cz)")
+("link")
+clj꞉nautilus-roam-1-12-2024꞉> 
+; : Unclosed character class near index 43
+; (?:\[((?:[^\]])*)\]\(((?:[^\)]*)\))|([^[]]+)
+;                                            ^ user 
+clj꞉nautilus-roam-1-12-2024꞉> 
+#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x681b15dd "sci.impl.fns$fun$arity_1__1191@681b15dd"]>
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} [link](https://www.melvil.cz)")
+("[TODO]]}} [link")
+clj꞉nautilus-roam-1-12-2024꞉> 
+#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x18e23249 "sci.impl.fns$fun$arity_1__1191@18e23249"]>
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} [link](https://www.melvil.cz)")
+{:cleaned-str "{{[TODO]]}} [link"}
+clj꞉nautilus-roam-1-12-2024꞉> 
+#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x2428d9db "sci.impl.fns$fun$arity_1__1191@2428d9db"]>
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} [link](https://www.melvil.cz)")
+{:cleaned-str "{{[[TODO]]}} link"}
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} whatever [link](https://www.melvil.cz) it is")
+{:cleaned-str "{{[[TODO]]}} whatever link it is"}
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} whatever [link](https://www.melvil.cz) it is [dear](https://www.melvil.cz)")
+{:cleaned-str "{{[[TODO]]}} whatever link it is dear"}
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "{{[[TODO]]}} whatever [link](https://www.melvil.cz) it is [dear]()")
+{:cleaned-str "{{[[TODO]]}} whatever link it is dear"}
+clj꞉nautilus-roam-1-12-2024꞉> 
+; Jacking in...
+; Connecting using "Babashka" project type.
+; You can make Calva auto-select this.
+;   - See https://calva.io/connect-sequences/
+; 
+; nREPL Connection was closed
+; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 62067 ; popd
+; Using host:port 127.0.0.1:62067 ...
+; Hooking up nREPL sessions ...
+; Connected session: clj
+; TIPS:
+;   - You can edit the contents here. Use it as a REPL if you like.
+;   - `alt+enter` evaluates the current top level form.
+;   - `ctrl+enter` evaluates the current form.
+;   - `alt+up` and `alt+down` traverse up and down the REPL command history
+;      when the cursor is after the last contents at the prompt
+;   - Clojure lines in stack traces are peekable and clickable.
+; Evaluating code from settings: 'calva.autoEvaluateCode.onConnect.clj'
+nil
+clj꞉user꞉> 
+clj꞉user꞉> 
+; Jack-in done.
+clj꞉user꞉> 
+#<Var@7e8038c3: #object[sci.impl.fns$fun$arity_1__1191 0x52fcdded "sci.impl.fns$fun$arity_1__1191@52fcdded"]>
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "[Přidat](https://discord.com/channels/899233096715628556/899233097239896099/1192404407879483422)")
+{:cleaned-str "Přidat "}
+clj꞉nautilus-roam-1-12-2024꞉> 
+{:cleaned-str "Přidat"}
+clj꞉nautilus-roam-1-12-2024꞉> 
+#<Var@7e8038c3: #object[sci.impl.fns$fun$arity_1__1191 0x39c5b81e "sci.impl.fns$fun$arity_1__1191@39c5b81e"]>
+clj꞉nautilus-roam-1-12-2024꞉> 
+(parse-URLs "[Přidat](https://discord.com/channels/899233096715628556/899233097239896099/1192404407879483422)")
+"Přidat"
+clj꞉nautilus-roam-1-12-2024꞉> 
+#<Var@b1ee343: #object[sci.impl.fns$fun$arity_1__1191 0x7a428108 "sci.impl.fns$fun$arity_1__1191@7a428108"]>
+clj꞉nautilus-roam-1-13-2024꞉> 
+(parse-URLs "[Přidat](https://discord.com/channels/899233096715628556/899233097239896099/1192404407879483422)")
+"Přidat"
+clj꞉nautilus-roam-1-13-2024꞉> 
+(parse-URLs "{{[[TODO]]}} whatever [link](https://www.melvil.cz) it is [dear]()")
+"linkdear"
+clj꞉nautilus-roam-1-13-2024꞉> 
+#<Var@b1ee343: #object[sci.impl.fns$fun$arity_1__1191 0x5ca52855 "sci.impl.fns$fun$arity_1__1191@5ca52855"]>
+clj꞉nautilus-roam-1-13-2024꞉> 
+(parse-URLs "{{[[TODO]]}} whatever [link](https://www.melvil.cz) it is [dear]()")
+"{{[[TODO]]}} whatever link it is dear"
+clj꞉nautilus-roam-1-13-2024꞉> 
+(parse-URLs " whatever [link](https://www.melvil.cz) it is [dear]()")
+" whatever link it is dear"
+clj꞉nautilus-roam-1-13-2024꞉> 
+(parse-URLs "{{[[TODO]]}} whatever [link](https://www.melvil.cz) it is [dear]()")
+"{{[[TODO]]}} whatever link it is dear"
+clj꞉nautilus-roam-1-13-2024꞉> 

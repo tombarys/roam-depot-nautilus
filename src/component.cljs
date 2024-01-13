@@ -1,4 +1,4 @@
-(ns nautilus-roam-1-12-2024
+(ns nautilus-roam-1-13-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -377,7 +377,7 @@
 (defn parse-URLs
   "Extract and format URL links"
   [s]
-  {:cleaned-str (str/replace s #"\[(.*?)\]\((.*?)\)" "$1")})
+  (str/replace s #"\[([^\]]*?)\]\((.*?)\)" "$1"))
 
 (defn parse-rest [s]
   (-> s
@@ -386,7 +386,7 @@
       (str/replace #"\{\{\[\[DONE\]\]\}\}" "")
 
       ;; Remove wiki links
-      (str/replace #"\[\[(.*?)\]\]" "$1") 
+      (str/replace #"\[\[(.*?)\]\]" "$1")
 
       ;; Remove other special formatting (bold, italic, etc.)
       (str/replace #"\*\*(.*?)\*\*" "$1")
@@ -404,12 +404,13 @@
       (str/trim)))
 
 (defn parse-row-params [s settings]
-  (let [;_ (println "#### STARTUJEME s " s)
-        {:keys [cleaned-str]} (parse-URLs s) ;; remove URLs – it has to start with this, because URLs can contain other markers
+  (let [_ (println "#### STARTUJEME s " s)
+        cleaned-str (parse-URLs s) ;; remove URLs – it has to start with this, because URLs can contain other markers
+        _ (println "URL cleaned-str: " cleaned-str)
         {:keys [range cleaned-str]} (parse-time-range cleaned-str)
-        ; _ (println "range: " range " cleaned-str: " cleaned-str)
+        _ (println "range: " range " cleaned-str: " cleaned-str)
         {:keys [duration cleaned-str]} (parse-duration cleaned-str settings)
-        ; _ (println "duration before: " duration " cleaned-str: " cleaned-str)
+        _ (println "duration before: " duration " cleaned-str: " cleaned-str)
         #_#__ (println "adjusted duration: " (or duration (:default-duration settings)))
         {:keys [done-at cleaned-str]} (parse-done-time cleaned-str)
         ; _ (println "done-time: " done-at " cleaned-str: " cleaned-str)
