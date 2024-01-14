@@ -1,23 +1,21 @@
-(ns nautilus-roam-1-13-2024
+(ns nautilus-roam-1-14-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
             [roam.datascript.reactive :as rdr]))
 
-;; ------ bfu settings ------
 
-(def start-duration 15)
+;; ------- defaults -------
 
-(def start-len-limit 22)
+(def init-duration 15) ;; values used when no duration is specified as a render parameter
 
+(def init-len-limit 22) ;; values used when no duration is specified as a render parameter
 
-;; ------- hard-coded defaults -------
-
-(def workday-start 480)
+(def workday-start 480) 
 
 (def workday-end 1320)
 
-(def tries-treshold 25)
+(def tries-treshold 25) ;; number of legend placement guesses; lower number = faster but more likely to overlap
 
 ;; -------------- scaling ---------------
 
@@ -47,9 +45,7 @@
 
 (def font-size (if mobile? 12 14))
 
-(def snail-blueprint-outer-radiuses
-  "[95 100 105 110 115 120 125 130 145 140 140 130 125 120 115 110 105 100 95 90 85 80 75 70]
-                                   8h  9h  10h 11h 12h 13h 14h 15h 16h 17h 18 19 20 21 22 23"
+(def snail-blueprint-outer-radiuses ;; FIXME remove zeros later
   [0  0   0   0   0   0   0   0   145 140 140 130 125 120 115 110 105 100 95 90 85 80 75 70])
 
 (def snail-inner-radius (* 50 snail-scaler))
@@ -104,10 +100,9 @@
 
 ;; --------------- reading Roam database ----------------------
 
-
 (defn get-block-str [block]
   (->> (rd/pull
-        [:block/uid :block/string]
+        [:block/uid :block/string {:block/refs [:block/string]}]
         [:block/uid block])
        :block/string))
 
@@ -132,10 +127,6 @@
   (-> (* num 100)
       (js/Math.round)
       (/ 100.0)))
-
-; (defn parse-int [v] (js/parseInt v))
-
-(defn parse-int [v] (int v))
 
 (defn angle->rad [angle]
   (* (- 180 angle) (/ pi 180)))
@@ -323,7 +314,7 @@
 
 (defn time-str-to-minutes [time-str]
   (let [[h m] (str/split time-str #":")]
-    (+ (if m (parse-int m) 0) (* 60 (parse-int h)))))
+    (+ (if m (int m) 0) (* 60 (int h)))))
 
 (defn parse-time-range [s]
   (let [range-format #"(?:\d{1,2}(?::\d{1,2})?)\s*(?:-|–|až|to)\s*(?:\d{1,2}(?::\d{1,2})?)"
@@ -340,7 +331,7 @@
     (if-let [duration-match (re-find duration-format s)]
       (let [duration-str (first duration-match)
             cleaned-str (str/replace s duration-str "")]
-        {:duration (parse-int (second duration-match))
+        {:duration (int (second duration-match))
          :cleaned-str cleaned-str})
       {:duration (:default-duration settings) :cleaned-str s})))
 
@@ -362,7 +353,7 @@
       (let [[_ done-time-str] done-time-match
             [h m] (str/split done-time-str #":")
             cleaned-str (str/replace s (str "d" done-time-str) "")]
-        {:done-at (+ (if m (parse-int m) 0) (* 60 (parse-int h)))
+        {:done-at (+ (if m (int m) 0) (* 60 (int h)))
          :cleaned-str cleaned-str})
       {:done-at nil :cleaned-str s})))
 
@@ -404,13 +395,13 @@
       (str/trim)))
 
 (defn parse-row-params [s settings]
-  (let [_ (println "#### STARTUJEME s " s)
+  (let [;; _ (println "#### STARTUJEME s " s)
         cleaned-str (parse-URLs s) ;; remove URLs – it has to start with this, because URLs can contain other markers
-        _ (println "URL cleaned-str: " cleaned-str)
+        ;; _ (println "URL cleaned-str: " cleaned-str)
         {:keys [range cleaned-str]} (parse-time-range cleaned-str)
-        _ (println "range: " range " cleaned-str: " cleaned-str)
+        ;; _ (println "range: " range " cleaned-str: " cleaned-str)
         {:keys [duration cleaned-str]} (parse-duration cleaned-str settings)
-        _ (println "duration before: " duration " cleaned-str: " cleaned-str)
+        ;; _ (println "duration before: " duration " cleaned-str: " cleaned-str)
         #_#__ (println "adjusted duration: " (or duration (:default-duration settings)))
         {:keys [done-at cleaned-str]} (parse-done-time cleaned-str)
         ; _ (println "done-time: " done-at " cleaned-str: " cleaned-str)
@@ -800,8 +791,8 @@
              (between a2 5 60)) ;; allowed default todo duration interval
       {:legend-len-limit a1
        :default-duration a2}
-      {:legend-len-limit start-len-limit
-       :default-duration start-duration})))
+      {:legend-len-limit init-len-limit
+       :default-duration init-duration})))
 
 (defn main [{:keys [block-uid]} & args]
   (reset-now-time-atom now-time-atom)

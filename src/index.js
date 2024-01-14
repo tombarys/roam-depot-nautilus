@@ -3,14 +3,12 @@ import { updateTemplateString } from "./entry-helpers";
 
 const componentName = 'Nautilus' 
 const codeBlockUID = `roam-render-${componentName}-cljs`;
-const cssBlockUID = `roam-render-${componentName}-css`;
 const renderStringStart = `{{[[roam/render]]:((${codeBlockUID}))`;
 const replacementString = `{{${componentName}`; 
 const disabledStr = `-disabled`;
 
 const version = 'v1';
 const titleblockUID = `roam-render-${componentName}`;
-const cssBlockParentUID = `${componentName}-css-parent`;
 
 const defaults = {'prefix-str': '', 'desc-length': 22, 'todo-duration': 15};
 
@@ -26,10 +24,9 @@ async function newRenderString(renderStringStart, extensionAPI, replacementKey, 
           values.push(value);
       }
   }
-  console.log("values are ", values);
+  // console.log("values are ", values);
   return values[0] + ' ' + renderStringStart + ' ' + values.slice(1).join(' ') + '}}';
 }
-
 
 async function onload({extensionAPI}) {
   const panelConfig = {
@@ -39,7 +36,8 @@ async function onload({extensionAPI}) {
         name:   "Nautilus prefix",
         description: "Your custom text preceding every newly created Nautilus spiral. E.g. #Agenda.",
         action: {type:  "input",
-                 placeholder: extensionAPI.settings.get('prefix-str') || defaults['prefix-str'],
+                 default: defaults['prefix-str'],
+                 // placeholder: extensionAPI.settings.get('prefix-str') || defaults['prefix-str'],
                  onChange: async (evt) => {
                    let newString = await newRenderString(renderStringStart, extensionAPI, 'prefix-str', evt.target.value);
                    updateTemplateString(renderStringStart, newString);
@@ -52,7 +50,7 @@ async function onload({extensionAPI}) {
           description: "Legend length in characters. Longer titles will be truncated. Applies to newly inserted spirals only. Factory setting: 22.",
           action: {
             type: "select",
-            default: extensionAPI.settings.get('desc-length') || defaults['desc-length'],
+            default: defaults['desc-length'],
             items: [14, 16, 18, 20, 22, 24, 26, 28], // specify your default values here
             onChange: async (evt) => {
               let newString = await newRenderString(renderStringStart, extensionAPI, 'desc-length', evt);
@@ -66,6 +64,7 @@ async function onload({extensionAPI}) {
           description: "Default TODO duration in minutes. Used whenever you create a new TODO without specifying a duration. Applies to newly inserted spirals only. Factory setting: 15.",
           action: {
             type: "select",
+            default: defaults['todo-duration'],
             items: [5, 10, 15, 20, 25, 30], // specify your default values here
             onChange: async (evt) => {
               let newString = await newRenderString(renderStringStart, extensionAPI, 'todo-duration', evt);
@@ -80,7 +79,8 @@ async function onload({extensionAPI}) {
   function setDefaultSettings(extensionAPI, defaults) {
     const keys = Object.keys(defaults);
     for (let key of keys) {
-      extensionAPI.settings.set(key, extensionAPI.settings.get(key) || defaults[key]);
+      if (!extensionAPI.settings.get(key)) {
+          extensionAPI.settings.set(key, defaults[key])};
     }
   }
 
@@ -89,7 +89,7 @@ async function onload({extensionAPI}) {
 
   if (!roamAlphaAPI.data.pull("[*]", [":block/uid", titleblockUID])) {
     // component hasn't been loaded so we add it to the graph
-    toggleRenderComponent(true, titleblockUID, cssBlockParentUID, version, renderStringStart, replacementString, cssBlockUID, codeBlockUID, componentName, disabledStr)
+    toggleRenderComponent(true, titleblockUID, version, renderStringStart, replacementString, codeBlockUID, componentName, disabledStr)
   }
 
   console.log(`load ${componentName} plugin`)
@@ -97,7 +97,7 @@ async function onload({extensionAPI}) {
 
 function onunload() {
   console.log(`unload ${componentName} plugin`)
-  toggleRenderComponent(false, titleblockUID, cssBlockParentUID, version, renderStringStart, replacementString, cssBlockUID, codeBlockUID, componentName, disabledStr)
+  toggleRenderComponent(false, titleblockUID, version, renderStringStart, replacementString, codeBlockUID, componentName, disabledStr)
 }
 
 export default {

@@ -1,4 +1,3 @@
-// import componentCSSFile from "./component.css";
 import clsjFile from "./component.cljs";
 
 function removeCodeBlock(uid){
@@ -12,7 +11,7 @@ function uidForToday() {
 }
 
 function createPage(title){
-    // creates the roam/css page if it does not exist
+    // creates the page if it does not exist
     let pageUID = roamAlphaAPI.util.generateUID()
     roamAlphaAPI.data
         .page.create(
@@ -95,37 +94,6 @@ function createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID,
     
 }
 
-// function createCSSBlock(parentUID, cssBlockUID, cssFile, parentString){
-//     // creates the initial code block and its parent
-//     // adding this to the roam/css page so users can use it as an example
-//     // if roam/css page doesn't exist then create it
-//     let pageUID = getPageUidByPageTitle('roam/css') || createPage('roam/css');
-//     // create closed parent block
-//     roamAlphaAPI.createBlock(
-//         {"location": 
-//             {"parent-uid": pageUID, 
-//             "order": "last"}, 
-//         "block": 
-//             {"string": `${parentString} [[${uidForToday()}]]`,
-//             "uid":parentUID,
-//             "open":false,
-//             "heading":3}})
-
-//     // create codeblock for the component
-//     // I do this so that a user can see what to customize
-//     let css = cssFile.toString();
-    
-//     let blockString = "```css\n " + css + " ```"
-//     roamAlphaAPI
-//     .createBlock(
-//         {"location": 
-//             {"parent-uid": parentUID, 
-//             "order": 0}, 
-//         "block": 
-//             {"uid": cssBlockUID,
-//             "string": blockString}})
-
-// }
 
 export function updateTemplateString(renderString, renderStringWSettings){ 
     let query = `[:find
@@ -176,16 +144,14 @@ function replaceRenderString(renderString, replacementString){
 }
 
 
-export function toggleRenderComponent(state, titleblockUID, cssBlockParentUID, version, renderString, replacementString, cssBlockUID, codeBlockUID, componentName, disabledStr) {
+export function toggleRenderComponent(state, titleblockUID, version, renderString, replacementString, codeBlockUID, componentName, disabledStr) {
     let renderPageName = 'roam/render'
     if (state==true) {
         replaceRenderString('{{' + componentName + disabledStr, renderString),
         createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID, componentName)
-        // createCSSBlock(cssBlockParentUID, cssBlockUID, componentCSSFile, `${componentName} STYLE`);
 
     } else if(state==false){
         replaceRenderString(renderString, replacementString + disabledStr),
         removeCodeBlock(titleblockUID)
-        // removeCodeBlock(cssBlockParentUID)
     }
 }
