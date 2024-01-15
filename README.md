@@ -1,22 +1,29 @@
 # ꩜ Nautilus for Roam
 
-Nautilus is a Roam Research extension designed for practical, stress-free daily task planning. It presents tasks and calendar events in a watch-face-like spiral within the Roam interface, acknowledging firmly that tasks vary in duration. 
+Nautilus is a Roam Research extension for stress-free task planning, visually representing tasks and calendar events in the Roam Daily Page, and recognizing task duration variabilities. This flexible tool uses the present moment as a threshold to dynamically push unfinished tasks into the available time until tonight while keeping them in user-defined order with user-estimated durations (no AI!).  
 
-Traditional time-boxing solutions are stressful due to rigid schedules; if one fails to keep up, the agenda quickly derails, which causes demotivation. Nautilus is more flexible, dynamically repositioning unfinished tasks within your day's remaining open time slots. This actually *reduces* stress (try it:), improves prioritization and task planning skills, and mercifully clarifies feasible tasks at any given moment.
-
-Why spiral shape? In my experience, my energy available for doing creative and demanding tasks slowly diminishes during a day – and the shape reflects it. 
+This visual approach reduces overwhelm, enhances task-effort estimating skills, and clearly shows feasible tasks for the rest of the day. The spiral shape mirrors one's diminishing energy for creative tasks over a day.
 
 <img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/examplewithlegend.png" width="800"></img>
 
 _Events are yellow, tasks are blue – and done tasks are faint gray_
 
+## Quick Start Guide
 
-## General Instructions
+- insert the component at the top of your Daily Page using `;;Nautilus` template
+- indent all events and tasks that you want to accomplish below the component as its children 
+- start inserting tasks, then folow up with events
+- use e.g. "12:30-14:20" or "9 to 10:45" to anchor fixed time events
+- use e.g. "10m" or "20min" to set the task duration (other than default)
+- use e.g. "d18:30" or "d9:05" in tasks to denote the time when they were finished (or use extension for it)
+- during a day: reorder tasks and move some of them after fixed events to ensure they will not be planned sooner
 
-- Tasks and events are just rows of simple **text outline** placed as a children’s block under the Nautilus component. You can use easy "caldown" notation too. Nautilus dynamically visualizes the outline into a watch-like visual timeline. It works in real time.
-- The order and the length of **tasks are sacred** – only you can manually change it.  
-- A notable and the only "automatic" feature of Nautilus is task **"push-forward," relocating uncompleted tasks** within open time slots in your day – taking the present time into account. The spiral reflects time without your intervention.
-- If the component is **not placed into today’s Daily Page**, the red time beam is not shown, and tasks are not pushed into the future. (As it does not make sense, you are reviewing the day’s agenda or planning).
+## Detailed Instructions
+
+- Tasks and events are just rows of simple **text outline** placed as a children’s block under the Nautilus component. Nautilus dynamically visualizes the list into a watch-like face. It works in real time.
+- The order and the duration of your tasks **can be changed only by you**. The app does not change it.  
+- A notable and the only "automatic" feature of Nautilus is task **push-forward: relocating uncompleted tasks** within open time slots in your day – taking the present moment into account. The spiral constantly reflects time without your intervention.
+- If the component is **not placed into today’s Daily Page**, the red time beam is not shown, and tasks are not pushed into the future. (as you are reviewing the day’s agenda or planning).
 - You can define your agenda using a straightforward notation:
   - **events** are rows containing a *time range* in 24h format (`HH:MM-HH:MM`, minutes can be omitted) and are fixed until the time range is changed by the user (e.g., "12:30-13 Meeting with JK", "9-10 Breakfast"). 
   - **tasks** are all residuing rows that are not events; undone tasks move through a day (e.g., "nearly empty task" "{{[[TODO]]}} another, but important task").
@@ -87,5 +94,5 @@ Enjoy!
 # Feature Requests, Bugs, and Feedback and Credits
 Nautilus is work in progress. I am happy to remove bugs or listen to your feedback! Contact me via https://barys.me.
 
-Huge thanks to Roam Slack community, especially to Matt Vogel, which helped me to understand how the Roam Depot extensions (roam/render) work. His [Roam Depot Render Template](https://github.com/8bitgentleman/roam-depot-render-template) is being adopted here. Many thanks to [Adam Kalisz](https://x.com/kaliszad), a developer behind OrgPad (written in ClojureScript) that helped me to grasp functional programming. Thanks to my beta-testers too.
+Huge thanks to Roam Slack community, especially to Matt Vogel, which helped me to understand how the Roam Depot extensions (roam/render) work. His [Roam Depot Render Template](https://github.com/8bitgentleman/roam-depot-render-template) is being adopted here. Thanks to Baibhav Bista from Roam Research company for his kindness and patience with my beginner's mistakes during the review process. Many thanks to [Adam Kalisz](https://x.com/kaliszad), a developer behind OrgPad (written in ClojureScript) that helped me to grasp and find love in functional programming. Thanks to all my beta-testers too.
 
