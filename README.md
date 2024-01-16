@@ -10,6 +10,7 @@ _Events are yellow, tasks are blue – and done tasks are light gray_
 
 ## Quick Start Guide
 
+- only once: install **Nautilus** and **TODO Trigger** extension
 - insert the component at the top of your Daily Page using `;;Nautilus` template
 - indent all events and tasks that you want to accomplish below the component as its children 
 - start inserting tasks, then folow up with events
@@ -18,30 +19,6 @@ _Events are yellow, tasks are blue – and done tasks are light gray_
 - use e.g. "d18:30" or "d9:05" in tasks to denote the time when they were finished (or use extension for it)
 - during a day: reorder tasks and move some of them after fixed events to ensure they will not be planned earlier
 
-## Detailed Instructions
-
-- Tasks and events are just rows of a simple **text outline** placed as a child block under the Nautilus component. Nautilus dynamically visualizes the list into a watch-like face. It works in real time.
-- The order and the duration of your tasks **can be changed only by you**. The app does not change it.  
-- A notable and the only "automatic" feature of Nautilus is the task **push-forward: relocating uncompleted tasks** within open time slots in your day – taking the present moment into account. The spiral constantly reflects time without your intervention.
-- If the component is **not placed into today’s Daily Page**, the red time beam is not shown, and tasks are not pushed into the future. 
-- You can define your agenda using a straightforward notation:
-  - **events** are rows containing a *time range* in 24h format (`HH:MM-HH:MM`, minutes can be omitted) and are fixed until the time range is changed by the user (e.g., "12:30-13 Meeting with JK", "9-10 Breakfast"). 
-  - **tasks** are all residual rows that are not events; undone tasks move through a day (e.g., "nearly empty task" "{{[[TODO]]}} another, but important task").
-- **Tasks duration defaults to a 15-minute time allocation**, but this can be adjusted above in the Roam Depot extension settings or **individually for each task in your task list** with the simple notation `Mm` or `Mmin` where M is the length of a task in minutes (e.g., "Call Jack 10m", "Daily workout 45min").
-- The **order of tasks** in a Nautilus spiral **reflects exactly the order of tasks in the list.** 
-- Tasks can be **forced to follow after a particular event** too – simply by placing them after the event in the task list; for example: to plan "Nap" not before lunch, just put it after it in the list. This does not change the order of tasks.
-- Once a task is marked 'DONE' in Roam, (and if you have installed the [Todo Trigger extension](https://github.com/tombarys/roam-depot-nautilus/blob/main/README.md#1-install-todo-trigger-extension-for-better-experience)) it's **tagged with the completion time** in the format dHH:MM (e.g. d14:30), which is visually interpreted as a light grey section on the spiral. It can serve as a visual log of tasks that have been completed.
-
-
-### Additional Info + Tips and Tricks
-- Nautilus works pretty well on mobile too.
-- I suggest describing your tasks in a very short (BuJo-like) style. Optinally add detailed description of each into children blocks.
-- References and markdown links are stripped heavily to show only the real name of the task in legend. 
-- You can use "to" in events time range definition too (e.g., "14:30 to 15:15 My TED Talk"). 
-- You can use Roam references to blocks in your task list. It means you can just `Alt/Option` + drag and drop tasks from other pages/blocks without having to rewrite them from scratch.
-- Do your planning in the morning or even the evening before. It seems like Nautilus involves extended preparation before a  workday, but my experience is it that greatly aids conscientous day planning and eventual task optimization. 
-- I usually add a prefix `#Agenda` preceding the Nautilus render block (via Settings). The inserted render blocks look like this: `#Agenda {{[[roam/render]]:((roam-render-Nautilus-cljs)) 22 30}}` so clicking later on #Agenda tag helps me to quickly gather all my old Nautiluses.
-- Sorry for some glitches when generating the proper position of the legend in some edge cases. This is the first version – even for someone like me that has been using Nautilus for 6 months without bigger issues, there are still some problems and a lot of work still has to be done. 
 
 ## Quick Start Video
 
@@ -90,6 +67,31 @@ Press `Enter` again and `Tab` to ident the first child block under the component
 - From now you can edit and rearrange your children blocks as you wish and see how your work spots are dynamically rearranged and filled with your tasks. 
 
 Enjoy!
+
+## Additional Info 
+- The order and the duration of your tasks **can be changed only by you**. The app does not change it.  
+- A notable and the only "automatic" feature of Nautilus is the task **push-forward: relocating uncompleted tasks** within open time slots in your day – taking the present moment into account. The spiral constantly reflects time without your intervention.
+- If the Nautilus is **not placed into _today’s_ Daily Page**, the red time beam is not shown, and tasks are not pushed into the future. 
+- You can define your agenda using a straightforward notation:
+  - **events** are rows containing a *time range* in 24h format (`HH:MM-HH:MM`, minutes can be omitted) and are fixed until the time range is changed by the user (e.g., "12:30-13 Meeting with JK", "9-10 Breakfast"). 
+  - **tasks** are all residual rows that are not events; undone tasks move through a day (e.g., "nearly empty task" "{{[[TODO]]}} another, but important task").
+- **Tasks duration defaults to a 15-minute time allocation**, but this can be adjusted in the Roam Depot extension Settings or **individually for each task in your task list** with the simple notation `Mm` or `Mmin` where M is the length of a task in minutes (e.g., "Call Jack 10m", "Daily workout 45min").
+- The **order of tasks** in a Nautilus spiral **reflects exactly the order of tasks in the list.** You have to prioritize them by itself – in the morning and later during a day. 
+- Tasks can be **forced to follow after a particular event** too – simply by placing them after the event in the task list; for example: to plan "Nap" not before lunch, just put it after it in the list. This does not change the order of tasks.
+- Once a task is marked 'DONE' in Roam, (and if you have installed the [Todo Trigger extension](https://github.com/tombarys/roam-depot-nautilus/blob/main/README.md#1-install-todo-trigger-extension-for-better-experience)) it's **tagged with the completion time** in the format dHH:MM (e.g. d14:30), which is visually interpreted as a light grey section on the spiral. It can serve as a visual log of tasks that have been completed.
+
+
+### Tips and Tricks
+- Nautilus works pretty well on mobile too.
+- I suggest describing your tasks in a very short (BuJo-like) style. Optinally add detailed description of each into children blocks.
+- References and markdown links are stripped heavily to show only the real name of the task in legend. 
+- You can use "to" in events time range definition too (e.g., "14:30 to 15:15 My TED Talk"). 
+- You can use Roam references to blocks in your task list. It means you can just `Alt/Option` + drag and drop tasks from other pages/blocks without having to rewrite them from scratch.
+- Do your planning in the morning or even the evening before. It seems like Nautilus involves extended preparation before a  workday, but my experience is it that greatly aids conscientous day planning and eventual task optimization. 
+- I usually add a prefix `#Agenda` preceding the Nautilus render block (via Settings). The inserted render blocks look like this: `#Agenda {{[[roam/render]]:((roam-render-Nautilus-cljs)) 22 30}}` so clicking later on #Agenda tag helps me to quickly gather all my old Nautiluses.
+- Sorry for some glitches when generating the proper position of the legend in some edge cases. This is the first version – even for someone like me that has been using Nautilus for 6 months without bigger issues, there are still some problems and a lot of work still has to be done. 
+
+
 
 # Feature Requests, Bugs, and Feedback and Credits
 Nautilus is work in progress. I am happy to remove bugs or listen to your feedback! Contact me via https://barys.me.
