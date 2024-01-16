@@ -42,7 +42,8 @@ I strongly suggest installing [David Vargas](https://github.com/dvargas92495/roa
 
 ### 3. Adjust your settings
 
-Additionally, you can easily change two parameters to better suit your needs (in the Roam Depot extension Settings):
+Additionally, you can easily change parameters to better suit your needs (in the Roam Depot extension Settings):
+- the text (e.g. tag) prefix that will inserted above the the spiral 
 - the length of the legend text (longer task description than specified will be stripped from spiral legend)
 - the default duration of the task (when creating a new to-do, you can leave it without specifics and it will default to the setting)
 
