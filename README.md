@@ -60,7 +60,7 @@ which inserts this code:
 
 <img src="https://github.com/tombarys/roam-depot-nautilus/raw/main/template2.png" width="500"></img>
 
-Press `Enter` again and `Tab` to ident the first child block under the component. Now you can start writing your task list.
+Press `Enter` again and `Tab` to indent the first child block under the component. Now you can start writing your task list.
 
 ### 2. Put your tasks and events as a child block 
 - If you are not able to edit the children blocks of the Nautilus block, try pressing `Cmd(Ctrl)-Enter` which opens the first block of the page for editing. 
