@@ -84,11 +84,11 @@ Enjoy!
 
 ### Tips and Tricks
 - Nautilus works pretty well on mobile too.
-- I suggest describing your tasks in a very short (BuJo-like) style. Optinally add detailed description of each into children blocks.
+- I suggest describing your tasks in a very short (BuJo-like) style. Optionally add detailed description of each into children blocks.
 - References and markdown links are stripped heavily to show only the real name of the task in legend. 
 - You can use "to" in events time range definition too (e.g., "14:30 to 15:15 My TED Talk"). 
 - You can use Roam references to blocks in your task list. It means you can just `Alt/Option` + drag and drop tasks from other pages/blocks without having to rewrite them from scratch.
-- Do your planning in the morning or even the evening before. It seems like Nautilus involves extended preparation before a  workday, but my experience is it that greatly aids conscientous day planning and eventual task optimization. 
+- Do your planning in the morning or even the evening before. It seems like Nautilus involves extended preparation before a workday, but my experience is that it greatly aids conscientous day planning and eventual task optimization. 
 - I usually add a prefix `#Agenda` preceding the Nautilus render block (via Settings). The inserted render blocks look like this: `#Agenda {{[[roam/render]]:((roam-render-Nautilus-cljs)) 22 30}}` so clicking later on #Agenda tag helps me to quickly gather all my old Nautiluses.
 - Sorry for some glitches when generating the proper position of the legend in some edge cases. This is the first version – even for someone like me that has been using Nautilus for 6 months without bigger issues, there are still some problems and a lot of work still has to be done. 
 
