@@ -9,8 +9,8 @@
 ; You can make Calva auto-select this.
 ;   - See https://calva.io/connect-sequences/
 ; 
-; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 60300 ; popd
-; Using host:port 127.0.0.1:60300 ...
+; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 65431 ; popd
+; Using host:port 127.0.0.1:65431 ...
 ; Hooking up nREPL sessions ...
 ; Connected session: clj
 ; TIPS:
@@ -26,164 +26,102 @@ clj꞉user꞉>  ; Use `alt+enter` to evaluate
 clj꞉user꞉> 
 ; Jack-in done.
 clj꞉user꞉> 
-#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x89b0ebd "sci.impl.fns$fun$arity_1__1191@89b0ebd"]>
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "https://www.notion.so/N")
-{:cleaned-str "https://www.notion.so/N"}
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "[popis](https://www.notion.so/N)")
-{:cleaned-str "popis"}
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}}[popis](https://www.notion.so/N)")
-{:cleaned-str "{{[TODO]]}}[popis"}
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} [popis](https://www.notion.so/N)")
-{:cleaned-str "{{[TODO]]}} [popis"}
-clj꞉nautilus-roam-1-12-2024꞉> 
-#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x706e000a "sci.impl.fns$fun$arity_1__1191@706e000a"]>
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} [popis](https://www.notion.so/N)")
-({:text "[TODO]]}} [popis", :url "https://www.notion.so/N"})
-clj꞉nautilus-roam-1-12-2024꞉> 
-#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x6db8026 "sci.impl.fns$fun$arity_1__1191@6db8026"]>
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} [popis](https://www.notion.so/N)")
-("[TODO]]}} [popis")
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} [popis](https://www.notion.so/N)")
-("[TODO]]}} [popis")
-clj꞉nautilus-roam-1-12-2024꞉> 
-#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0xc426b93 "sci.impl.fns$fun$arity_1__1191@c426b93"]>
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} [popis](https://www.notion.so/N)")
-("[TODO]]}} [popis")
-clj꞉nautilus-roam-1-12-2024꞉> 
-#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x62b299a0 "sci.impl.fns$fun$arity_1__1191@62b299a0"]>
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} [popis](https://www.notion.so/N)")
-("[TODO]]}} [popis")
-clj꞉nautilus-roam-1-12-2024꞉> 
-#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x8b82bb2 "sci.impl.fns$fun$arity_1__1191@8b82bb2"]>
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} [popis](https://www.notion.so/N)")
-("[TODO]]}} [popis")
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} [link](https://www.melvil.cz)")
-("[TODO]]}} [link")
-clj꞉nautilus-roam-1-12-2024꞉> 
-#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x3ff84445 "sci.impl.fns$fun$arity_1__1191@3ff84445"]>
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} [link](https://www.melvil.cz)")
-("link")
-clj꞉nautilus-roam-1-12-2024꞉> 
-#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x67961bfd "sci.impl.fns$fun$arity_1__1191@67961bfd"]>
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} [link](https://www.melvil.cz)")
-(("link"))
-clj꞉nautilus-roam-1-12-2024꞉> 
-#<Var@511dc5f8: #object[sci.impl.fns$fun$arity_1__1191 0x288dab30 "sci.impl.fns$fun$arity_1__1191@288dab30"]>
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} [link](https://www.melvil.cz)")
-(("link"))
-clj꞉nautilus-roam-1-12-2024꞉> 
-(remove-urls "{{[[TODO]]}} [link](https://www.melvil.cz)")
-"{{[TODO]]}} [link"
-clj꞉nautilus-roam-1-12-2024꞉> 
-; : Unclosed character class near index 43
-; (?:\[((?:[^\]])*)\]\(((?:[^\))])*\)|([^[])+)
-;                                            ^ user 
-clj꞉nautilus-roam-1-12-2024꞉> 
-(remove-urls "{{[[TODO]]}} [link](https://www.melvil.cz)")
-"{{[TODO]]}} [link"
-clj꞉nautilus-roam-1-12-2024꞉> 
-; : Unclosed character class near index 43
-; (?:\[((?:[^\]])*)\]\(((?:[^\))])*\)|([^[])+)
-;                                            ^ user 
-clj꞉nautilus-roam-1-12-2024꞉> 
-#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x45db99af "sci.impl.fns$fun$arity_1__1191@45db99af"]>
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} [link](https://www.melvil.cz)")
-("link")
-clj꞉nautilus-roam-1-12-2024꞉> 
-; : Unclosed character class near index 43
-; (?:\[((?:[^\]])*)\]\(((?:[^\)]*)\))|([^[]]+)
-;                                            ^ user 
-clj꞉nautilus-roam-1-12-2024꞉> 
-#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x681b15dd "sci.impl.fns$fun$arity_1__1191@681b15dd"]>
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} [link](https://www.melvil.cz)")
-("[TODO]]}} [link")
-clj꞉nautilus-roam-1-12-2024꞉> 
-#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x18e23249 "sci.impl.fns$fun$arity_1__1191@18e23249"]>
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} [link](https://www.melvil.cz)")
-{:cleaned-str "{{[TODO]]}} [link"}
-clj꞉nautilus-roam-1-12-2024꞉> 
-#<Var@158127de: #object[sci.impl.fns$fun$arity_1__1191 0x2428d9db "sci.impl.fns$fun$arity_1__1191@2428d9db"]>
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} [link](https://www.melvil.cz)")
-{:cleaned-str "{{[[TODO]]}} link"}
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} whatever [link](https://www.melvil.cz) it is")
-{:cleaned-str "{{[[TODO]]}} whatever link it is"}
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} whatever [link](https://www.melvil.cz) it is [dear](https://www.melvil.cz)")
-{:cleaned-str "{{[[TODO]]}} whatever link it is dear"}
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "{{[[TODO]]}} whatever [link](https://www.melvil.cz) it is [dear]()")
-{:cleaned-str "{{[[TODO]]}} whatever link it is dear"}
-clj꞉nautilus-roam-1-12-2024꞉> 
-; Jacking in...
-; Connecting using "Babashka" project type.
-; You can make Calva auto-select this.
-;   - See https://calva.io/connect-sequences/
-; 
-; nREPL Connection was closed
-; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 62067 ; popd
-; Using host:port 127.0.0.1:62067 ...
-; Hooking up nREPL sessions ...
-; Connected session: clj
-; TIPS:
-;   - You can edit the contents here. Use it as a REPL if you like.
-;   - `alt+enter` evaluates the current top level form.
-;   - `ctrl+enter` evaluates the current form.
-;   - `alt+up` and `alt+down` traverse up and down the REPL command history
-;      when the cursor is after the last contents at the prompt
-;   - Clojure lines in stack traces are peekable and clickable.
-; Evaluating code from settings: 'calva.autoEvaluateCode.onConnect.clj'
-nil
+(map :block/string ({:block/order 0, :block/string "2"} {:block/order 1, :block/string "něco 1.3"} {:block/order 2, :block/string "3.5"} {:block/order 3, :block/string "dasd"}))
+; clojure.lang.ArityException: Wrong number of args (3) passed to: clojure.lang.PersistentArrayMap user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:20
 clj꞉user꞉> 
+(map identity ({:block/order 0, :block/string "2" 
+                    {:block/order 1, :block/string "něco 1.3"} 
+                    {:block/order 2, :block/string "3.5"}
+                    {:block/order 3, :block/string"dasd"}}))
+; clojure.lang.ExceptionInfo: The map literal starting with :block/order contains 7 form(s). Map literals must contain an even number of forms. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:16
 clj꞉user꞉> 
-; Jack-in done.
+(map identity [{:block/order 0, :block/string "2" 
+                    {:block/order 1, :block/string "něco 1.3"} 
+                    {:block/order 2, :block/string "3.5"}
+                    {:block/order 3, :block/string"dasd"}}])
+; clojure.lang.ExceptionInfo: The map literal starting with :block/order contains 7 form(s). Map literals must contain an even number of forms. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:16
 clj꞉user꞉> 
-#<Var@7e8038c3: #object[sci.impl.fns$fun$arity_1__1191 0x52fcdded "sci.impl.fns$fun$arity_1__1191@52fcdded"]>
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "[Přidat](https://discord.com/channels/899233096715628556/899233097239896099/1192404407879483422)")
-{:cleaned-str "Přidat "}
-clj꞉nautilus-roam-1-12-2024꞉> 
-{:cleaned-str "Přidat"}
-clj꞉nautilus-roam-1-12-2024꞉> 
-#<Var@7e8038c3: #object[sci.impl.fns$fun$arity_1__1191 0x39c5b81e "sci.impl.fns$fun$arity_1__1191@39c5b81e"]>
-clj꞉nautilus-roam-1-12-2024꞉> 
-(parse-URLs "[Přidat](https://discord.com/channels/899233096715628556/899233097239896099/1192404407879483422)")
-"Přidat"
-clj꞉nautilus-roam-1-12-2024꞉> 
-#<Var@b1ee343: #object[sci.impl.fns$fun$arity_1__1191 0x7a428108 "sci.impl.fns$fun$arity_1__1191@7a428108"]>
-clj꞉nautilus-roam-1-13-2024꞉> 
-(parse-URLs "[Přidat](https://discord.com/channels/899233096715628556/899233097239896099/1192404407879483422)")
-"Přidat"
-clj꞉nautilus-roam-1-13-2024꞉> 
-(parse-URLs "{{[[TODO]]}} whatever [link](https://www.melvil.cz) it is [dear]()")
-"linkdear"
-clj꞉nautilus-roam-1-13-2024꞉> 
-#<Var@b1ee343: #object[sci.impl.fns$fun$arity_1__1191 0x5ca52855 "sci.impl.fns$fun$arity_1__1191@5ca52855"]>
-clj꞉nautilus-roam-1-13-2024꞉> 
-(parse-URLs "{{[[TODO]]}} whatever [link](https://www.melvil.cz) it is [dear]()")
-"{{[[TODO]]}} whatever link it is dear"
-clj꞉nautilus-roam-1-13-2024꞉> 
-(parse-URLs " whatever [link](https://www.melvil.cz) it is [dear]()")
-" whatever link it is dear"
-clj꞉nautilus-roam-1-13-2024꞉> 
-(parse-URLs "{{[[TODO]]}} whatever [link](https://www.melvil.cz) it is [dear]()")
-"{{[[TODO]]}} whatever link it is dear"
-clj꞉nautilus-roam-1-13-2024꞉> 
+(map identity [{:block/order 0 :block/string "2"} 
+                    {:block/order 1 :block/string "něco 1.3"} 
+                    {:block/order 2 :block/string "3.5"}
+                    {:block/order 3 :block/string"dasd"}])
+; clojure.lang.ExceptionInfo: The map literal starting with :block/order contains 7 form(s). Map literals must contain an even number of forms. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:16
+clj꞉user꞉> 
+({:block/order 0, :block/string "2"}
+ {:block/order 1, :block/string "něco 1.3"}
+ {:block/order 2, :block/string "3.5"}
+ {:block/order 3, :block/string "dasd"})
+clj꞉user꞉> 
+(map :block/string [{:block/order 0 :block/string "2"} 
+                    {:block/order 1 :block/string "něco 1.3"} 
+                    {:block/order 2 :block/string "3.5"}
+                    {:block/order 3 :block/string"dasd"}])
+("2" "něco 1.3" "3.5" "dasd")
+clj꞉user꞉> 
+(map :block/string ({:block/order 0 :block/string "2"} 
+                    {:block/order 1 :block/string "něco 1.3"} 
+                    {:block/order 2 :block/string "3.5"}
+                    {:block/order 3 :block/string"dasd"}))
+; clojure.lang.ArityException: Wrong number of args (3) passed to: clojure.lang.PersistentArrayMap user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:20
+clj꞉user꞉> 
+(map :block/string (into []({:block/order 0 :block/string "2"} 
+                    {:block/order 1 :block/string "něco 1.3"} 
+                    {:block/order 2 :block/string "3.5"}
+                    {:block/order 3 :block/string"dasd"})))
+; clojure.lang.ArityException: Wrong number of args (3) passed to: clojure.lang.PersistentArrayMap user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:28
+clj꞉user꞉> 
+(map :block/string (into [({:block/order 0 :block/string "2"} 
+                    {:block/order 1 :block/string "něco 1.3"} 
+                    {:block/order 2 :block/string "3.5"}
+                    {:block/order 3 :block/string"dasd"})]))
+; clojure.lang.ArityException: Wrong number of args (3) passed to: clojure.lang.PersistentArrayMap user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:27
+clj꞉user꞉> 
+(map :block/string (into [({:block/order 0 :block/string "2"} 
+                    {:block/order 1 :block/string "něco 1.3"} 
+                    {:block/order 2 :block/string "3.5"}
+                    {:block/order 3 :block/string"dasd"})]))
+; clojure.lang.ArityException: Wrong number of args (3) passed to: clojure.lang.PersistentArrayMap user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:27
+clj꞉user꞉> 
+(map :block/string (into [] ({:block/order 0 :block/string "2"} 
+                    {:block/order 1 :block/string "něco 1.3"} 
+                    {:block/order 2 :block/string "3.5"}
+                    {:block/order 3 :block/string"dasd"})))
+; clojure.lang.ArityException: Wrong number of args (3) passed to: clojure.lang.PersistentArrayMap user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:29
+clj꞉user꞉> 
+(into [] ({:block/order 0 :block/string "2"} 
+                    {:block/order 1 :block/string "něco 1.3"} 
+                    {:block/order 2 :block/string "3.5"}
+                    {:block/order 3 :block/string"dasd"}))
+; clojure.lang.ArityException: Wrong number of args (3) passed to: clojure.lang.PersistentArrayMap user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:10
+clj꞉user꞉> 
+(into [] {:block/order 0 :block/string "2"} 
+                    {:block/order 1 :block/string "něco 1.3"} 
+                    {:block/order 2 :block/string "3.5"}
+                    {:block/order 3 :block/string"dasd"})
+; clojure.lang.ArityException: Wrong number of args (5) passed to: clojure.core/into user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉user꞉> 
+(into [] {:block/order 0 :block/string "2"} 
+                    {:block/order 1 :block/string "něco 1.3"} 
+                    {:block/order 2 :block/string "3.5"}
+                    {:block/order 3 :block/string"dasd"})
+; clojure.lang.ArityException: Wrong number of args (5) passed to: clojure.core/into user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉user꞉> 
+(re-find #"\d+(\.\d+)?|\.\d+" "něco 1.3")
+["1.3" ".3"]
+clj꞉user꞉> 
+(re-find #"\d+(\.\d+)?|\.\d+" "něco 1.3 2")
+["1.3" ".3"]
+clj꞉user꞉> 
+(re-find #"\d+(\.\d+)?|\.\d+" "něco 1.3 2.1")
+["1.3" ".3"]
+clj꞉user꞉> 
+(re-find #"\d+(\.\d+)?|\.\d+" "něco 1.3 2.1")
+["1.3" ".3"]
+clj꞉user꞉> 
+(re-seq #"\b\d+(\.\d+)?\b|\.\d+\b" "něco 1.3 45 5")
+(["1.3" ".3"] ["45" nil] ["5" nil])
+clj꞉user꞉> 
+(last (re-seq #"\b\d+(\.\d+)?\b|\.\d+\b" "něco 1.3 45 5.6"))
+["5.6" ".6"]
+clj꞉user꞉> 
+(first (last (re-seq #"\b\d+(\.\d+)?\b|\.\d+\b" s)))
