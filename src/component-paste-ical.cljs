@@ -1,4 +1,4 @@
-(ns component-ical
+(ns component-paste-ical
   (:require
    [clojure.string :as str]
    [roam.datascript :as rd]

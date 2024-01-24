@@ -1,4 +1,5 @@
 import clsjFile from "./component.cljs";
+import clsjFilePaste from "./component-paste-ical.cljs";
 
 function removeCodeBlock(uid){
     roamAlphaAPI.deleteBlock({"block":{"uid": uid}})
@@ -94,6 +95,72 @@ function createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID,
     
 }
 
+function createAutorunBlock(renderPageName, titleblockUID, version, codeBlockUID, componentName){
+    let renderPageUID = getPageUidByPageTitle(renderPageName)|| createPage(renderPageName);
+    // let templateBlockUID = roamAlphaAPI.util.generateUID()
+    let codeBlockHeaderUID = roamAlphaAPI.util.generateUID()
+    let renderBlockUID = roamAlphaAPI.util.generateUID()
+
+    // create the titleblock
+    //Component Name [[January 12th, 2023]]
+    roamAlphaAPI
+    .createBlock(
+        {"location": 
+            {"parent-uid": renderPageUID, 
+            "order": 0}, 
+        "block": 
+            {"string": `${componentName} [[${uidForToday()}]]`,
+            "uid":titleblockUID,
+            "open":true,
+            "heading":3}})
+    // create the template name block
+    // Component Name vXX [[roam/templates]]
+    //roamAlphaAPI
+    //.createBlock(
+    //    {"location": 
+    //        {"parent-uid": titleblockUID, 
+    //        "order": 0}, 
+    //    "block": 
+    //        {"string": `${componentName} ${version} [[roam/templates]]`,
+    //        "uid":templateBlockUID,
+    //        "open":true}})
+    // create the render component block
+    // {{roam/render:((diA0Fyj5m))}}
+    // roamAlphaAPI
+    // .createBlock(
+    //    {"location": 
+    //        {"parent-uid": titleblockUID, 
+    //        "order": 0}, 
+    //    "block": 
+    //        {"string": `{{[[roam/render]]:((${codeBlockUID})) }}`, 
+    //        "uid":renderBlockUID}})
+
+    // create code header block
+    roamAlphaAPI
+    .createBlock(
+        {"location": 
+            {"parent-uid": titleblockUID, 
+            "order": 'last'}, 
+        "block": 
+            {"string": `{{[[roam/cljs]]}}`,
+            "uid":codeBlockHeaderUID,
+            "open":false}})
+
+            // create codeblock for the component
+
+    let cljs = clsjFilePaste
+                
+    let blockString = "```clojure\n " + cljs + " ```"
+    roamAlphaAPI
+    .createBlock(
+        {"location": 
+            {"parent-uid": codeBlockHeaderUID, 
+            "order": 0}, 
+        "block": 
+            {"uid": codeBlockUID,
+            "string": blockString}})
+    
+}
 
 export function updateTemplateString(renderString, renderStringWSettings){ 
     let query = `[:find
@@ -144,11 +211,23 @@ function replaceRenderString(renderString, replacementString){
 }
 
 
-export function toggleRenderComponent(state, titleblockUID, version, renderString, replacementString, codeBlockUID, componentName, disabledStr) {
-    let renderPageName = 'roam/render'
+export function toggleRenderComponent(state, titleblockUID, version, renderString, replacementString, codeBlockUID, componentName, disabledStr, renderPageName) {
+    // let renderPageName = 'roam/render'
     if (state==true) {
         replaceRenderString('{{' + componentName + disabledStr, renderString),
         createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID, componentName)
+
+    } else if(state==false){
+        replaceRenderString(renderString, replacementString + disabledStr),
+        removeCodeBlock(titleblockUID)
+    }
+}
+
+export function toggleAutorunComponent(state, titleblockUID, version, renderString, replacementString, codeBlockUID, componentName, disabledStr, renderPageName) {
+    // let renderPageName = 'roam/cljs'
+    if (state==true) {
+        replaceRenderString('{{' + componentName + disabledStr, renderString),
+        createAutorunBlock(renderPageName, titleblockUID, version, codeBlockUID, componentName)
 
     } else if(state==false){
         replaceRenderString(renderString, replacementString + disabledStr),

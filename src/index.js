@@ -1,14 +1,22 @@
 import { toggleRenderComponent } from "./entry-helpers";
+import { toggleAutorunComponent } from "./entry-helpers";
 import { updateTemplateString } from "./entry-helpers";
 
-const componentName = 'Nautilus' 
-const codeBlockUID = `roam-render-${componentName}-cljs`;
-const renderStringStart = `{{[[roam/render]]:((${codeBlockUID}))`;
-const replacementString = `{{${componentName}`; 
-const disabledStr = `-disabled`;
+const componentName = 'Nautilus'; // this is the name of the main Nautilus component that will be inserted into the graph
+const codeBlockUID = `roam-render-${componentName}-cljs`; // this is the UID of the code block that contains the ClojureScript code for the component
+const titleblockUID = `roam-render-${componentName}`; // this is the UID of the title block that contains the link to the roam/templates page
+const renderStringStart = `{{[[roam/render]]:((${codeBlockUID}))`; // this is the start of the render string that will be inserted into the graph
+const replacementStringStart = `{{${componentName}`; // this is the string that will replace the renderStringStart in the graph after uninstalling the plugin
+const disabledStr = `-disabled`; // this is the string that will be appended to the componentName to disable the component
+
+const componentPasteName = 'NautiPaste'; // secondary, optional helper component for pasting iCal events into the graph
+const codeBlockPasteUID = `roam-render-${componentPasteName}-cljs`; // this is the UID of the code block that contains the ClojureScript code for the component
+const titleblockPasteUID = `roam-render-${componentPasteName}`; // this is the UID of the title block that contains the link to the roam/templates page
+const renderStringPasteStart = `{{[[roam/render]]:((${codeBlockPasteUID}))`; // this is the start of the render string that will be inserted into the graph
+const replacementStringPasteStart = `{{${componentPasteName}`; // this is the string that will replace the renderStringStart in the graph after uninstalling the plugin
+
 
 const version = 'v1';
-const titleblockUID = `roam-render-${componentName}`;
 
 const defaults = {'prefix-str': '', 'desc-length': 22, 'todo-duration': 15};
 
@@ -89,7 +97,13 @@ async function onload({extensionAPI}) {
 
   if (!roamAlphaAPI.data.pull("[*]", [":block/uid", titleblockUID])) {
     // component hasn't been loaded so we add it to the graph
-    toggleRenderComponent(true, titleblockUID, version, renderStringStart, replacementString, codeBlockUID, componentName, disabledStr)
+    toggleRenderComponent(true, titleblockUID, version, renderStringStart, replacementStringStart, codeBlockUID, componentName, disabledStr, 'roam/render')
+  }
+
+  if (!roamAlphaAPI.data.pull("[*]", [":block/uid", titleblockPasteUID])) {
+    // component hasn't been loaded so we add it to the graph
+    toggleAutorunComponent(true, titleblockPasteUID, version, renderStringPasteStart, 
+      replacementStringPasteStart, codeBlockPasteUID, componentPasteName, disabledStr, 'roam/cljs')
   }
 
   console.log(`load ${componentName} plugin`)
@@ -97,7 +111,7 @@ async function onload({extensionAPI}) {
 
 function onunload() {
   console.log(`unload ${componentName} plugin`)
-  toggleRenderComponent(false, titleblockUID, version, renderStringStart, replacementString, codeBlockUID, componentName, disabledStr)
+  toggleRenderComponent(false, titleblockUID, version, renderStringStart, replacementStringStart, codeBlockUID, componentName, disabledStr, 'roam/render')
 }
 
 export default {
