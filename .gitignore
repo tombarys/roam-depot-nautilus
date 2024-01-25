@@ -8,6 +8,7 @@ out
 .lsp
 .calva
 .clj-kondo
+.vscode/settings.json
 
 .DS_Store
 *extension.js

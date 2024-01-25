@@ -1,4 +1,4 @@
-(ns nautilus-roam-1-14-2024
+(ns nautilus-roam-1-25-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -98,20 +98,13 @@
            :width w
            :height h}]])])
 
-;; --------------- reading Roam database ----------------------
+;; ---------- resolving (()) references -----------
 
-(defn get-block-str [block]
-  (->> (rd/pull
-        [:block/uid :block/string {:block/refs [:block/string]}]
-        [:block/uid block])
-       :block/string))
-
-(defn extract-ref [s]
-  (let [[_ b u a] (re-find #"^(.*)\(\(([a-zA-Z0-9\-\_]{9})\)\)(.*$)" s)]
-    (if u
-      (str b (get-block-str u) a)
-      s)))
-
+(defn str-with-resolved-block-refs [{:keys [block/string block/refs]}]
+  (reduce (fn [string ref-ent]
+            (str/replace string (str "((" (:block/uid ref-ent) "))") (:block/string ref-ent)))
+          string
+          refs))
 
 ;; --------- math is beautiful ---------
 
@@ -275,10 +268,10 @@
 
 (defn get-children-strings [block-uid]
   (r/with-let [*get-children-atom (rdr/pull
-                                   [{:block/children [:block/string :block/order]}]
+                                   [{:block/children [:block/string :block/order {:block/refs [:block/string :block/uid]}]}]
                                    [:block/uid block-uid])
                *children (r/track eval-state *get-children-atom)]
-    (map (comp extract-ref :block/string)
+    (map str-with-resolved-block-refs
          (->> @*children
               (sort-by :block/order)))))
 
