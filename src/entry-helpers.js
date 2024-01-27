@@ -41,7 +41,8 @@ function createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID,
             {"parent-uid": renderPageUID, 
             "order": 0}, 
         "block": 
-            {"string": `${componentName} [[${uidForToday()}]]`,
+            {"string": `${componentName}`, 
+             // [[${uidForToday()}]]`,
             "uid":titleblockUID,
             "open":true,
             "heading":3}})
