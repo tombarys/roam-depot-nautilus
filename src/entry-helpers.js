@@ -1,6 +1,6 @@
 import clsjFile from "./component.cljs";
 
-function removeCodeBlock(uid){
+function removeTheBlock(uid){
     roamAlphaAPI.deleteBlock({"block":{"uid": uid}})
 }
 
@@ -108,7 +108,7 @@ export function updateTemplateString(renderString, renderStringWSettings){
     
     let result = window.roamAlphaAPI.q(query).flat();
     result.forEach(block => {
-        const updatedString = renderStringWSettings // block.string.replace(renderString, replacementString);
+        const updatedString = renderStringWSettings 
         window.roamAlphaAPI.updateBlock({
           block: {
             uid: block.uid,
@@ -144,15 +144,38 @@ function replaceRenderString(renderString, replacementString){
     });
 }
 
+function replaceRenderStringsOnUnload(renderString, replacementString){
+// replaces all render strings excluding these on the roam/render page
+    let query = `[:find    
+        (pull ?node [:block/string :node/title :block/uid])   
+        :where   
+          [?node :block/string ?node-String]   
+          [(clojure.string/includes? ?node-String "${renderString}")]   
+        (not        
+            [?node :block/parents ?parent]       
+            [?parent :node/title "roam/render"])]`;
+    
+    let result = window.roamAlphaAPI.q(query).flat();
+    result.forEach(block => {
+        // if (block.node.title === 'roam/render') return;
+        const updatedString = block.string.replace(renderString, replacementString);
+        window.roamAlphaAPI.updateBlock({
+          block: {
+            uid: block.uid,
+            string: updatedString
+          }
+        });
+    });
+}
 
 export function toggleRenderComponent(state, titleblockUID, version, renderString, replacementString, codeBlockUID, componentName, disabledStr) {
     let renderPageName = 'roam/render'
     if (state==true) {
-        replaceRenderString('{{' + componentName + disabledStr, renderString),
+        replaceRenderString('{{' + componentName + disabledStr, renderString), // replaces all {{Nautilus-disabled}} with render component call string
         createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID, componentName)
 
     } else if(state==false){
-        replaceRenderString(renderString, replacementString + disabledStr),
-        removeCodeBlock(titleblockUID)
+        replaceRenderStringsOnUnload(renderString, replacementString + disabledStr),
+        removeTheBlock(titleblockUID)
     }
 }
