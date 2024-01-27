@@ -4,12 +4,6 @@ function removeTheBlock(uid){
     roamAlphaAPI.deleteBlock({"block":{"uid": uid}})
 }
 
-function uidForToday() {
-    let roamDate = new Date(Date.now());
-    let today = window.roamAlphaAPI.util.dateToPageTitle(roamDate);
-    return today
-}
-
 function createPage(title){
     // creates the page if it does not exist
     let pageUID = roamAlphaAPI.util.generateUID()
@@ -34,7 +28,7 @@ function createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID,
     let renderBlockUID = roamAlphaAPI.util.generateUID()
 
     // create the titleblock
-    //Component Name [[January 12th, 2023]]
+    //Component Name
     roamAlphaAPI
     .createBlock(
         {"location": 
@@ -94,7 +88,6 @@ function createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID,
             "string": blockString}})
     
 }
-
 
 export function updateTemplateString(renderString, renderStringWSettings){ 
     let query = `[:find
@@ -157,7 +150,6 @@ function replaceRenderStringsOnUnload(renderString, replacementString){
     
     let result = window.roamAlphaAPI.q(query).flat();
     result.forEach(block => {
-        // if (block.node.title === 'roam/render') return;
         const updatedString = block.string.replace(renderString, replacementString);
         window.roamAlphaAPI.updateBlock({
           block: {
