@@ -1,4 +1,4 @@
-(ns nautilus-roam-1-27-2024
+(ns nautilus-roam-1-28-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -147,12 +147,12 @@
 (defn collide? [new-rect any-rect]
   (let [ntlx (:x new-rect)
         ntly (:y new-rect)
-        nbrx (+ (:x new-rect) (:w new-rect))
-        nbry (+ (:y new-rect) (:h new-rect))
+        nbrx (+ ntlx (:w new-rect))
+        nbry (+ ntly (:h new-rect))
         tlx (:x any-rect)
         tly (:y any-rect)
-        brx (+ (:x any-rect) (:w any-rect))
-        bry (+ (:y any-rect) (:h any-rect))]
+        brx (+ tlx (:w any-rect))
+        bry (+ tly (:h any-rect))]
     (not (or (< nbrx tlx)
              (> ntlx brx)
              (< nbry tly)
@@ -183,7 +183,7 @@
     (let [max-radians-span (/ pi 17)
           min-radians (- radians (/ max-radians-span 2))
           max-radians (+ radians (/ max-radians-span 2))
-          min-radius (- start-radius 10)
+          ; min-radius (- start-radius 10)
           max-radius (* start-radius 1.5)
           x (+ (:center-x center) (* (cos radians) radius))
           y (+ (:center-y center) (* (sin radians) radius))

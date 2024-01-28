@@ -9,8 +9,8 @@
 ; You can make Calva auto-select this.
 ;   - See https://calva.io/connect-sequences/
 ; 
-; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 65431 ; popd
-; Using host:port 127.0.0.1:65431 ...
+; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 56765 ; popd
+; Using host:port 127.0.0.1:56765 ...
 ; Hooking up nREPL sessions ...
 ; Connected session: clj
 ; TIPS:
@@ -26,102 +26,7 @@ clj꞉user꞉>  ; Use `alt+enter` to evaluate
 clj꞉user꞉> 
 ; Jack-in done.
 clj꞉user꞉> 
-(map :block/string ({:block/order 0, :block/string "2"} {:block/order 1, :block/string "něco 1.3"} {:block/order 2, :block/string "3.5"} {:block/order 3, :block/string "dasd"}))
-; clojure.lang.ArityException: Wrong number of args (3) passed to: clojure.lang.PersistentArrayMap user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:20
-clj꞉user꞉> 
-(map identity ({:block/order 0, :block/string "2" 
-                    {:block/order 1, :block/string "něco 1.3"} 
-                    {:block/order 2, :block/string "3.5"}
-                    {:block/order 3, :block/string"dasd"}}))
-; clojure.lang.ExceptionInfo: The map literal starting with :block/order contains 7 form(s). Map literals must contain an even number of forms. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:16
-clj꞉user꞉> 
-(map identity [{:block/order 0, :block/string "2" 
-                    {:block/order 1, :block/string "něco 1.3"} 
-                    {:block/order 2, :block/string "3.5"}
-                    {:block/order 3, :block/string"dasd"}}])
-; clojure.lang.ExceptionInfo: The map literal starting with :block/order contains 7 form(s). Map literals must contain an even number of forms. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:16
-clj꞉user꞉> 
-(map identity [{:block/order 0 :block/string "2"} 
-                    {:block/order 1 :block/string "něco 1.3"} 
-                    {:block/order 2 :block/string "3.5"}
-                    {:block/order 3 :block/string"dasd"}])
-; clojure.lang.ExceptionInfo: The map literal starting with :block/order contains 7 form(s). Map literals must contain an even number of forms. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:16
-clj꞉user꞉> 
-({:block/order 0, :block/string "2"}
- {:block/order 1, :block/string "něco 1.3"}
- {:block/order 2, :block/string "3.5"}
- {:block/order 3, :block/string "dasd"})
-clj꞉user꞉> 
-(map :block/string [{:block/order 0 :block/string "2"} 
-                    {:block/order 1 :block/string "něco 1.3"} 
-                    {:block/order 2 :block/string "3.5"}
-                    {:block/order 3 :block/string"dasd"}])
-("2" "něco 1.3" "3.5" "dasd")
-clj꞉user꞉> 
-(map :block/string ({:block/order 0 :block/string "2"} 
-                    {:block/order 1 :block/string "něco 1.3"} 
-                    {:block/order 2 :block/string "3.5"}
-                    {:block/order 3 :block/string"dasd"}))
-; clojure.lang.ArityException: Wrong number of args (3) passed to: clojure.lang.PersistentArrayMap user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:20
-clj꞉user꞉> 
-(map :block/string (into []({:block/order 0 :block/string "2"} 
-                    {:block/order 1 :block/string "něco 1.3"} 
-                    {:block/order 2 :block/string "3.5"}
-                    {:block/order 3 :block/string"dasd"})))
-; clojure.lang.ArityException: Wrong number of args (3) passed to: clojure.lang.PersistentArrayMap user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:28
-clj꞉user꞉> 
-(map :block/string (into [({:block/order 0 :block/string "2"} 
-                    {:block/order 1 :block/string "něco 1.3"} 
-                    {:block/order 2 :block/string "3.5"}
-                    {:block/order 3 :block/string"dasd"})]))
-; clojure.lang.ArityException: Wrong number of args (3) passed to: clojure.lang.PersistentArrayMap user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:27
-clj꞉user꞉> 
-(map :block/string (into [({:block/order 0 :block/string "2"} 
-                    {:block/order 1 :block/string "něco 1.3"} 
-                    {:block/order 2 :block/string "3.5"}
-                    {:block/order 3 :block/string"dasd"})]))
-; clojure.lang.ArityException: Wrong number of args (3) passed to: clojure.lang.PersistentArrayMap user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:27
-clj꞉user꞉> 
-(map :block/string (into [] ({:block/order 0 :block/string "2"} 
-                    {:block/order 1 :block/string "něco 1.3"} 
-                    {:block/order 2 :block/string "3.5"}
-                    {:block/order 3 :block/string"dasd"})))
-; clojure.lang.ArityException: Wrong number of args (3) passed to: clojure.lang.PersistentArrayMap user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:29
-clj꞉user꞉> 
-(into [] ({:block/order 0 :block/string "2"} 
-                    {:block/order 1 :block/string "něco 1.3"} 
-                    {:block/order 2 :block/string "3.5"}
-                    {:block/order 3 :block/string"dasd"}))
-; clojure.lang.ArityException: Wrong number of args (3) passed to: clojure.lang.PersistentArrayMap user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:10
-clj꞉user꞉> 
-(into [] {:block/order 0 :block/string "2"} 
-                    {:block/order 1 :block/string "něco 1.3"} 
-                    {:block/order 2 :block/string "3.5"}
-                    {:block/order 3 :block/string"dasd"})
-; clojure.lang.ArityException: Wrong number of args (5) passed to: clojure.core/into user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
-clj꞉user꞉> 
-(into [] {:block/order 0 :block/string "2"} 
-                    {:block/order 1 :block/string "něco 1.3"} 
-                    {:block/order 2 :block/string "3.5"}
-                    {:block/order 3 :block/string"dasd"})
-; clojure.lang.ArityException: Wrong number of args (5) passed to: clojure.core/into user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
-clj꞉user꞉> 
-(re-find #"\d+(\.\d+)?|\.\d+" "něco 1.3")
-["1.3" ".3"]
-clj꞉user꞉> 
-(re-find #"\d+(\.\d+)?|\.\d+" "něco 1.3 2")
-["1.3" ".3"]
-clj꞉user꞉> 
-(re-find #"\d+(\.\d+)?|\.\d+" "něco 1.3 2.1")
-["1.3" ".3"]
-clj꞉user꞉> 
-(re-find #"\d+(\.\d+)?|\.\d+" "něco 1.3 2.1")
-["1.3" ".3"]
-clj꞉user꞉> 
-(re-seq #"\b\d+(\.\d+)?\b|\.\d+\b" "něco 1.3 45 5")
-(["1.3" ".3"] ["45" nil] ["5" nil])
-clj꞉user꞉> 
-(last (re-seq #"\b\d+(\.\d+)?\b|\.\d+\b" "něco 1.3 45 5.6"))
-["5.6" ".6"]
-clj꞉user꞉> 
-(first (last (re-seq #"\b\d+(\.\d+)?\b|\.\d+\b" s)))
+#'nautilus-roam-1-27-2024/time-str-to-minutes
+clj꞉nautilus-roam-1-27-2024꞉> 
+#'nautilus-roam-1-27-2024/parse-time-range
+clj꞉nautilus-roam-1-27-2024꞉> 
