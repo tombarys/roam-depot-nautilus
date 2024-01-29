@@ -1,4 +1,4 @@
-(ns nautilus-roam-1-28-2024
+(ns nautilus-roam-1-29-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -11,7 +11,7 @@
 
 (def init-len-limit 22) ;; values used when no duration is specified as a render parameter
 
-(def workday-start 480) 
+(def workday-start 480)
 
 (def workday-end 1320)
 
@@ -173,18 +173,18 @@
    radians-span - the maximum angular deviation
    text – the legend text that is written to the debug console" ;; FIXME remove in production
   [new-rect rects start-radians start-radius text center]
-  (loop [radians start-radians
+  (let [max-legend-radius (* start-radius 1.7) ;; maximum legend radius to try
+        max-radians-span (/ pi 17)] ;; maximum angle span for legend to try
+   (loop [radians start-radians
          radius start-radius
          angle-offset  0
          radius-offset 0
          counter 0
          radius-inc 3 ;; radius offset step size
          trying (if (at-vertex radians) :radius :angle)]
-    (let [max-radians-span (/ pi 17)
-          min-radians (- radians (/ max-radians-span 2))
+    (let [min-radians (- radians (/ max-radians-span 2))
           max-radians (+ radians (/ max-radians-span 2))
           ; min-radius (- start-radius 10)
-          max-radius (* start-radius 1.5)
           x (+ (:center-x center) (* (cos radians) radius))
           y (+ (:center-y center) (* (sin radians) radius))
           on-left? (or (> radians (/ pi 2)) (< radians (- (/ pi 2))))
@@ -203,7 +203,7 @@
       (if (or (> counter tries-treshold) (not colliding?)) ;; number of placement guesses; lower number = faster but more likely to overlap
         new-rect
         (if (= trying :radius) ;; testing placing using increased radius 
-          (if (< radius max-radius)
+          (if (< radius max-legend-radius)
             (recur radians
                    (+ start-radius radius-offset)
                    angle-offset
@@ -222,7 +222,7 @@
                    (inc counter)
                    0
                    :angle)
-            (recur start-radians start-radius angle-offset radius-offset 0 radius-inc :radius)))))))
+            (recur start-radians start-radius angle-offset radius-offset 0 radius-inc :radius))))))))
 
 (defn real-rect-radians [rect center]
   (let [rcenter-x (+ (:x rect) (/ (:w rect) 2))
