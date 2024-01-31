@@ -74,7 +74,7 @@ Enjoy!
 - A notable and the only "automatic" feature of Nautilus is the task **push-forward: relocating uncompleted tasks** within open time slots in your day – taking the present moment into account. The spiral constantly reflects time without your intervention.
 - If the Nautilus is **not placed into _today’s_ Daily Page**, the red time beam is not shown, and tasks are not pushed into the future. 
 - You can define your agenda using a straightforward notation:
-  - **events** are rows containing a *time range* in 24h format (`HH:MM-HH:MM`, minutes can be omitted) and are fixed until the time range is changed by the user (e.g., "12:30-13 Meeting with JK", "9-10 Breakfast"). 
+  - **events** are rows containing a *time range* in 24h or 12h format (`HH:MM-HH:MM`, minutes can be omitted) and are fixed until the time range is changed by the user (e.g., "12:30-13 Meeting with JK", "9-10am Breakfast", "11am-14pm Presentation"). 
   - **tasks** are all residual rows that are not events; undone tasks move through a day (e.g., "nearly empty task" "{{[[TODO]]}} another, but important task").
 - **Tasks duration defaults to a 15-minute time allocation**, but this can be adjusted in the Roam Depot extension Settings or **individually for each task in your task list** with the simple notation `Mm` or `Mmin` where M is the length of a task in minutes (e.g., "Call Jack 10m", "Daily workout 45min").
 - The **order of tasks** in a Nautilus spiral **reflects exactly the order of tasks in the list.** You have to prioritize them by itself – in the morning and later during a day. 
@@ -92,7 +92,9 @@ Enjoy!
 - I usually add a prefix `#Agenda` preceding the Nautilus render block (via Settings). The inserted render blocks look like this: `#Agenda {{[[roam/render]]:((roam-render-Nautilus-cljs)) 22 30}}` so clicking later on #Agenda tag helps me to quickly gather all my old Nautiluses.
 - Sorry for some glitches when generating the proper position of the legend in some edge cases. This is the first version – even for someone like me that has been using Nautilus for 6 months without bigger issues, there are still some problems and a lot of work still has to be done. 
 
+## Changelog
 
+- 31/1/2024 – updated to autodetect 12h format in time-range (now supports both 24h and 12h time format)
 
 # Feature Requests, Bugs, and Feedback and Credits
 Nautilus is work in progress. I am happy to remove bugs or listen to your feedback! Contact me via https://barys.me.
