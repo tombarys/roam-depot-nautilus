@@ -305,7 +305,7 @@
 
 ;; --------------- text parsers --------------------
 
-(defn from-1224->min [time-str am??]
+(defn from-1224->min [time-str am??] ;; FIXME wow this is f*cking complicated – refactor later
   (let [pm? (re-find #"(?:pm|PM)" time-str)
         am? (or am?? (re-find #"(?:am|AM)" time-str))
         new-time-str (str/trim (str/replace time-str #"(?:am|AM|pm|PM)" ""))
@@ -323,11 +323,9 @@
 (defn parse-time-range [s]
   (let [range-format #"(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\s?AM|\s?PM|\s?am|\s?pm))?)\s*(?:-|–|až|to)\s*(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\s?AM|\s?PM|\s?am|\s?pm))?)"
         range-str (re-find range-format s)
-        cleaned-str (str/replace s range-str "")
-        _ (println "Range-str: " range-str)]
+        cleaned-str (str/replace s range-str "")]
     (if range-str
       (let [[_ from-str to-str] (re-find #"(.*)(?:-|–|až|to)(.*)" range-str)
-            _ (println "from " from-str " to " to-str " and cleaned: " cleaned-str)
             [to-min pm??] (from-1224->min to-str false)
             [from-min _] (from-1224->min from-str pm??)]
         {:range (if (> to-min from-min)
@@ -344,17 +342,6 @@
         {:duration (int (second duration-match))
          :cleaned-str cleaned-str})
       {:duration (:default-duration settings) :cleaned-str s})))
-
-
-#_(defn parse-progress [s]
-    (let [progress-format #"(\d{1,3})(\%)"
-          progress-match (re-find progress-format s)]
-      (if progress-match
-        (let [progress-str (first progress-match)
-              cleaned-str (str/replace s progress-str "")]
-          {:progress (parse-int (second progress-match))
-           :cleaned-str cleaned-str})
-        {:progress nil :cleaned-str s})))
 
 (defn parse-done-time [s]
   (let [done-time-format #"d(\d{1,2}(?::\d{1,2})?)"
