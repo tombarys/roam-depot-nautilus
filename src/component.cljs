@@ -305,17 +305,34 @@
 
 ;; --------------- text parsers --------------------
 
-(defn time-str-to-minutes [time-str]
-  (let [[h m] (str/split time-str #":")]
-    (+ (if m (int m) 0) (* 60 (int h)))))
+(defn from-1224->min [time-str am??]
+  (let [pm? (re-find #"(?:pm|PM)" time-str)
+        am? (or am?? (re-find #"(?:am|AM)" time-str))
+        new-time-str (str/trim (str/replace time-str #"(?:am|AM|pm|PM)" ""))
+        [hours new-mins] (if (re-find #"\:" new-time-str)
+                           (mapv int (str/split new-time-str ":"))
+                           [(int new-time-str) 0])
+        new-hours (if pm?
+                    (if (= hours 12) 12 (+ hours 12))
+                    (if am?
+                      (if (= hours 12) 0 hours)
+                      hours))
+        [h m] [(mod new-hours 24) (mod new-mins 60)]]
+    [(+ m (* 60 h)) pm?]))
 
 (defn parse-time-range [s]
-  (let [range-format #"(?:\d{1,2}(?::\d{1,2})?)\s*(?:-|–|až|to)\s*(?:\d{1,2}(?::\d{1,2})?)"
-        range-str (re-find range-format s)]
+  (let [range-format #"(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\s?AM|\s?PM|\s?am|\s?pm))?)\s*(?:-|–|až|to)\s*(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\s?AM|\s?PM|\s?am|\s?pm))?)"
+        range-str (re-find range-format s)
+        cleaned-str (str/replace s range-str "")
+        _ (println "Range-str: " range-str)]
     (if range-str
-      (let [[start-str end-str] (str/split range-str #"\s*(?:-|–|až|to)\s*")
-            cleaned-str (str/replace s range-str "")]
-        {:range [(time-str-to-minutes start-str) (time-str-to-minutes end-str)]
+      (let [[_ from-str to-str] (re-find #"(.*)(?:-|–|až|to)(.*)" range-str)
+            _ (println "from " from-str " to " to-str " and cleaned: " cleaned-str)
+            [to-min pm??] (from-1224->min to-str false)
+            [from-min _] (from-1224->min from-str pm??)]
+        {:range (if (> to-min from-min)
+                  [from-min to-min]
+                  [from-min from-min])
          :cleaned-str cleaned-str})
       {:range nil :cleaned-str s})))
 
