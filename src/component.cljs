@@ -305,9 +305,10 @@
 
 ;; --------------- text parsers --------------------
 
-(defn from-1224->min [time-str am??] ;; FIXME wow this is f*cking complicated – refactor later
-  (let [pm? (re-find #"(?:pm|PM)" time-str)
-        am? (or am?? (re-find #"(?:am|AM)" time-str))
+
+(defn from-1224->min [time-str am2 pm2] ;; FIXME wow this is f*cking complicated – refactor later
+  (let [pm? (or (re-find #"(?:pm|PM)" time-str) pm2)
+        am?  (or (re-find #"(?:am|AM)" time-str) am2)
         new-time-str (str/trim (str/replace time-str #"(?:am|AM|pm|PM)" ""))
         [hours new-mins] (if (re-find #"\:" new-time-str)
                            (mapv int (str/split new-time-str ":"))
@@ -315,19 +316,18 @@
         new-hours (if pm?
                     (if (= hours 12) 12 (+ hours 12))
                     (if am?
-                      (if (= hours 12) 0 hours)
-                      hours))
+                      (if (= hours 12) 0 hours) hours))
         [h m] [(mod new-hours 24) (mod new-mins 60)]]
-    [(+ m (* 60 h)) pm?]))
+    [(+ m (* 60 h)) am? pm?]))
 
 (defn parse-time-range [s]
   (let [range-format #"(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\s?AM|\s?PM|\s?am|\s?pm))?)\s*(?:-|–|až|to)\s*(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\s?AM|\s?PM|\s?am|\s?pm))?)"
-        range-str (re-find range-format s)
-        cleaned-str (str/replace s range-str "")]
+        range-str (re-find range-format s)]
     (if range-str
-      (let [[_ from-str to-str] (re-find #"(.*)(?:-|–|až|to)(.*)" range-str)
-            [to-min pm??] (from-1224->min to-str false)
-            [from-min _] (from-1224->min from-str pm??)]
+      (let [cleaned-str (str/replace s range-str "")
+            [_ from-str to-str] (re-find #"(.*)(?:-|–|až|to)(.*)" range-str)
+            [to-min am? pm?] (from-1224->min to-str nil nil)
+            [from-min _ _] (from-1224->min from-str am? pm?)]
         {:range (if (> to-min from-min)
                   [from-min to-min]
                   [from-min from-min])
