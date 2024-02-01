@@ -68,24 +68,23 @@
 
 ;; -------------- debug support ------------ ; FIXME remove in production
 (def debug-state-atom (r/atom false))        ; FIXME remove in production
-
+                                             ; FIXME remove in production
 (defn safe-prn [s]                           ; FIXME remove in production
   (when @debug-state-atom                    ; FIXME remove in production
     (clojure.pprint/pprint s)                ; FIXME remove in production
     s))                                      ; FIXME remove in production
-
+                                             ; FIXME remove in production
 (defn println?debug [& args]                 ; FIXME remove in production
   (when @debug-state-atom                    ; FIXME remove in production
     (apply println args)))                   ; FIXME remove in production
-
+                                             ; FIXME remove in production
 (defn pprint-all [& args]                    ; FIXME remove in production
   (clojure.pprint/pprint (apply str args)))  ; FIXME remove in production
-
-
+                                             ; FIXME remove in production
 (defn pprint?debug [& args]                      ; FIXME remove in production
   (when @debug-state-atom                        ; FIXME remove in production
     (clojure.pprint/pprint (apply str args))))   ; FIXME remove in production
-
+                                             ; FIXME remove in production
 (defn draw-debug-rects [rects]                ; FIXME remove in production
   [:g (for [{:keys [w h x y]} rects]          ; FIXME remove in production
         [:g                                   ; FIXME remove in production
@@ -183,7 +182,7 @@
            trying (if (at-vertex radians) :radius :angle)]
       (let [min-radians (- radians (/ max-radians-span 2))
             max-radians (+ radians (/ max-radians-span 2))
-          ; min-radius (- start-radius 10)
+          ; min-radius (- start-radius 10) ; FIXME remove in production
             x (+ (:center-x center) (* (cos radians) radius))
             y (+ (:center-y center) (* (sin radians) radius))
             on-left? (or (> radians (/ pi 2)) (< radians (- (/ pi 2))))
@@ -395,20 +394,20 @@
 (defn parse-row-params [s settings]
   (let [;; _ (println "#### STARTUJEME s " s)
         cleaned-str (parse-URLs s) ;; remove URLs – it has to start with this, because URLs can contain other markers
-        ;; _ (println "URL cleaned-str: " cleaned-str)
+        ;; _ (println "URL cleaned-str: " cleaned-str) ; FIXME remove in production
         {:keys [range cleaned-str]} (parse-time-range cleaned-str)
-        ;; _ (println "range: " range " cleaned-str: " cleaned-str)
+        ;; _ (println "range: " range " cleaned-str: " cleaned-str); FIXME remove in production
         {:keys [duration cleaned-str]} (parse-duration cleaned-str settings)
-        ;; _ (println "duration before: " duration " cleaned-str: " cleaned-str)
+        ;; _ (println "duration before: " duration " cleaned-str: " cleaned-str); FIXME remove in production
         #_#__ (println "adjusted duration: " (or duration (:default-duration settings)))
         {:keys [done-at cleaned-str]} (parse-done-time cleaned-str)
-        ; _ (println "done-time: " done-at " cleaned-str: " cleaned-str)
+        ; _ (println "done-time: " done-at " cleaned-str: " cleaned-str); FIXME remove in production
         {:keys [done cleaned-str]} (parse-DONE cleaned-str)
-        ; _ (println "done: " done " cleaned-str: " cleaned-str)
-        #_#_{:keys [progress cleaned-str]} (parse-progress cleaned-str)
-        ; _ (println "progress: " progress " cleaned-str: " cleaned-str)
+        ; _ (println "done: " done " cleaned-str: " cleaned-str); FIXME remove in production
+        #_#_{:keys [progress cleaned-str]} (parse-progress cleaned-str); FIXME remove in production
+        ; _ (println "progress: " progress " cleaned-str: " cleaned-str); FIXME remove in production
         description (parse-rest cleaned-str)
-        ; _ (println "description: " description)
+        ; _ (println "description: " description); FIXME remove in production
         event-type (if range :meeting :todo)]
     (-> {:description description
          :duration duration
@@ -538,10 +537,10 @@
         legend-color (if-not done? (update-opacity-str bg-color "1") (update-opacity-str bg-color "0.2"))
         font-weight (if font-weight font-weight "normal")
         path (create-arc-path start-angle end-angle inner-radius outer-radius center)
-        debug? @debug-state-atom                                       ; FIXME remove in production
-        dbg-radians-txt (if debug? (str "slc:" (round2 start-radians)  ; FIXME remove in production
-                                        "–>" (round2 end-radians) "/ leg:" (round2 legend-radians)) "") ; FIXME remove in production
-        on-left? (or (<= legend-radians (- (/ pi 2))) (>= legend-radians (/ pi 2)))] ; FIXME remove in production
+        debug? @debug-state-atom                                       
+        dbg-radians-txt (if debug? (str "slc:" (round2 start-radians)  
+                                        "–>" (round2 end-radians) "/ leg:" (round2 legend-radians)) "") 
+        on-left? (or (<= legend-radians (- (/ pi 2))) (>= legend-radians (/ pi 2)))] 
     [:g
      (when @debug-state-atom  [:circle {:cx center-x :cy center-y :r 4 :fill "red"}])              ; FIXME remove in production
      ;; ⤵ this is the main component - slice
@@ -565,8 +564,9 @@
                 :alignment-baseline "baseline"
                 :font-weight font-weight
                 :fill (if-not done? (update-opacity-str bg-color "1") (update-opacity-str bg-color "0.2"))}
-         (if debug? (str dbg-radians-txt)                                            ; FIXME remove in production
-             (str #_progress-str (subs text 0 (:legend-len-limit settings))))]])     ; FIXME remove in production
+         (if debug? (str dbg-radians-txt)                                            
+             (str #_progress-str (subs text 0 (:legend-len-limit settings))))        
+         ]])     
      (when (seq timestamp)
        ;; ⤵ adds a clock label for the snail template
        [:text  {:x time-text-x :y time-text-y :font-size (- font-size 3) :font-family font-family :color border-color :fill border-color
@@ -581,7 +581,7 @@
                                          (<= start-angle 90))
                                       "after-edge"
                                       "before-edge")}
-        (if debug? (str (round2 start-radians) " / " start-angle) timestamp)         ; FIXME remove in production
+        (if debug? (str (round2 start-radians) " / " start-angle) timestamp)         
         ])]))
 
 
