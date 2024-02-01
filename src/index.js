@@ -72,7 +72,7 @@ async function onload({extensionAPI}) {
       settings: 
         [{id: "workday-start",
           name: "Default workday start time",
-          description: "Default workday start time. Options are 6(am), 7(am), 8(am) am. Factory setting: 8(am). Applies to newly inserted spirals only.",
+          description: "Default workday start time. Options are 6(am), 7(am) or 8(am) which is default. Applies to a newly inserted Nautiluses only.",
           action: {
             type: "select",
             default: defaults['workday-start'],
