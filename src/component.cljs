@@ -1,9 +1,8 @@
-(ns nautilus-roam-1-31-2024
+(ns nautilus-roam-2-1-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
             [roam.datascript.reactive :as rdr]))
-
 
 ;; ------- defaults -------
 
@@ -11,7 +10,7 @@
 
 (def init-len-limit 22) ;; values used when no duration is specified as a render parameter
 
-(def workday-start 480)
+(def init-workday-start 480)
 
 (def workday-end 1320)
 
@@ -21,13 +20,13 @@
 
 (defonce mobile? js/window.roamAlphaAPI.platform.isMobile)
 
+(def start-svg-rect-ratio 0.7)
+
 (defonce snail-scaler (if mobile? 0.7 1)) ;; changes the size of the snail (and thus proportions of the whole chart)
 
 (def mob-width 450) ;; default start width value on mobile
 
 (def desk-width 600) ;; default start width value on desktop
-
-(def start-svg-rect-ratio 0.7)
 
 ;; ---------- mostly visual dev settings ------------
 
@@ -37,7 +36,7 @@
 
 (def bent-line-gap 3) ;; the space between the bent line and the legend rectangle
 
-(def rect-width-coef 1.7) ;; bigger number = narrower text rect (for legend)
+(def rect-width-coef 1.65) ;; bigger number = narrower text rect (for legend)
 
 (def rect-height-coef 1.15) ;; bigger number = taller text rect (for legend)
 
@@ -45,14 +44,13 @@
 
 (def font-size (if mobile? 12 14))
 
-(def snail-blueprint-outer-radiuses ;; FIXME remove zeros later
-  [0  0   0   0   0   0   0   0   145 140 140 130 125 120 115 110 105 100 95 90 85 80 75 70])
+(def snail-blueprint-outer-radiuses 
+  (concat (repeat 5 0) [135 140 145 150] (range 145 65 -5)))
 
 (def snail-inner-radius (* 50 snail-scaler))
 
 (defn outer-radius-at [t]
   (* (nth snail-blueprint-outer-radiuses t) snail-scaler))
-
 
 (def len-central-legend 16) ;; length of the central legend description (page name or date)
 
@@ -175,54 +173,54 @@
   [new-rect rects start-radians start-radius text center]
   (let [max-legend-radius (* start-radius 1.7) ;; maximum legend radius to try
         max-radians-span (/ pi 17)] ;; maximum angle span for legend to try
-   (loop [radians start-radians
-         radius start-radius
-         angle-offset  0
-         radius-offset 0
-         counter 0
-         radius-inc 3 ;; radius offset step size
-         trying (if (at-vertex radians) :radius :angle)]
-    (let [min-radians (- radians (/ max-radians-span 2))
-          max-radians (+ radians (/ max-radians-span 2))
+    (loop [radians start-radians
+           radius start-radius
+           angle-offset  0
+           radius-offset 0
+           counter 0
+           radius-inc 3 ;; radius offset step size
+           trying (if (at-vertex radians) :radius :angle)]
+      (let [min-radians (- radians (/ max-radians-span 2))
+            max-radians (+ radians (/ max-radians-span 2))
           ; min-radius (- start-radius 10)
-          x (+ (:center-x center) (* (cos radians) radius))
-          y (+ (:center-y center) (* (sin radians) radius))
-          on-left? (or (> radians (/ pi 2)) (< radians (- (/ pi 2))))
-          at-vertex? (at-vertex radians)
-          horizontal-shift (if at-vertex?
-                             (/ (:w new-rect) 2)
-                             (if on-left?
-                               (:w new-rect)
-                               0))
-          vertical-shift (/ (:h new-rect) 2)
-          new-rect (assoc new-rect :x (- x horizontal-shift) :y (- y vertical-shift) :radians radians)
-          colliding? (collides? new-rect rects)]
-      (pprint?debug text " TRYING: " trying " x: " (round2 x) " y: " (round2 y) " radius: " (round2 radius) " radians: " (round2 radians)
-                    " radius-offset " radius-offset
-                    " angle-offset: " (round2 angle-offset) " colliding?: " colliding? " counter " counter)
-      (if (or (> counter tries-treshold) (not colliding?)) ;; number of placement guesses; lower number = faster but more likely to overlap
-        new-rect
-        (if (= trying :radius) ;; testing placing using increased radius 
-          (if (< radius max-legend-radius)
-            (recur radians
-                   (+ start-radius radius-offset)
-                   angle-offset
-                   (+ radius-offset radius-inc)
-                   (inc counter)
-                   radius-inc
-                   :radius)
-            (recur radians start-radius angle-offset radius-offset 0 0 :angle))
-          (if (and (> radians min-radians) (< radians max-radians)) ;; testing increased/decreased angle 
-            (recur (+ start-radians angle-offset)
-                   radius
-                   (if (or (= 0 angle-offset) (pos? angle-offset))
-                     (- (+ 0.03 angle-offset)) ;; angle offset step size
-                     (+ 0.03 (- angle-offset)))
-                   radius-offset
-                   (inc counter)
-                   0
-                   :angle)
-            (recur start-radians start-radius angle-offset radius-offset 0 radius-inc :radius))))))))
+            x (+ (:center-x center) (* (cos radians) radius))
+            y (+ (:center-y center) (* (sin radians) radius))
+            on-left? (or (> radians (/ pi 2)) (< radians (- (/ pi 2))))
+            at-vertex? (at-vertex radians)
+            horizontal-shift (if at-vertex?
+                               (/ (:w new-rect) 2)
+                               (if on-left?
+                                 (:w new-rect)
+                                 0))
+            vertical-shift (/ (:h new-rect) 2)
+            new-rect (assoc new-rect :x (- x horizontal-shift) :y (- y vertical-shift) :radians radians)
+            colliding? (collides? new-rect rects)]
+        (pprint?debug text " TRYING: " trying " x: " (round2 x) " y: " (round2 y) " radius: " (round2 radius) " radians: " (round2 radians)
+                      " radius-offset " radius-offset
+                      " angle-offset: " (round2 angle-offset) " colliding?: " colliding? " counter " counter)
+        (if (or (> counter tries-treshold) (not colliding?)) ;; number of placement guesses; lower number = faster but more likely to overlap
+          new-rect
+          (if (= trying :radius) ;; testing placing using increased radius 
+            (if (< radius max-legend-radius)
+              (recur radians
+                     (+ start-radius radius-offset)
+                     angle-offset
+                     (+ radius-offset radius-inc)
+                     (inc counter)
+                     radius-inc
+                     :radius)
+              (recur radians start-radius angle-offset radius-offset 0 0 :angle))
+            (if (and (> radians min-radians) (< radians max-radians)) ;; testing increased/decreased angle 
+              (recur (+ start-radians angle-offset)
+                     radius
+                     (if (or (= 0 angle-offset) (pos? angle-offset))
+                       (- (+ 0.03 angle-offset)) ;; angle offset step size
+                       (+ 0.03 (- angle-offset)))
+                     radius-offset
+                     (inc counter)
+                     0
+                     :angle)
+              (recur start-radians start-radius angle-offset radius-offset 0 radius-inc :radius))))))))
 
 (defn real-rect-radians [rect center]
   (let [rcenter-x (+ (:x rect) (/ (:w rect) 2))
@@ -584,10 +582,21 @@
 
 
 (defn snail-blueprint-component [color inner-radius center settings]
-  [:g (mapcat (fn [[start end timestamp]]
-                [[slice [start end inner-radius (outer-radius-at timestamp) center settings] :border-color color :timestamp (str timestamp)]])
-              (concat (map vector (range 0 390 30) (range 30 390 30) (range 9 21))
-                      [(vector 0 30 21) (vector 330 360 8)]))])
+  (let
+   [workday-start (:workday-start settings)]
+    [:g (mapcat (fn [[start end timestamp]]
+                  [[slice
+                    [start end inner-radius (outer-radius-at timestamp) center settings]
+                    :border-color color
+                    :timestamp (str timestamp)]])
+                (concat
+                 (cond (between workday-start 420 479) [(vector 300 330 7)]
+                       (between workday-start 360 419) [(vector 270 300 6) (vector 300 330 7)])
+                 (map vector
+                      (range 0 390 30)
+                      (range 30 390 30)
+                      (range 9 21))
+                 [(vector 0 30 21) (vector 330 360 8)]))]))
 
 (defn central-label-component [[first-row second-row] center]
   (let [[center-x center-y] [(:center-x center) (:center-y center)]
@@ -684,7 +693,7 @@
         [(+ reserve (- center-x left-min))
          (+ reserve (- right-max left-min))
          (+ reserve (- center-y top-min))
-         (+ (* 3 reserve) (- bottom-max top-min))]))))
+         (+ (* 3 reserve) (- bottom-max top-min) (when (< (:workday-start settings) 420) reserve))])))) ;; when the workday starts before 7:00, the snail has to get more space below
 
 (defn split-and-trim [page-title n]
   (map #(subs % 0 (min n (count %))) (str/split page-title #"," 2)))
@@ -742,7 +751,7 @@
   (let [text->events (-> (mapv #(parse-row-params % settings) (get-children-strings block-uid))
                          (add-start-after))
         filled-day [(-> text->events
-                        (fill-day workday-start plan-from-time)) (filter #(:done-at %) text->events)]]
+                        (fill-day (:workday-start settings) plan-from-time)) (filter #(:done-at %) text->events)]]
     filled-day))
 
 ;; structure of filled-day: [[events] [done-todos]]
@@ -780,16 +789,20 @@
      (str "debug is on")
      (str "🪲 debug is off"))])
 
-(defn args->settings [[a1 a2 :as args]]
+(defn args->settings [[a1 a2 a3 :as args]]
   (let [a1 (when a1 (int a1))
-        a2 (when a2 (int a2))]
-    (if (and (>= (count args) 2)
+        a2 (when a2 (int a2))
+        a3 (when a3 (int a3))]
+    (if (and (>= (count args) 3)
              (between a1 15 30) ;; allowed legend len interval
-             (between a2 5 60)) ;; allowed default todo duration interval
+             (between a2 5 60)
+             (between a3 360 540)) ;; allowed default todo duration interval
       {:legend-len-limit a1
-       :default-duration a2}
+       :default-duration a2
+       :workday-start a3}
       {:legend-len-limit init-len-limit
-       :default-duration init-duration})))
+       :default-duration init-duration
+       :workday-start init-workday-start})))
 
 (defn main [{:keys [block-uid]} & args]
   (reset-now-time-atom now-time-atom)
@@ -797,11 +810,11 @@
                     :height (* start-svg-rect-ratio (if mobile? mob-width desk-width))}
         show-debug-button? (= :debug (first args))
         settings (args->settings args)
-        #_#__ (println "**** Settings: " settings)
+        _ (println "**** Settings: " settings)
         show-done-state (r/atom true)
         daily-page-atom? (r/atom (daily-page? block-uid))
         page-title (page-title block-uid)
-        plan-from-time (if @daily-page-atom? @now-time-atom workday-start)
+        plan-from-time (if @daily-page-atom? @now-time-atom (:workday-start settings))
         events-state (r/atom (populate-events block-uid plan-from-time settings))]
     ; (println?debug "Dimensions-atom: " dimensions)
     ; (println?debug "Argumenty roam/renderu: " args)

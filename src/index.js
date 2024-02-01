@@ -10,14 +10,17 @@ const disabledReplacementString = `{{${componentName}${disabledStr}`;
 const version = 'v1';
 const titleblockUID = `roam-render-${componentName}`;
 
-const defaults = {'prefix-str': '', 'desc-length': 22, 'todo-duration': 15};
+const defaults = {'prefix-str': '', 'desc-length': 22, 'todo-duration': 15, 'workday-start': 8};
 
 async function newRenderString(renderStringCore, extensionAPI, replacementKey, newValue) {
-  const keys = ['prefix-str', 'desc-length', 'todo-duration'];
+  const keys = ['prefix-str', 'desc-length', 'todo-duration', 'workday-start'];
   let values = [];
 
-  for (let key of keys) {
+    for (let key of keys) {
       if (key === replacementKey) {
+          if (key === 'workday-start') {
+              newValue = newValue * 60;
+          }
           values.push(newValue);
       } else {
           let value = await extensionAPI.settings.get(key) || defaults[key];
@@ -67,7 +70,21 @@ async function onload({extensionAPI}) {
   const panelConfig = {
       tabTitle: componentName,
       settings: 
-        [{id:   "prefix-str",
+        [{id: "workday-start",
+          name: "Default workday start time",
+          description: "Default workday start time. Options are 6(am), 7(am), 8(am) am. Factory setting: 8(am). Applies to newly inserted spirals only.",
+          action: {
+            type: "select",
+            default: defaults['workday-start'],
+            items: [6, 7, 8], // specify your default values here
+            onChange: async (evt) => {
+              let newString = await newRenderString(renderStringCore, extensionAPI, 'workday-start', evt);
+              updateTemplateString(renderStringCore, newString);
+              // console.log("Todo duration changed to: ", evt, " and the new renderString is", newString);
+            },
+          }
+        },
+        {id:   "prefix-str",
         name:   "Nautilus prefix",
         description: "Your custom text preceding every newly created Nautilus spiral. E.g. #Agenda.",
         action: {type:  "input",
