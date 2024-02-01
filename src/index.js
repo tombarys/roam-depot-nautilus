@@ -12,7 +12,7 @@ const titleblockUID = `roam-render-${componentName}`;
 
 const defaults = {'prefix-str': '', 'desc-length': 22, 'todo-duration': 15, 'workday-start': 8};
 
-async function newRenderString(renderStringCore, extensionAPI, replacementKey, newValue) {
+async function generateUpdatedRenderString(renderStringCore, extensionAPI, replacementKey, newValue) {
   const keys = ['prefix-str', 'desc-length', 'todo-duration', 'workday-start'];
   let values = [];
 
@@ -31,8 +31,8 @@ async function newRenderString(renderStringCore, extensionAPI, replacementKey, n
   return values[0] + ' ' + renderStringCore + ' ' + values.slice(1).join(' ') + '}}';
 }
 
-async function getTemplateString(extensionAPI) { // returns the whole template string for the render block (if all settings are not default else returns the default string)
-  const keys = ['prefix-str', 'desc-length', 'todo-duration'];
+async function generateTemplateString(extensionAPI) { // returns the whole template string for the render block (if all settings are not default else returns the default string)
+  const keys = ['prefix-str', 'desc-length', 'todo-duration', 'workday-start'];
   let values = [];
   let allAreDefault = true;
   for (let key of keys) {
@@ -78,7 +78,7 @@ async function onload({extensionAPI}) {
             default: defaults['workday-start'],
             items: [6, 7, 8], // specify your default values here
             onChange: async (evt) => {
-              let newString = await newRenderString(renderStringCore, extensionAPI, 'workday-start', evt);
+              let newString = await generateUpdatedRenderString(renderStringCore, extensionAPI, 'workday-start', evt);
               updateTemplateString(renderStringCore, newString);
               // console.log("Todo duration changed to: ", evt, " and the new renderString is", newString);
             },
@@ -91,7 +91,7 @@ async function onload({extensionAPI}) {
                  default: defaults['prefix-str'],
                  // placeholder: extensionAPI.settings.get('prefix-str') || defaults['prefix-str'],
                  onChange: async (evt) => {
-                   let newString = await newRenderString(renderStringCore, extensionAPI, 'prefix-str', evt.target.value);
+                   let newString = await generateUpdatedRenderString(renderStringCore, extensionAPI, 'prefix-str', evt.target.value);
                    updateTemplateString(renderStringCore, newString.trim());
                  // console.log("Input Changed!", evt); 
             }
@@ -105,7 +105,7 @@ async function onload({extensionAPI}) {
             default: defaults['desc-length'],
             items: [14, 16, 18, 20, 22, 24, 26, 28], // specify your default values here
             onChange: async (evt) => {
-              let newString = await newRenderString(renderStringCore, extensionAPI, 'desc-length', evt);
+              let newString = await generateUpdatedRenderString(renderStringCore, extensionAPI, 'desc-length', evt);
               updateTemplateString(renderStringCore, newString);
               // console.log("Desc-length changed to: ", evt, " and the new renderString is", newString);
             },
@@ -119,7 +119,7 @@ async function onload({extensionAPI}) {
             default: defaults['todo-duration'],
             items: [5, 10, 15, 20, 25, 30], // specify your default values here
             onChange: async (evt) => {
-              let newString = await newRenderString(renderStringCore, extensionAPI, 'todo-duration', evt);
+              let newString = await generateUpdatedRenderString(renderStringCore, extensionAPI, 'todo-duration', evt);
               updateTemplateString(renderStringCore, newString);
               // console.log("Todo duration changed to: ", evt, " and the new renderString is", newString);
             },
@@ -141,7 +141,7 @@ async function onload({extensionAPI}) {
 
   if (!roamAlphaAPI.data.pull("[*]", [":block/uid", titleblockUID])) {
     // component hasn't been loaded so we add it to the graph
-    toggleRenderComponent(true, titleblockUID, version, renderStringCore, disabledReplacementString, codeBlockUID, componentName, await getTemplateString(extensionAPI));
+    toggleRenderComponent(true, titleblockUID, version, renderStringCore, disabledReplacementString, codeBlockUID, componentName, await generateTemplateString(extensionAPI));
     // console.log("getting template string:" + await getTemplateString(extensionAPI));
   }
 
