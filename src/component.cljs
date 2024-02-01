@@ -66,34 +66,6 @@
 (def todo-color-palette
   ["rgba(4,100,132,0.3)", "rgba(8,153,200,0.3)", "rgba(47,186,232,0.3)", "rgba(58,202,249,0.3)"])
 
-;; -------------- debug support ------------ ; FIXME remove in production
-(def debug-state-atom (r/atom false))        ; FIXME remove in production
-                                             ; FIXME remove in production
-(defn safe-prn [s]                           ; FIXME remove in production
-  (when @debug-state-atom                    ; FIXME remove in production
-    (clojure.pprint/pprint s)                ; FIXME remove in production
-    s))                                      ; FIXME remove in production
-                                             ; FIXME remove in production
-(defn println?debug [& args]                 ; FIXME remove in production
-  (when @debug-state-atom                    ; FIXME remove in production
-    (apply println args)))                   ; FIXME remove in production
-                                             ; FIXME remove in production
-(defn pprint-all [& args]                    ; FIXME remove in production
-  (clojure.pprint/pprint (apply str args)))  ; FIXME remove in production
-                                             ; FIXME remove in production
-(defn pprint?debug [& args]                      ; FIXME remove in production
-  (when @debug-state-atom                        ; FIXME remove in production
-    (clojure.pprint/pprint (apply str args))))   ; FIXME remove in production
-                                             ; FIXME remove in production
-(defn draw-debug-rects [rects]                ; FIXME remove in production
-  [:g (for [{:keys [w h x y]} rects]          ; FIXME remove in production
-        [:g                                   ; FIXME remove in production
-         [:rect                               ; FIXME remove in production
-          {:style {:fill "rgba(128,128,128,0.32)"}    ; FIXME remove in production
-           :x x                ; FIXME remove in production
-           :y y                ; FIXME remove in production
-           :width w            ; FIXME remove in production
-           :height h}]])])     ; FIXME remove in production
 
 ;; ---------- resolving (()) references -----------
 
@@ -182,7 +154,6 @@
            trying (if (at-vertex radians) :radius :angle)]
       (let [min-radians (- radians (/ max-radians-span 2))
             max-radians (+ radians (/ max-radians-span 2))
-          ; min-radius (- start-radius 10) ; FIXME remove in production
             x (+ (:center-x center) (* (cos radians) radius))
             y (+ (:center-y center) (* (sin radians) radius))
             on-left? (or (> radians (/ pi 2)) (< radians (- (/ pi 2))))
@@ -195,11 +166,6 @@
             vertical-shift (/ (:h new-rect) 2)
             new-rect (assoc new-rect :x (- x horizontal-shift) :y (- y vertical-shift) :radians radians)
             colliding? (collides? new-rect rects)]
-        (pprint?debug text " TRYING: " trying " x: " (round2 x) " y: " (round2 y) ; FIXME remove in production
-                      " radius: " (round2 radius) " radians: " (round2 radians)   ; FIXME remove in production
-                      " radius-offset " radius-offset                             ; FIXME remove in production
-                      " angle-offset: " (round2 angle-offset)                     ; FIXME remove in production
-                      " colliding?: " colliding? " counter " counter)             ; FIXME remove in production
         (if (or (> counter tries-treshold) (not colliding?)) ;; number of placement guesses; lower number = faster but more likely to overlap
           new-rect
           (if (= trying :radius) ;; testing placing using increased radius 
@@ -394,20 +360,12 @@
 (defn parse-row-params [s settings]
   (let [;; _ (println "#### STARTUJEME s " s)
         cleaned-str (parse-URLs s) ;; remove URLs – it has to start with this, because URLs can contain other markers
-        ;; _ (println "URL cleaned-str: " cleaned-str) ; FIXME remove in production
         {:keys [range cleaned-str]} (parse-time-range cleaned-str)
-        ;; _ (println "range: " range " cleaned-str: " cleaned-str); FIXME remove in production
         {:keys [duration cleaned-str]} (parse-duration cleaned-str settings)
-        ;; _ (println "duration before: " duration " cleaned-str: " cleaned-str); FIXME remove in production
         #_#__ (println "adjusted duration: " (or duration (:default-duration settings)))
         {:keys [done-at cleaned-str]} (parse-done-time cleaned-str)
-        ; _ (println "done-time: " done-at " cleaned-str: " cleaned-str); FIXME remove in production
         {:keys [done cleaned-str]} (parse-DONE cleaned-str)
-        ; _ (println "done: " done " cleaned-str: " cleaned-str); FIXME remove in production
-        #_#_{:keys [progress cleaned-str]} (parse-progress cleaned-str); FIXME remove in production
-        ; _ (println "progress: " progress " cleaned-str: " cleaned-str); FIXME remove in production
         description (parse-rest cleaned-str)
-        ; _ (println "description: " description); FIXME remove in production
         event-type (if range :meeting :todo)]
     (-> {:description description
          :duration duration
@@ -542,7 +500,6 @@
                                         "–>" (round2 end-radians) "/ leg:" (round2 legend-radians)) "") 
         on-left? (or (<= legend-radians (- (/ pi 2))) (>= legend-radians (/ pi 2)))] 
     [:g
-     (when @debug-state-atom  [:circle {:cx center-x :cy center-y :r 4 :fill "red"}])              ; FIXME remove in production
      ;; ⤵ this is the main component - slice
      [:path
       {:d path
@@ -667,7 +624,6 @@
             text (:description event)
             radius (nth snail-blueprint-outer-radiuses (mod (quot (int (:start event)) 60) (count snail-blueprint-outer-radiuses)))
             new-rect (get-legend-rect rects text mid-radians radius center settings)]
-        (println?debug "RADIUS INSIDE EVENTS-SLICES: " radius)              ; FIXME remove in production
         (recur (inc i) (rest events) (conj rects new-rect) (conj all-slice-components (event-slice-component event i new-rect snail-inner-radius @daily-page-atom? center settings))))
       [all-slice-components rects])))
 
@@ -690,9 +646,6 @@
               text (:description event)
               radius (nth snail-blueprint-outer-radiuses (mod (quot (int (:start event)) 60) (count snail-blueprint-outer-radiuses)))
               new-rect (get-legend-rect rects text mid-radians radius center settings)]
-        ;(println?debug "RADIUS: " radius)              ; FIXME remove in production
-        ;(pprint?debug new-rect)                        ; FIXME remove in production
-        ;(println?debug "LEFT-MIN: " left-min " RIGHT-MAX: " right-max " WIDTH: " (- right-max left-min))              ; FIXME remove in production
           (recur (inc i) (rest events) (conj rects new-rect) (min left-min (:x new-rect)) (max right-max (+ (:x new-rect) (:w new-rect))) (min top-min (:y new-rect)) (max bottom-max (+ (:y new-rect) (:h new-rect)))))
         [(+ reserve (- center-x left-min))
          (+ reserve (- right-max left-min))
@@ -722,15 +675,6 @@
         [slice [(- (min->angle @now-time-atom) 1) (+ (min->angle @now-time-atom) 1) 0 center-y center settings] :bg-color clock-hand-color])
       [central-label-component (split-and-trim page-title len-central-legend) center]
      
-      (when @debug-state-atom ;; čistě pro účely debugu ⤵              ; FIXME remove in production
-        [:g                                                             ; FIXME remove in production
-         [draw-debug-rects rects]                                       ; FIXME remove in production
-         [:text {:x "0" :y "450" :text-anchor "start"}                  ; FIXME remove in production
-          "Suggested w: " suggested-width                               ; FIXME remove in production
-          " Center-x: " (:center-x center)                              ; FIXME remove in production
-          " Center-y: " (js/Math.round center-y)]                       ; FIXME remove in production
-         [:circle {:cx (:center-x center) :cy (:center-y center)        ; FIXME remove in production
-                   :r 200 :fill "none" :stroke "black" :stroke-width 1}]])  ; FIXME remove in production
       ]]))
 
 (defn add-start-after
@@ -783,13 +727,6 @@
           "all"
           "undone"))])
 
-(defn switch-debug-button []                           ; FIXME remove in production
-  [:button {:on-click #(swap! debug-state-atom not)    ; FIXME remove in production
-            :style {:background-color "#5B5B5BBF", :color "rgb(254,254,254)"           ; FIXME remove in production
-                    :margin "8px" :border-radius "8px" :display "inline-block"}}       ; FIXME remove in production
-   (if @debug-state-atom                               ; FIXME remove in production
-     (str "debug is on")                               ; FIXME remove in production
-     (str "🪲 debug is off"))])                        ; FIXME remove in production
 
 (defn args->settings [[a1 a2 a3 :as args]]
   (let [a1 (when a1 (int a1))
@@ -810,7 +747,6 @@
   (reset-now-time-atom now-time-atom)
   (let [dimensions {:width (if mobile? mob-width desk-width)
                     :height (* start-svg-rect-ratio (if mobile? mob-width desk-width))}
-        show-debug-button? (= :debug (first args))              ; FIXME remove in production
         settings (args->settings args)
         _ (println "**** Settings: " settings)
         show-done-state (r/atom true)
@@ -824,5 +760,4 @@
        (reset! events-state (populate-events block-uid plan-from-time settings)))
      [:div
       [switch-done-visibility-button show-done-state]
-      (when show-debug-button? [switch-debug-button])              ; FIXME remove in production
       ]]))
