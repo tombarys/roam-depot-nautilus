@@ -14,7 +14,7 @@ _Events are yellow, tasks are blue – and done tasks are light gray_
 - insert the component at the top of your Daily Page using `;;Nautilus` template
 - indent all events and tasks that you want to accomplish below the component as its children 
 - start inserting tasks, then folow up with events
-- use e.g. "12:30-14:20" or "9 to 10:45" to anchor fixed time events
+- use e.g. "12:30-14:20" or "9am to 1:45pm" to anchor fixed time events
 - use e.g. "10m" or "20min" to set the task duration (other than default)
 - use e.g. "d18:30" or "d9:05" in tasks to denote the time when they were finished (or use extension for it)
 - during a day: reorder tasks and move some of them after fixed events to ensure they will not be planned earlier
@@ -43,6 +43,7 @@ I strongly suggest installing [David Vargas](https://github.com/dvargas92495/roa
 ### 3. Adjust your settings
 
 Additionally, you can easily change parameters to better suit your needs (in the Roam Depot extension Settings):
+- your workday start time; choices are 6am, 7am, 8am (default)
 - the text (e.g. tag) prefix that will inserted above the the spiral 
 - the length of the legend text (longer task description than specified will be stripped from spiral legend)
 - the default duration of the task (when creating a new to-do, you can leave it without specifics and it will default to the setting)
@@ -89,12 +90,13 @@ Enjoy!
 - You can use "to" in events time range definition too (e.g., "14:30 to 15:15 My TED Talk"). 
 - You can use Roam references to blocks in your task list. It means you can just `Alt/Option` + drag and drop tasks from other pages/blocks without having to rewrite them from scratch.
 - Do your planning in the morning or even the evening before. It seems like Nautilus involves extended preparation before a workday, but my experience is that it greatly aids conscientous day planning and eventual task optimization. 
-- I usually add a prefix `#Agenda` preceding the Nautilus render block (via Settings). The inserted render blocks look like this: `#Agenda {{[[roam/render]]:((roam-render-Nautilus-cljs)) 22 30}}` so clicking later on #Agenda tag helps me to quickly gather all my old Nautiluses.
+- I usually add a prefix `#Agenda` preceding the Nautilus render block (via Settings). The inserted render blocks look like this: `#Agenda {{[[roam/render]]:((roam-render-Nautilus-cljs)) 22 30 480}}` so clicking later on #Agenda tag helps me to quickly gather all my old Nautiluses.
 - Sorry for some glitches when generating the proper position of the legend in some edge cases. This is the first version – even for someone like me that has been using Nautilus for 6 months without bigger issues, there are still some problems and a lot of work still has to be done. 
 
 ## Changelog
 
 - 31/1/2024 – updated to autodetect 12h format in time-range (now supports both 24h and 12h time format)
+- 1/2/2024 – added option to change workday start time (the first select option in Settings now)
 
 # Feature Requests, Bugs, and Feedback and Credits
 Nautilus is work in progress. I am happy to remove bugs or listen to your feedback! Contact me via https://barys.me.
