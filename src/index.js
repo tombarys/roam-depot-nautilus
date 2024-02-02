@@ -38,8 +38,12 @@ async function generateTemplateString(extensionAPI) { // returns the whole templ
   for (let key of keys) {
           let value = await extensionAPI.settings.get(key);
           switch(value) {
-            case defaults[key]: { 
-              values.push(value);
+            case defaults[key]: {
+              if (key === 'workday-start') {
+                values.push(value * 60);
+                } else {
+                values.push(value);
+              }
               break; 
             }
             case undefined: {
