@@ -13,7 +13,7 @@ const titleblockUID = `roam-render-${componentName}`;
 const defaults = {'prefix-str': '', 'desc-length': 22, 'todo-duration': 15, 'workday-start': 8};
 
 async function generateUpdatedRenderString(renderStringCore, extensionAPI, replacementKey, newValue) {
-  const keys = ['prefix-str', 'desc-length', 'todo-duration', 'workday-start'];
+  const keys = Object.keys(defaults);
   let values = [];
 
     for (let key of keys) {
@@ -32,7 +32,7 @@ async function generateUpdatedRenderString(renderStringCore, extensionAPI, repla
 }
 
 async function generateTemplateString(extensionAPI) { // returns the whole template string for the render block (if all settings are not default else returns the default string)
-  const keys = ['prefix-str', 'desc-length', 'todo-duration', 'workday-start'];
+  const keys = Object.keys(defaults);
   let values = [];
   let allAreDefault = true;
   for (let key of keys) {
