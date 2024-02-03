@@ -1,4 +1,4 @@
-(ns nautilus-roam-2-1-2024
+(ns nautilus-roam-3-2-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -13,6 +13,10 @@
 (def init-workday-start 480)
 
 (def workday-end 1320)
+
+(def init-starting-distance 30)
+
+;; ------ legend placement vs performance ----------
 
 (def tries-treshold 25) ;; number of legend placement guesses; lower number = faster but more likely to overlap
 
@@ -235,14 +239,14 @@
 (defn get-legend-rect
   "Returns a new legend rectangle that does not overlap with any of the rects"
   [rects text slice-radians outer-radius center settings]
-  (let [w (* (/ font-size rect-width-coef) (min (count text) (:legend-len-limit settings)))  ;; legend rectangle width according to text length and approx. font width
-        h (* font-size rect-height-coef)                          ;; legend rectangle height according to approx. font height
+  (let [w (* (/ font-size rect-width-coef) (min (count text) (:legend-len-limit settings)))  
+        h (* font-size rect-height-coef)                          
         new-text-rect (if rects
                         (assoc
-                         (iterate-rect-place {:w w :h h}               ;; the size of the legend rectangle
-                                             rects                     ;; legend rectangle repository
-                                             (- slice-radians)         ;; the direction of the 1st place attempt
-                                             (+ outer-radius (if mobile? 0 30))  ;; starting distance from the centre
+                         (iterate-rect-place {:w w :h h}               
+                                             rects                     
+                                             (- slice-radians)         
+                                             (+ outer-radius (if mobile? 0 init-starting-distance))  ;; starting distance from the centre
                                              text
                                              center)
                          :text text)                                   ;; FIXME jen pro debug              
@@ -382,41 +386,29 @@
       (str/replace #"\_\_(.*?)\_\_" "$1")
       (str/replace #"\^\^(.*?)\^\^" "$1")
 
-      ;; Replace custom tags with their symbols or texts 
-      ;; TODO for later implementation via Settings
-      ; (str/replace #"\#hoří" "🔥")
-      ; (str/replace #"\#čekám" "⏳")
-      ; (str/replace #"\#hluboká" "📵")
-      ; (str/replace #"\#cesta" "cesta➡︎")
+      ;; Remove embeds (idiot version, but works)
+      (str/replace #"\{\{(\[\[)?embed(\]\])?\:" "")
+      (str/replace #"\}\}" "")
 
       ;; Trim whitespace
       (str/trim)))
 
 (defn parse-row-params [s settings]
-  (let [;; _ (println "#### STARTUJEME s " s)
-        cleaned-str (parse-URLs s) ;; remove URLs – it has to start with this, because URLs can contain other markers
-        ;; _ (println "URL cleaned-str: " cleaned-str) 
+  (let [cleaned-str (parse-URLs s) ;; remove URLs – it has to start with this, because URLs can contain other markers
         {:keys [range cleaned-str]} (parse-time-range cleaned-str)
-        ;; _ (println "range: " range " cleaned-str: " cleaned-str)
         {:keys [duration cleaned-str]} (parse-duration cleaned-str settings)
-        ;; _ (println "duration before: " duration " cleaned-str: " cleaned-str)
-        #_#__ (println "adjusted duration: " (or duration (:default-duration settings)))
         {:keys [done-at cleaned-str]} (parse-done-time cleaned-str)
-        ; _ (println "done-time: " done-at " cleaned-str: " cleaned-str)
         {:keys [done cleaned-str]} (parse-DONE cleaned-str)
-        ; _ (println "done: " done " cleaned-str: " cleaned-str)
-        #_#_{:keys [progress cleaned-str]} (parse-progress cleaned-str)
-        ; _ (println "progress: " progress " cleaned-str: " cleaned-str)
+        ;; {:keys [progress cleaned-str]} (parse-progress cleaned-str)
         description (parse-rest cleaned-str)
-        ; _ (println "description: " description)
         event-type (if range :meeting :todo)]
     (-> {:description description
          :duration duration
          :start (if done-at (abs (- done-at duration)) (first range))
          :end (or done-at (second range))
          :done done
-         :done-at (if done done-at nil)
-         #_#_:progress (or progress 0)}
+         :done-at (if done done-at nil)}
+         ;; :progress (or progress 0)
         (assoc event-type true))))
 
 ;; --------------- fill day with events and todos ----------------------
@@ -509,8 +501,8 @@
              font-weight
              shaky            ;; "unsure hand style" allowed
              done?
-             progress]}]  ;; has the todo been done?
-  (let [; #_#_hovered (r/atom false)
+             #_progress]}]  ;; has the todo been done?
+  (let [; hovered (r/atom false)
         start-radians (angle->rad (+ start-angle (shake-if shaky)))
         end-radians (angle->rad (+ end-angle (shake-if shaky)))
         mid-radians (pos-sweep-angle-mid start-radians end-radians)
@@ -614,7 +606,6 @@
      [:text (assoc common-attr :y (- center-y (/ font-size 2))) first-row]
      [:text (assoc common-attr :y (+ center-y (/ font-size 2))) second-row]]))
 
-
 (defn calculate-slice-params [event index daily-page?]
   (let [outer-radius (outer-radius-at (mod (quot (int (:start event)) 60) (count snail-blueprint-outer-radiuses)))
         start-angle (min->angle (:start event))
@@ -635,9 +626,6 @@
                  :else nil)
      :done done?
      :outer-radius outer-radius}))
-
-;; (when @show-done-atom? ;; má-li ukazovat hotové úkoly, tak je ukáže v šedé
-;;        (map (fn [event] [event-slice-component event 1 nil snail-inner-radius nil center-x center-y]) done-todos))
 
 (defn event-slice-component [event index legend-rect inner-radius daily-page? center settings]
   (let [{:keys [start-angle end-angle bg-color done outer-radius]} (calculate-slice-params event index daily-page?)
@@ -690,9 +678,6 @@
               text (:description event)
               radius (nth snail-blueprint-outer-radiuses (mod (quot (int (:start event)) 60) (count snail-blueprint-outer-radiuses)))
               new-rect (get-legend-rect rects text mid-radians radius center settings)]
-        ;(println?debug "RADIUS: " radius)              
-        ;(pprint?debug new-rect)                        
-        ;(println?debug "LEFT-MIN: " left-min " RIGHT-MAX: " right-max " WIDTH: " (- right-max left-min))              
           (recur (inc i) (rest events) (conj rects new-rect) (min left-min (:x new-rect)) (max right-max (+ (:x new-rect) (:w new-rect))) (min top-min (:y new-rect)) (max bottom-max (+ (:y new-rect) (:h new-rect)))))
         [(+ reserve (- center-x left-min))
          (+ reserve (- right-max left-min))
@@ -717,12 +702,12 @@
       [snail-blueprint-component snail-template-color snail-inner-radius center settings]
       (when  @show-done-atom? ;; má-li ukazovat hotové úkoly, tak je ukáže v šedé
         (map (fn [event] [event-slice-component event 1 nil snail-inner-radius nil center settings]) done-todos))
-      all-slice-components ;; zobrazení všech událostí
-      (when @daily-page-atom?   ;; ukáže aktuální čas pomocí úzké výseče
+      all-slice-components         ;; zobrazení všech událostí
+      (when @daily-page-atom?      ;; ukáže aktuální čas pomocí úzké výseče
         [slice [(- (min->angle @now-time-atom) 1) (+ (min->angle @now-time-atom) 1) 0 center-y center settings] :bg-color clock-hand-color])
       [central-label-component (split-and-trim page-title len-central-legend) center]
      
-      (when @debug-state-atom ;; čistě pro účely debugu ⤵              
+      (when @debug-state-atom ;; just for debug ⤵  #FIXME remove in production later
         [:g                                                             
          [draw-debug-rects rects]                                       
          [:text {:x "0" :y "450" :text-anchor "start"}                  
@@ -730,8 +715,7 @@
           " Center-x: " (:center-x center)                              
           " Center-y: " (js/Math.round center-y)]                       
          [:circle {:cx (:center-x center) :cy (:center-y center)        
-                   :r 200 :fill "none" :stroke "black" :stroke-width 1}]])  
-      ]]))
+                   :r 200 :fill "none" :stroke "black" :stroke-width 1}]])]]))
 
 (defn add-start-after
   "Adds an end time to events so that tasks placed after the meeting cannot start before it"
@@ -783,7 +767,7 @@
           "all"
           "undone"))])
 
-(defn switch-debug-button []                           
+(defn switch-debug-button [] ;; debug button
   [:button {:on-click #(swap! debug-state-atom not)    
             :style {:background-color "#5B5B5BBF", :color "rgb(254,254,254)"           
                     :margin "8px" :border-radius "8px" :display "inline-block"}}       
@@ -796,9 +780,9 @@
         a2 (when a2 (int a2))
         a3 (when a3 (int a3))]
     (if (and (>= (count args) 3)
-             (between a1 15 30) ;; allowed legend len interval
-             (between a2 5 60)
-             (between a3 360 540)) ;; allowed default todo duration interval
+             (between a1 15 30)    ;; allowed legend length interval
+             (between a2 5 60)     ;; allowed default todo duration interval
+             (between a3 360 540)) ;; allowed default start of the workday 
       {:legend-len-limit a1
        :default-duration a2
        :workday-start a3}
