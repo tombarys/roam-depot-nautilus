@@ -9,8 +9,8 @@
 ; You can make Calva auto-select this.
 ;   - See https://calva.io/connect-sequences/
 ; 
-; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 56765 ; popd
-; Using host:port 127.0.0.1:56765 ...
+; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 60846 ; popd
+; Using host:port 127.0.0.1:60846 ...
 ; Hooking up nREPL sessions ...
 ; Connected session: clj
 ; TIPS:
@@ -26,71 +26,12 @@ clj꞉user꞉>  ; Use `alt+enter` to evaluate
 clj꞉user꞉> 
 ; Jack-in done.
 clj꞉user꞉> 
-#'nautilus-roam-1-27-2024/time-str-to-minutes
-clj꞉nautilus-roam-1-27-2024꞉> 
-#'nautilus-roam-1-27-2024/parse-time-range
-clj꞉nautilus-roam-1-27-2024꞉> 
-(parse-time-range "10:00-11:00")
-; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:3:14
-clj꞉nautilus-roam-1-27-2024꞉> (defn time-str-to-minutes [time-str]
-                                (let [[h m] (str/split time-str #":")]
-                                  (+ (if m (int m) 0) (* 60 (int h)))))
-#'nautilus-roam-1-27-2024/time-str-to-minutes
-clj꞉nautilus-roam-1-27-2024꞉> (time-str-to-minutes "10:00")
-; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:3:44
-clj꞉nautilus-roam-1-27-2024꞉> 
-; java.lang.Exception: Could not find namespace: reagent.core. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:2:3
-clj꞉nautilus-roam-1-28-2024꞉> 
-(ns nautilus-roam-1-28-2024
-  (:require [clojure.string :as str]))
+(seq "")
 nil
-clj꞉nautilus-roam-1-28-2024꞉> 
-(defn time-str-to-minutes [time-str]
-                                (let [[h m] (str/split time-str #":")]
-                                  (+ (if m (int m) 0) (* 60 (int h)))))
-#'nautilus-roam-1-28-2024/time-str-to-minutes
-clj꞉nautilus-roam-1-28-2024꞉> 
-(time-str-to-minutes "10:00")
-; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:3:44
-clj꞉nautilus-roam-1-28-2024꞉> 
-(defn new-parse-time-range [s]
-  (let [range-format #"(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\sAM|\sPM|\sam|\spm))?)\s*(?:-|–|až|to)\s*(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\sAM|\sPM|\sam|\spm))?)"
-        to-form #"(.+)\s(-|–|až|to)\s(.+)"
-        range-str (re-find range-format s)]
-    (if range-str
-      (let [[_ from-str to-str] (re-find to-form range-str)
-            from-str-24 (to-24h from-str)
-            to-str-24 (to-24h to-str)
-            cleaned-str (str/replace s range-str "")]
-        {:range [(time-str-to-minutes from-str-24) (time-str-to-minutes to-str-24)]
-         :cleaned-str cleaned-str})
-      {:range nil :cleaned-str s})))
-; clojure.lang.ExceptionInfo: Could not resolve symbol: to-24h user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:7:25
-clj꞉nautilus-roam-1-28-2024꞉> 
-(defn to-24h [time-str]
-  (let [[hours mins] (str/split time-str ":")
-        pm? (re-find #"(?:pm|PM)" mins)]
-    (str (if pm? (str (+ 12 (int hours))) hours)
-         ":"
-         (str/replace mins #"(?:\sam|\sAM|\spm|\sPM)" ""))))
-; clojure.lang.ExceptionInfo: Could not resolve symbol: js/parseInt user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:4:29
-clj꞉nautilus-roam-1-28-2024꞉> 
-#'nautilus-roam-1-28-2024/to-24h
-clj꞉nautilus-roam-1-28-2024꞉> 
-(defn new-parse-time-range [s]
-  (let [range-format #"(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\sAM|\sPM|\sam|\spm))?)\s*(?:-|–|až|to)\s*(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\sAM|\sPM|\sam|\spm))?)"
-        to-form #"(.+)\s(-|–|až|to)\s(.+)"
-        range-str (re-find range-format s)]
-    (if range-str
-      (let [[_ from-str to-str] (re-find to-form range-str)
-            from-str-24 (to-24h from-str)
-            to-str-24 (to-24h to-str)
-            cleaned-str (str/replace s range-str "")]
-        {:range [(time-str-to-minutes from-str-24) (time-str-to-minutes to-str-24)]
-         :cleaned-str cleaned-str})
-      {:range nil :cleaned-str s})))
-#'nautilus-roam-1-28-2024/new-parse-time-range
-clj꞉nautilus-roam-1-28-2024꞉> 
-(new-parse-time-range "10:00-11:00")
-; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:2:22
-clj꞉nautilus-roam-1-28-2024꞉> 
+clj꞉user꞉> 
+(seq nil)
+nil
+clj꞉user꞉> 
+(str "#hoří")
+"#hoří"
+clj꞉user꞉> 

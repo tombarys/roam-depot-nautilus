@@ -1,16 +1,22 @@
-(ns nautilus-roam-3-2-2024
+(ns nautilus-roam-6-2-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
             [roam.datascript.reactive :as rdr]))
 
-;; ------- defaults -------
+;; ------- default settings -------
 
 (def init-duration 15) ;; values used when no duration is specified as a render parameter
 
 (def init-len-limit 22) ;; values used when no duration is specified as a render parameter
 
+(def custom-color-1 "rgba(255,0,0,0.8)")
+
+(def init-custom-color-1-tag "")
+
 (def init-workday-start 480)
+
+;; ------- other defaults –––––––
 
 (def workday-end 1320)
 
@@ -367,6 +373,15 @@
        :cleaned-str (str/replace s done-format "")}
       {:done false :cleaned-str s})))
 
+(defn parse-custom-color-1 [s {:keys [custom-color-1-tag]}]
+  (let [color-format (re-pattern custom-color-1-tag) 
+        color-found? (re-find color-format s)]
+    (if (and (seq custom-color-1-tag) color-found?)
+      {:custom-color custom-color-1
+       :cleaned-str s}
+      {:custom-color nil 
+       :cleaned-str s})))
+
 (defn parse-URLs
   "Extract and format URL links"
   [s]
@@ -395,6 +410,7 @@
 
 (defn parse-row-params [s settings]
   (let [cleaned-str (parse-URLs s) ;; remove URLs – it has to start with this, because URLs can contain other markers
+        {:keys [custom-color cleaned-str]} (parse-custom-color-1 cleaned-str settings)
         {:keys [range cleaned-str]} (parse-time-range cleaned-str)
         {:keys [duration cleaned-str]} (parse-duration cleaned-str settings)
         {:keys [done-at cleaned-str]} (parse-done-time cleaned-str)
@@ -407,6 +423,7 @@
          :start (if done-at (abs (- done-at duration)) (first range))
          :end (or done-at (second range))
          :done done
+         :bg-color custom-color
          :done-at (if done done-at nil)}
          ;; :progress (or progress 0)
         (assoc event-type true))))
@@ -615,8 +632,8 @@
         done? (if (:done event) true false)
         meeting? (:meeting event)
         expired? (and meeting? (>= @now-time-atom (:end event)))
-        todo-bg-color (nth todo-color-palette (mod index (count todo-color-palette)))
-        meeting-color (nth meeting-color-palette (mod index (count meeting-color-palette)))]
+        todo-bg-color (or (:bg-color event ) (nth todo-color-palette (mod index (count todo-color-palette))))
+        meeting-color (or (:bg-color event) (nth meeting-color-palette (mod index (count meeting-color-palette))))]
     ; (pprint-all "calc-slice-params:::: start " (:start event) " end-angle: " (:end event) " outer-radius: " outer-radius)
     {:start-angle start-angle
      :end-angle end-angle
@@ -775,27 +792,23 @@
      (str "debug is on")                               
      (str "🪲 debug is off"))])                        
 
-(defn args->settings [[a1 a2 a3 :as args]]
+(defn args->settings [[a1 a2 a3 a4]]
   (let [a1 (when a1 (int a1))
         a2 (when a2 (int a2))
         a3 (when a3 (int a3))]
-    (if (and (>= (count args) 3)
-             (between a1 15 30)    ;; allowed legend length interval
-             (between a2 5 60)     ;; allowed default todo duration interval
-             (between a3 360 540)) ;; allowed default start of the workday 
-      {:legend-len-limit a1
-       :default-duration a2
-       :workday-start a3}
-      {:legend-len-limit init-len-limit
-       :default-duration init-duration
-       :workday-start init-workday-start})))
+      {:legend-len-limit (if (and a1 (between a1 15 30)) a1 init-len-limit) ;; allowed legend length interval
+       :default-duration (if (and a2 (between a2 5 60)) a2 init-duration) ;; allowed default todo duration interval
+       :workday-start (if (and a3 (between a3 360 540)) a3 init-workday-start) ;; allowed default start of the workday 
+       :custom-color-1-tag (if (seq a4) (str a4) init-custom-color-1-tag)}))
 
-(defn main [{:keys [block-uid]} & args]
+
+(defn main [{:keys [:block-uid]} & args]
   (reset-now-time-atom now-time-atom)
   (let [dimensions {:width (if mobile? mob-width desk-width)
                     :height (* start-svg-rect-ratio (if mobile? mob-width desk-width))}
         show-debug-button? (= :debug (first args))              
         settings (args->settings args)
+        _ (println settings)
         show-done-state (r/atom true)
         daily-page-atom? (r/atom (daily-page? block-uid))
         page-title (page-title block-uid)
