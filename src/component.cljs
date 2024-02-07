@@ -286,6 +286,14 @@
          (->> @*children
               (sort-by :block/order)))))
 
+(defn get-page-title [page-uid] ;; when you have a block-uid for a page
+  (-> (rd/q '[:find ?title
+              :in $ ?page-uid
+              :where [?e :block/uid ?page-uid]
+              [?e :node/title ?title]]
+            page-uid)
+      first
+      first))
 
 (defn page-title [block-uid]
   (str (rd/q
@@ -316,6 +324,17 @@
 
 ;; --------------- text parsers --------------------
 
+(defn arg-tag->str [arg]
+  (if (= (first arg) :block/uid)
+    (let [uid (second arg)
+          decoded (get-page-title uid)
+          spaces (re-find #"\s" decoded)]
+      (str
+       "#"
+       (when spaces "[[")
+       decoded
+       (when spaces "]]")))
+    arg))
 
 (defn from-1224->min [time-str am2 pm2] ;; FIXME wow this is f*cking complicated – refactor later
   (let [pm? (or (re-find #"(?:pm|PM)" time-str) pm2)
@@ -798,9 +817,12 @@
         a3 (when a3 (int a3))]
       {:legend-len-limit (if (and a1 (between a1 15 30)) a1 init-len-limit) ;; allowed legend length interval
        :default-duration (if (and a2 (between a2 5 60)) a2 init-duration) ;; allowed default todo duration interval
-       :workday-start (if (and a3 (between a3 360 540)) a3 init-workday-start) ;; allowed default start of the workday 
-       :custom-color-1-tag (if (seq a4) (str a4) init-custom-color-1-tag)}))
-
+       :workday-start (if (and a3 (between a3 6 8)) (* 60 a3) init-workday-start) ;; allowed default start of the workday 
+       :custom-color-1-tag (if (or (nil? a4) "") 
+                             init-custom-color-1-tag
+                             (if (string? a4) 
+                               (str a4)
+                               (arg-tag->str a4)))}))
 
 (defn main [{:keys [:block-uid]} & args]
   (reset-now-time-atom now-time-atom)

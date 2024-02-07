@@ -10,7 +10,7 @@ const disabledReplacementString = `{{${componentName}${disabledStr}`;
 const version = 'v1';
 const titleblockUID = `roam-render-${componentName}`;
 
-const defaults = {'prefix-str': '', 'desc-length': 22, 'todo-duration': 15, 'workday-start': 8};
+const defaults = {'prefix-str': '', 'desc-length': 22, 'todo-duration': 15, 'workday-start': 8, 'color-1-trigger': ''};
 
 async function generateUpdatedRenderString(renderStringCore, extensionAPI, replacementKey, newValue) {
   const keys = Object.keys(defaults);
@@ -18,9 +18,6 @@ async function generateUpdatedRenderString(renderStringCore, extensionAPI, repla
 
     for (let key of keys) {
       if (key === replacementKey) {
-          if (key === 'workday-start') {
-              newValue = newValue * 60;
-          }
           values.push(newValue);
       } else {
           let value = await extensionAPI.settings.get(key) || defaults[key];
@@ -39,11 +36,7 @@ async function generateTemplateString(extensionAPI) { // returns the whole templ
           let value = await extensionAPI.settings.get(key);
           switch(value) {
             case defaults[key]: {
-              if (key === 'workday-start') {
-                values.push(value * 60);
-                } else {
                 values.push(value);
-              }
               break; 
             }
             case undefined: {
@@ -60,7 +53,7 @@ async function generateTemplateString(extensionAPI) { // returns the whole templ
           }
         }
       }
-  console.log("values are ", values, " and allAreDefault is ", allAreDefault);
+  // console.log("values are ", values, " and allAreDefault is ", allAreDefault);
   if (allAreDefault) { 
     return renderStringCore + '}}'; } 
   else {
@@ -129,6 +122,19 @@ async function onload({extensionAPI}) {
             },
           }
         },
+        {id:   "color-1-trigger",
+        name:   "Custom trigger string for red accent",
+        description: "Beta. Custom string that triggers a color change of a todo/event. E.g. #important, #red etc.",
+        action: {type:  "input",
+                 default: defaults['color-1-trigger'],
+                 // placeholder: extensionAPI.settings.get('prefix-str') || defaults['prefix-str'],
+                 onChange: async (evt) => {
+                   let newString = await generateUpdatedRenderString(renderStringCore, extensionAPI, 'color-1-trigger', evt.target.value);
+                   updateTemplateString(renderStringCore, newString.trim());
+                 // console.log("Input Changed!", evt); 
+            }
+          }
+        },
     ]
   };
 
@@ -151,8 +157,6 @@ async function onload({extensionAPI}) {
 
   console.log(`load ${componentName} plugin`)
 }
-
-
 
 function onunload() {
   console.log(`unload ${componentName} plugin`)
