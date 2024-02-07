@@ -808,7 +808,7 @@
                     :height (* start-svg-rect-ratio (if mobile? mob-width desk-width))}
         show-debug-button? (= :debug (first args))              
         settings (args->settings args)
-        _ (println settings)
+        ;; _ (println settings)
         show-done-state (r/atom true)
         daily-page-atom? (r/atom (daily-page? block-uid))
         page-title (page-title block-uid)
