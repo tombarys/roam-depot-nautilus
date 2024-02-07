@@ -18,9 +18,6 @@ async function generateUpdatedRenderString(renderStringCore, extensionAPI, repla
 
     for (let key of keys) {
       if (key === replacementKey) {
-          if (key === 'workday-start') {
-              newValue = newValue * 60;
-          }
           values.push(newValue);
       } else {
           let value = await extensionAPI.settings.get(key) || defaults[key];
@@ -39,11 +36,7 @@ async function generateTemplateString(extensionAPI) { // returns the whole templ
           let value = await extensionAPI.settings.get(key);
           switch(value) {
             case defaults[key]: {
-              if (key === 'workday-start') {
-                values.push(value * 60);
-                } else {
                 values.push(value);
-              }
               break; 
             }
             case undefined: {
@@ -60,7 +53,7 @@ async function generateTemplateString(extensionAPI) { // returns the whole templ
           }
         }
       }
-  console.log("values are ", values, " and allAreDefault is ", allAreDefault);
+  // console.log("values are ", values, " and allAreDefault is ", allAreDefault);
   if (allAreDefault) { 
     return renderStringCore + '}}'; } 
   else {
