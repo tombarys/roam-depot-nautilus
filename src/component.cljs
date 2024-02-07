@@ -798,7 +798,7 @@
         a3 (when a3 (int a3))]
       {:legend-len-limit (if (and a1 (between a1 15 30)) a1 init-len-limit) ;; allowed legend length interval
        :default-duration (if (and a2 (between a2 5 60)) a2 init-duration) ;; allowed default todo duration interval
-       :workday-start (if (and a3 (between a3 360 540)) a3 init-workday-start) ;; allowed default start of the workday 
+       :workday-start (if (and a3 (between a3 6 8)) (* 60 a3) init-workday-start) ;; allowed default start of the workday 
        :custom-color-1-tag (if (seq a4) (str a4) init-custom-color-1-tag)}))
 
 
