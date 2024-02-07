@@ -1,4 +1,4 @@
-(ns nautilus-roam-6-2-2024
+(ns nautilus-roam-7-2-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -10,7 +10,7 @@
 
 (def init-len-limit 22) ;; values used when no duration is specified as a render parameter
 
-(def custom-color-1 "rgba(255,0,0,0.8)")
+(def custom-color-1 "rgba(255,0,0,0.6)")
 
 (def init-custom-color-1-tag "")
 
