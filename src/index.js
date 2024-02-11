@@ -36,7 +36,8 @@ async function generateTemplateString(extensionAPI) { // returns the whole templ
           let value = await extensionAPI.settings.get(key);
           switch(value) {
             case defaults[key]: {
-                values.push(value);
+              if (key === 'color-1-trigger') { value = '\"' + value.replace(/ /g, '') + '\"'; };
+              values.push(value);
               break; 
             }
             case undefined: {
@@ -49,6 +50,7 @@ async function generateTemplateString(extensionAPI) { // returns the whole templ
             }
             default: { 
               allAreDefault = false;
+              if (key === 'color-1-trigger') { value = '\"' + value.replace(/ /g, '') + '\"'; };
               values.push(value);
           }
         }
@@ -123,14 +125,15 @@ async function onload({extensionAPI}) {
           }
         },
         {id:   "color-1-trigger",
-        name:   "Custom trigger string for red accent",
-        description: "Beta. Custom string that triggers a color change of a todo/event. E.g. #important, #red etc.",
+        name:   "Custom word for red color",
+        description: "Beta. Custom word that causes todo/event to show in red. E.g. important, #red etc. WARNING: cannot contain spaces. ",
         action: {type:  "input",
                  default: defaults['color-1-trigger'],
                  // placeholder: extensionAPI.settings.get('prefix-str') || defaults['prefix-str'],
                  onChange: async (evt) => {
-                   let newString = await generateUpdatedRenderString(renderStringCore, extensionAPI, 'color-1-trigger', evt.target.value);
-                   updateTemplateString(renderStringCore, newString.trim());
+                   let cleanedValue = evt.target.value.replace(/ /g, ''); // Remove spaces from input
+                   let newString = await generateUpdatedRenderString(renderStringCore, extensionAPI, 'color-1-trigger', '\"' + cleanedValue + '\"');
+                   updateTemplateString(renderStringCore, newString);
                  // console.log("Input Changed!", evt); 
             }
           }

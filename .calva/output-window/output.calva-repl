@@ -9,8 +9,8 @@
 ; You can make Calva auto-select this.
 ;   - See https://calva.io/connect-sequences/
 ; 
-; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 60846 ; popd
-; Using host:port 127.0.0.1:60846 ...
+; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 59929 ; popd
+; Using host:port 127.0.0.1:59929 ...
 ; Hooking up nREPL sessions ...
 ; Connected session: clj
 ; TIPS:
@@ -25,13 +25,256 @@ nil
 clj꞉user꞉>  ; Use `alt+enter` to evaluate
 clj꞉user꞉> 
 ; Jack-in done.
+clj꞉user꞉> (let [s "abc123def"]
+            (re-find #"\d+" s))
+"123"
 clj꞉user꞉> 
-(seq "")
+(let [s "#red"
+      w "je to něco red"]
+ (re-find s w))
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:3:2
+clj꞉user꞉> 
+(let [s (re-pattern "#red")
+      w "je to něco red"]
+ (re-find s w))
 nil
 clj꞉user꞉> 
-(seq nil)
+(let [s (re-pattern "#red")
+      w "je to něco #red"]
+ (re-find s w))
+"#red"
+clj꞉user꞉> 
+(let [s (re-pattern "red")
+      w "je to něco #red"]
+ (re-find s w))
+"red"
+clj꞉user꞉> 
+(let [f (str "red")
+      s (re-pattern f)
+      w "je to něco #red"]
+ (re-find s w))
+"red"
+clj꞉user꞉> 
+(let [f (str "(" "red" ")")
+      s (re-pattern f)
+      w "je to něco #red"]
+ (re-find s w))
+["red" "red"]
+clj꞉user꞉> 
+(let [f (str "\s" "red" "\s")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+; clojure.lang.ExceptionInfo: [line 1, col 17] Unsupported escape character: \s. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:
+clj꞉user꞉> 
+(let [f (str " " "red" " ")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
 nil
 clj꞉user꞉> 
-(str "#hoří")
-"#hoří"
+(let [f (str " " "#red" " ")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+" #red "
+clj꞉user꞉> 
+(let [f (str " " "red")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+nil
+clj꞉user꞉> 
+(let [f (str "^[#]" "red")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+nil
+clj꞉user꞉> 
+(let [f (str "^[#]" "#red")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+nil
+clj꞉user꞉> 
+(let [f (str "^[#]" "red")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))(let [f (str "^[#]" "#red")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+nil
+clj꞉user꞉> 
+(let [f (str "^[\s]" "#red")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+; clojure.lang.ExceptionInfo: [line 1, col 19] Unsupported escape character: \s. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:
+clj꞉user꞉> 
+(let [f (str "^ " "#red")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+nil
+clj꞉user꞉> 
+(let [f (str "[^| ]" "#red")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+nil
+clj꞉user꞉> 
+(let [f (str "[^| ]" "red")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+"#red"
+clj꞉user꞉> 
+(let [f (str " " "red")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+nil
+clj꞉user꞉> 
+(let [f (str " " "#red")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+" #red"
+clj꞉user꞉> 
+(let [f (str " " "#red")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+" #red"
+clj꞉user꞉> 
+(let [f (str " " "red")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+nil
+clj꞉user꞉> 
+(let [f (str " " "red")
+      s (re-pattern f)
+      w "je to něco red a"]
+ (re-find s w))
+" red"
+clj꞉user꞉> 
+(let [f (str " " "#red")
+      s (re-pattern f)
+      w "je to něco red a"]
+ (re-find s w))
+nil
+clj꞉user꞉> 
+(let [f (str "\b" "#red" "\b")
+      s (re-pattern f)
+      w "je to něco red a"]
+ (re-find s w))
+nil
+clj꞉user꞉> 
+(let [f (str "\b" "#red" "\b")
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+nil
+clj꞉user꞉> 
+(let [f (str "\b" "red" "\b")
+      s (re-pattern f)
+      w "je to něco red a"]
+ (re-find s w))
+nil
+clj꞉user꞉> 
+(let [f (str "\\b" "red" "\\b" )
+      s (re-pattern f)
+      w "je to něco red a"]
+ (re-find s w))
+"red"
+clj꞉user꞉> 
+(let [f (str "\\b" "red" "\\b" )
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+"red"
+clj꞉user꞉> 
+(let [f (str "\\b" "red" "\\b" )
+      s (re-pattern f)
+      w "je to něco #redneck a"]
+ (re-find s w))
+nil
+clj꞉user꞉> 
+(let [f (str "\\b" "red" "\\b" )
+      s (re-pattern f)
+      w "je to něco redneck a"]
+ (re-find s w))
+nil
+clj꞉user꞉> 
+(let [f (str "(?<=^|#|\s)" "red" )
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+"red"
+clj꞉user꞉> 
+; clojure.lang.ExceptionInfo: [line 1, col 25] Unsupported escape character: \s. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:
+clj꞉user꞉> 
+(let [f (str "\(\?\<=^|#|\s)" "red" )
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+; clojure.lang.ExceptionInfo: [line 1, col 17] Unsupported escape character: \(. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:
+clj꞉user꞉> 
+(let [f (str "(?<=^|#|\\s)" "red" )
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+; clojure.lang.ExceptionInfo: [line 1, col 18] Unsupported escape character: \?. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:
+clj꞉user꞉> 
+; clojure.lang.ExceptionInfo: [line 1, col 19] Unsupported escape character: \<. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:
+clj꞉user꞉> 
+; clojure.lang.ExceptionInfo: [line 1, col 25] Unsupported escape character: \s. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:
+clj꞉user꞉> 
+"red"
+clj꞉user꞉> 
+(let [f (str "(?<=^|\\s)" "red" )
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+nil
+clj꞉user꞉> 
+(let [f (str "(?<=^|\\s)" "#red" )
+      s (re-pattern f)
+      w "je to něco #red a"]
+ (re-find s w))
+"#red"
+clj꞉user꞉> 
+(let [f (str "(?<=^|\\s)" "#red" )
+      s (re-pattern f)
+      w "je to něco red a"]
+ (re-find s w))
+nil
+clj꞉user꞉> 
+(let [f (str "(?<=^|\\s)" "red" )
+      s (re-pattern f)
+      w "je to něco red a"]
+ (re-find s w))
+"red"
+clj꞉user꞉> 
+(let [f (str "(?<=^|\\s)" "red" )
+      s (re-pattern f)
+      w "je to něco redneck a"]
+ (re-find s w))
+"red"
+clj꞉user꞉> 
+(let [f (str "(?<=^|\\s)" "red" "(?=$|\\s)")
+      s (re-pattern f)
+      w "je to něco redneck a"]
+ (re-find s w))
+; clojure.lang.ExceptionInfo: [line 1, col 41] Unsupported escape character: \s. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:
+clj꞉user꞉> 
+nil
+clj꞉user꞉> 
+(let [f (str "(?<=^|\\s)" "red" "(?=$|\\s)")
+      s (re-pattern f)
+      w "je to něco red a"]
+ (re-find s w))
+"red"
 clj꞉user꞉> 

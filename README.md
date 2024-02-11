@@ -97,7 +97,7 @@ Enjoy!
 
 - 31/1/2024 – now autodetects 12h format in time-range (supports both 24h and 12h time format – if no am/pm specified in the task, defaults to 24h format)
 - 1/2/2024 – added an option to change workday start time (the first select option in Settings now, defaults to 8am) – I think the prettiest proportions has a 8am-Nautilus but I understand some of us are early birds!
-- 7/2/2024 – added a custom trigger string to individually rewrite task/event color to red
+- 9/2/2024 – added an option to set a trigger string or tag (no spaces allowed!) to individually rewrite task/event color to red
 
 # Feature Requests, Bugs, and Feedback and Credits
 Nautilus is work in progress. I am happy to remove bugs or listen to your feedback! Contact me via https://barys.me.

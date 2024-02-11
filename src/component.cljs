@@ -1,4 +1,4 @@
-(ns nautilus-roam-7-2-2024
+(ns nautilus-roam-11-2-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -6,11 +6,11 @@
 
 ;; ------- default settings -------
 
-(def init-duration 15) ;; values used when no duration is specified as a render parameter
+(def init-duration 15) ;; value used when no duration is specified as a render parameter
 
-(def init-len-limit 22) ;; values used when no duration is specified as a render parameter
+(def init-len-limit 22) ;; value used when no legend length limit is specified as a render parameter
 
-(def custom-color-1 "rgba(255,0,0,0.6)")
+(def custom-color-1 "rgba(255,0,0,0.5)")
 
 (def init-custom-color-1-tag "")
 
@@ -327,13 +327,8 @@
 (defn arg-tag->str [arg]
   (if (= (first arg) :block/uid)
     (let [uid (second arg)
-          decoded (get-page-title uid)
-          spaces (re-find #"\s" decoded)]
-      (str
-       "#"
-       (when spaces "[[")
-       decoded
-       (when spaces "]]")))
+          decoded (get-page-title uid)]
+      (str "#" decoded))
     arg))
 
 (defn from-1224->min [time-str am2 pm2] ;; FIXME wow this is f*cking complicated – refactor later
@@ -393,7 +388,7 @@
       {:done false :cleaned-str s})))
 
 (defn parse-custom-color-1 [s {:keys [custom-color-1-tag]}]
-  (let [color-format (re-pattern custom-color-1-tag) 
+  (let [color-format (re-pattern (str "(?<=^|\\s)" custom-color-1-tag "(?=$|\\s)")) 
         color-found? (re-find color-format s)]
     (if (and (seq custom-color-1-tag) color-found?)
       {:custom-color custom-color-1
@@ -818,7 +813,7 @@
       {:legend-len-limit (if (and a1 (between a1 15 30)) a1 init-len-limit) ;; allowed legend length interval
        :default-duration (if (and a2 (between a2 5 60)) a2 init-duration) ;; allowed default todo duration interval
        :workday-start (if (and a3 (between a3 6 8)) (* 60 a3) init-workday-start) ;; allowed default start of the workday 
-       :custom-color-1-tag (if (or (nil? a4) "") 
+       :custom-color-1-tag (if (nil? a4)
                              init-custom-color-1-tag
                              (if (string? a4) 
                                (str a4)
@@ -830,7 +825,7 @@
                     :height (* start-svg-rect-ratio (if mobile? mob-width desk-width))}
         show-debug-button? (= :debug (first args))              
         settings (args->settings args)
-        _ (println settings)
+        ;; _ (println settings)
         show-done-state (r/atom true)
         daily-page-atom? (r/atom (daily-page? block-uid))
         page-title (page-title block-uid)
