@@ -271,6 +271,14 @@
    10000))
 
 
+(defn in-the-past? [page-date]
+   (let [now (new js/Date (.now js/Date))
+         month (.getMonth now)
+         day (.getDate now)
+         year (.getFullYear now)]
+      (and (= (js/Date. page-date) (js/Date. year month day))
+              (< (js/Date. page-date) now))))
+
 
 ;; --------------- reading Roam database ----------------------
 
@@ -605,7 +613,8 @@
                                          (<= start-angle 90))
                                       "after-edge"
                                       "before-edge")}
-        (if debug? (str (round2 start-radians) " / " start-angle) timestamp)])]))
+        (if debug? (str (round2 start-radians) " / " start-angle) 
+            timestamp)])]))
 
 
 (defn snail-blueprint-component [color inner-radius center settings]
