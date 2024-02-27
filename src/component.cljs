@@ -40,7 +40,7 @@
 
 ;; ---------- mostly visual dev settings ------------
 
-(def shaky false) ;; beta feature
+;; (def shaky false) ;; beta feature
 
 (def reserve 15) ;; reserve space left and right
 
@@ -271,7 +271,7 @@
    10000))
 
 
-(defn in-the-past? [page-date]
+(defn in-the-past? [page-date] ;; FIXME gray out the past
    (let [now (new js/Date (.now js/Date))
          month (.getMonth now)
          day (.getDate now)
@@ -285,12 +285,21 @@
 (defn eval-state [*get-children]
   (:block/children @*get-children))
 
-(defn get-children-strings [block-uid]
-  (r/with-let [*get-children-atom (rdr/pull
+(defn get-children-strings-old [block-uid]
+  (r/with-let [*get-children-atom (rdr/pull                                       
                                    [{:block/children [:block/string :block/order {:block/refs [:block/string :block/uid]}]}]
                                    [:block/uid block-uid])
                *children (r/track eval-state *get-children-atom)]
     (map str-with-resolved-block-refs
+         (->> @*children
+              (sort-by :block/order)))))
+
+(defn get-children-strings [block-uid]
+  (r/with-let [*get-children-atom (rdr/pull                                       ; v- zde jsem přidal 
+                                   [{:block/children [:block/string :block/order :block/uid {:block/refs [:block/string :block/uid]}]}]
+                                   [:block/uid block-uid])
+               *children (r/track eval-state *get-children-atom)]
+    (map #([(str-with-resolved-block-refs %) (:block/uid %)])
          (->> @*children
               (sort-by :block/order)))))
 
@@ -327,7 +336,7 @@
     new-color))
 
 (defn shake-if [shaky]
-  (if shaky (- (rand-int 4) 2) 0))
+  (if shaky (- (rand-int 6) 3) 0))
 
 
 ;; --------------- text parsers --------------------
@@ -430,7 +439,7 @@
       ;; Trim whitespace
       (str/trim)))
 
-(defn parse-row-params [s settings]
+(defn parse-row-params [[s _] settings]
   (let [cleaned-str (parse-URLs s) ;; remove URLs – it has to start with this, because URLs can contain other markers
         {:keys [custom-color cleaned-str]} (parse-custom-color-1 cleaned-str settings)
         {:keys [range cleaned-str]} (parse-time-range cleaned-str)
@@ -667,7 +676,7 @@
      :done done?
      :outer-radius outer-radius}))
 
-(defn event-slice-component [event index legend-rect inner-radius daily-page? center settings]
+(defn event-slice-component [event shaky-state-atom index legend-rect inner-radius daily-page? center settings]
   (let [{:keys [start-angle end-angle bg-color done outer-radius]} (calculate-slice-params event index daily-page?)
         description (:description event)
         progress (:progress event)]
@@ -675,7 +684,7 @@
      [start-angle end-angle inner-radius outer-radius center settings]
      :bg-color bg-color
      :text description
-     :shaky shaky
+     :shaky @shaky-state-atom
      :done? done
      :font-weight "bold"
      :legend-rect legend-rect
@@ -683,7 +692,7 @@
 
 (defn events->slices
   "Returns svg vector of all slice components + list of legend rectangles"
-  [events daily-page-atom? center settings]
+  [events shaky-state-atom daily-page-atom? center settings]
   (loop [i 0
          events (filter #(not= true (:freetime %)) events)
          rects []
@@ -696,7 +705,7 @@
             radius (nth snail-blueprint-outer-radiuses (mod (quot (int (:start event)) 60) (count snail-blueprint-outer-radiuses)))
             new-rect (get-legend-rect rects text mid-radians radius center settings)]
         (println?debug "RADIUS INSIDE EVENTS-SLICES: " radius)              
-        (recur (inc i) (rest events) (conj rects new-rect) (conj all-slice-components (event-slice-component event i new-rect snail-inner-radius @daily-page-atom? center settings))))
+        (recur (inc i) (rest events) (conj rects new-rect) (conj all-slice-components (event-slice-component event shaky-state-atom i new-rect snail-inner-radius @daily-page-atom? center settings))))
       [all-slice-components rects])))
 
 (defn events->new-dimensions
@@ -727,13 +736,13 @@
 (defn split-and-trim [page-title n]
   (map #(subs % 0 (min n (count %))) (str/split page-title #"," 2)))
 
-(defn show-events [events-state daily-page-atom? show-done-atom? page-title dimensions settings]
+(defn show-events [events-state shaky-state-atom daily-page-atom? show-done-atom? page-title dimensions settings]
   (let [[events done-todos] @events-state
         old-width (js/Math.round (:width dimensions))
         old-height (js/Math.round (:height dimensions))
         [center-x suggested-width center-y suggested-height] (events->new-dimensions events {:center-x (/ old-width 2) :center-y (/ old-height 2)} settings)
         center {:center-x center-x :center-y center-y}
-        [all-slice-components rects] (events->slices events daily-page-atom? center settings)]   ;; rects jsou tam jen kvůli debugu, jinak vrací svg vektor
+        [all-slice-components rects] (events->slices events shaky-state-atom daily-page-atom? center settings)]   ;; rects jsou tam jen kvůli debugu, jinak vrací svg vektor
     [:svg {:width (str suggested-width) :height (str suggested-height)
            :xmlns "http://www.w3.org/2000/svg"
            :font-family font-family
@@ -807,6 +816,21 @@
           "all"
           "undone"))])
 
+(defn switch-shaky-button [shaky-state-atom]
+  [:button
+   {:on-click #(swap! shaky-state-atom not)
+    :style {:background-color "gray",
+            :opacity "50%"
+            :color "rgb(254,254,254)"
+            :margin "8px"
+            :border-radius "8px"
+            :display "inline-block"
+            :transition "all 0.3s ease"}}
+   (str "shakiness is "
+        (if @shaky-state-atom
+          "on"
+          "off"))])
+
 (defn switch-debug-button [] ;; debug button
   [:button {:on-click #(swap! debug-state-atom not)    
             :style {:background-color "#5B5B5BBF", :color "rgb(254,254,254)"           
@@ -832,18 +856,20 @@
   (reset-now-time-atom now-time-atom)
   (let [dimensions {:width (if mobile? mob-width desk-width)
                     :height (* start-svg-rect-ratio (if mobile? mob-width desk-width))}
-        show-debug-button? (= :debug (first args))              
+        show-debug-button? (= :debug (first args)) 
         settings (args->settings args)
         ;; _ (println settings)
         show-done-state (r/atom true)
+        shaky-state-atom (r/atom false)
         daily-page-atom? (r/atom (daily-page? block-uid))
         page-title (page-title block-uid)
         plan-from-time (if @daily-page-atom? @now-time-atom (:workday-start settings))
         events-state (r/atom (populate-events block-uid plan-from-time settings))]
     [:div
      (if-not (nil? @events-state)
-       [show-events events-state daily-page-atom? show-done-state page-title dimensions settings]
+       [show-events events-state shaky-state-atom daily-page-atom? show-done-state page-title dimensions settings]
        (reset! events-state (populate-events block-uid plan-from-time settings)))
      [:div
       [switch-done-visibility-button show-done-state]
+      [switch-shaky-button shaky-state-atom]
       (when show-debug-button? [switch-debug-button])]]))
