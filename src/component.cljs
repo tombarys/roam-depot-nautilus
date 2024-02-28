@@ -79,8 +79,12 @@
 ;; -------------- debug support ------------ 
 
 (def debug-state-atom (r/atom false))        
-                                             
-(defn safe-prn [s]                           
+
+(defn safe-prn [s]
+  (println s)
+  s)
+
+(defn debug-safe-prn [s]                           
   (when @debug-state-atom                    
     (clojure.pprint/pprint s)                
     s))                                      
@@ -277,7 +281,7 @@
          day (.getDate now)
          year (.getFullYear now)]
       (and (= (js/Date. page-date) (js/Date. year month day))
-              (< (js/Date. page-date) now))))
+           (< (js/Date. page-date) now))))
 
 
 ;; --------------- reading Roam database ----------------------
@@ -294,12 +298,12 @@
          (->> @*children
               (sort-by :block/order)))))
 
-(defn get-children-strings [block-uid]
-  (r/with-let [*get-children-atom (rdr/pull                                       ; v- zde jsem přidal 
-                                   [{:block/children [:block/string :block/order :block/uid {:block/refs [:block/string :block/uid]}]}]
+(defn get-children-maps [block-uid]
+  (r/with-let [*get-children-atom (rdr/pull
+                                   [{:block/children [:block/uid :block/string :block/order {:block/refs [:block/string :block/uid]}]}]
                                    [:block/uid block-uid])
                *children (r/track eval-state *get-children-atom)]
-    (map #([(str-with-resolved-block-refs %) (:block/uid %)])
+    (map #(hash-map :s (str-with-resolved-block-refs %) :uid (:block/uid %)) ;; a mělo by to vracet vektor map
          (->> @*children
               (sort-by :block/order)))))
 
@@ -439,8 +443,9 @@
       ;; Trim whitespace
       (str/trim)))
 
-(defn parse-row-params [[s _] settings]
-  (let [cleaned-str (parse-URLs s) ;; remove URLs – it has to start with this, because URLs can contain other markers
+(defn parse-row-params [block settings]
+  (let [s (:s block)
+        cleaned-str (parse-URLs s) ;; remove URLs – it has to start with this, because URLs can contain other markers
         {:keys [custom-color cleaned-str]} (parse-custom-color-1 cleaned-str settings)
         {:keys [range cleaned-str]} (parse-time-range cleaned-str)
         {:keys [duration cleaned-str]} (parse-duration cleaned-str settings)
@@ -451,6 +456,7 @@
         event-type (if range :meeting :todo)]
     (-> {:description description
          :duration duration
+         :uid (:uid block)
          :start (if done-at (abs (- done-at duration)) (first range))
          :end (or done-at (second range))
          :done done
@@ -606,22 +612,22 @@
                 :font-weight font-weight
                 :fill (if-not done? (update-opacity-str bg-color "1") (update-opacity-str bg-color "0.2"))}
          (if debug? (str dbg-radians-txt)                                            
-             (str #_progress-str (subs text 0 (:legend-len-limit settings))))        
-         ]])     
+             (str #_progress-str (subs text 0 (:legend-len-limit settings))))]])        
+              
      (when (seq timestamp)
        ;; ⤵ adds a clock label for the snail template
        [:text  {:x time-text-x :y time-text-y :font-size (- font-size 3) :font-family font-family :color border-color :fill border-color
                 :transform (str "rotate(" (if
                                            (or (>= start-angle 270)
                                                (<= start-angle 90))
-                                            start-angle
-                                            (- start-angle 180)) " " time-text-x "," time-text-y ")")
+                                           start-angle
+                                           (- start-angle 180)) " " time-text-x "," time-text-y ")")
                 :text-anchor "middle"
                 :alignment-baseline (if
                                      (or (>= start-angle 270)
                                          (<= start-angle 90))
-                                      "after-edge"
-                                      "before-edge")}
+                                     "after-edge"
+                                     "before-edge")}
         (if debug? (str (round2 start-radians) " / " start-angle) 
             timestamp)])]))
 
@@ -629,19 +635,19 @@
 (defn snail-blueprint-component [color inner-radius center settings]
   (let
    [workday-start (:workday-start settings)]
-    [:g (mapcat (fn [[start end timestamp]]
-                  [[slice
-                    [start end inner-radius (outer-radius-at timestamp) center settings]
-                    :border-color color
-                    :timestamp (str timestamp)]])
-                (concat
-                 (cond (between workday-start 420 479) [(vector 300 330 7)]
-                       (between workday-start 360 419) [(vector 270 300 6) (vector 300 330 7)])
-                 (map vector
-                      (range 0 390 30)
-                      (range 30 390 30)
-                      (range 9 21))
-                 [(vector 0 30 21) (vector 330 360 8)]))]))
+   [:g (mapcat (fn [[start end timestamp]]
+                 [[slice
+                   [start end inner-radius (outer-radius-at timestamp) center settings]
+                   :border-color color
+                   :timestamp (str timestamp)]])
+               (concat
+                (cond (between workday-start 420 479) [(vector 300 330 7)]
+                      (between workday-start 360 419) [(vector 270 300 6) (vector 300 330 7)])
+                (map vector
+                     (range 0 390 30)
+                     (range 30 390 30)
+                     (range 9 21))
+                [(vector 0 30 21) (vector 330 360 8)]))]))
 
 (defn central-label-component [[first-row second-row] center]
   (let [[center-x center-y] [(:center-x center) (:center-y center)]
@@ -786,7 +792,8 @@
 (defn populate-events
   "Returns vector [events, done_with_done-at]"
   [block-uid plan-from-time settings]
-  (let [text->events (-> (mapv #(parse-row-params % settings) (get-children-strings block-uid))
+  (let [text->events (-> (mapv #(parse-row-params % settings) (get-children-maps block-uid))
+                         (safe-prn)
                          (add-start-after))
         filled-day [(-> text->events
                         (fill-day (:workday-start settings) plan-from-time)) (filter #(:done-at %) text->events)]]
