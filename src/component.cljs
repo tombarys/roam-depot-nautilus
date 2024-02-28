@@ -80,7 +80,11 @@
 
 (def debug-state-atom (r/atom false))        
                                              
-(defn safe-prn [s]                           
+(defn safe-prn [s]
+    (clojure.pprint/pprint s)
+    s)                                      
+
+(defn safe-prn-debug? [s]                           
   (when @debug-state-atom                    
     (clojure.pprint/pprint s)                
     s))                                      
@@ -422,8 +426,9 @@
       ;; Trim whitespace
       (str/trim)))
 
-(defn parse-row-params [s settings]
-  (let [cleaned-str (parse-URLs s) ;; remove URLs – it has to start with this, because URLs can contain other markers
+(defn parse-row-params [block-map settings]
+  (let [s (:s block-map)
+        cleaned-str (parse-URLs s) ;; remove URLs – it has to start with this, because URLs can contain other markers
         {:keys [custom-color cleaned-str]} (parse-custom-color-1 cleaned-str settings)
         {:keys [range cleaned-str]} (parse-time-range cleaned-str)
         {:keys [duration cleaned-str]} (parse-duration cleaned-str settings)
@@ -434,6 +439,7 @@
         event-type (if range :meeting :todo)]
     (-> {:description description
          :duration duration
+         :uid (:uid block-map)
          :start (if done-at (abs (- done-at duration)) (first range))
          :end (or done-at (second range))
          :done done
@@ -765,10 +771,19 @@
                             event)]
         (recur (rest events) new-start (conj result updated-event))))))
 
+(defn get-children-maps [block-uid]
+  (r/with-let [*get-children-atom (rdr/pull
+                                   [{:block/children [:block/uid :block/string :block/order {:block/refs [:block/string :block/uid]}]}]
+                                   [:block/uid block-uid])
+               *children (r/track eval-state *get-children-atom)]
+    (map #(hash-map :s (str-with-resolved-block-refs %) :uid (:block/uid %)) ;; a mělo by to vracet vektor map
+         (->> @*children
+              (sort-by :block/order)))))
+
 (defn populate-events
   "Returns vector [events, done_with_done-at]"
   [block-uid plan-from-time settings]
-  (let [text->events (-> (mapv #(parse-row-params % settings) (get-children-strings block-uid))
+  (let [text->events (-> (mapv #(parse-row-params % settings) (get-children-maps block-uid))
                          (add-start-after))
         filled-day [(-> text->events
                         (fill-day (:workday-start settings) plan-from-time)) (filter #(:done-at %) text->events)]]
