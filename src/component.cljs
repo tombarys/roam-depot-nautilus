@@ -333,12 +333,28 @@
                    {:uid block-uid
                     :string new-str}})))
 
+(defn update-block-progress [block-uid increment] 
+   (let [s (get-block-str-naked block-uid)
+         progress-format #"(\s\%)(\d{1,3})"
+         updated-str (if-let [progress-match (re-find progress-format s)]
+                       (let [old-progress-str (first progress-match)
+                             prog-incremented (+ (int (last progress-match)) increment)
+                             prog-new-str (cond
+                                            (= prog-incremented 100) "done"
+                                            (> prog-incremented 100) ""
+                                            :else (str " %" prog-incremented))]
+                         (if (not= prog-new-str "done") 
+                            (str/replace s old-progress-str prog-new-str)
+                           (->
+                            (str/replace s old-progress-str "")
+                            (str/replace #"\{\{\[\[TODO\]\]\}\}" "{{[[DONE]]}}"))))
+                       (-> (str s " %" increment)
+                           (str/replace #"\{\{\[\[DONE\]\]\}\}" "{{[[TODO]]}}")))]
+     (block/update {:block
+                    {:uid block-uid
+                     :string updated-str}})))
 
-#_(defn update-block-progress [block-uid progress] ;; FIXME! this is not working
-  (block/update {:block 
-                 {:uid block-uid
-                  :string (str block-str " " progress)}}))
-
+     
 
 ;; ---------------- helpers ----------------------
 
@@ -397,12 +413,12 @@
          :cleaned-str cleaned-str})
       {:duration (:default-duration settings) :cleaned-str s})))
 
-(defn parse-progress [s settings]
-  (let [progress-format #"(\%)(\d{1,3})"]
+(defn parse-progress [s]
+  (let [progress-format #"(\s\%)(\d{1,3})"]
     (if-let [progress-match (re-find progress-format s)]
-      (let [progress-str (second progress-match)
+      (let [progress-str (first progress-match)
             cleaned-str (str/replace s progress-str "")
-            prog-int (int (second progress-match))]
+            prog-int (int (last progress-match))]
         {:progress (if (> prog-int 100) 100 prog-int)
          :cleaned-str cleaned-str})
       {:progress 0 :cleaned-str s})))
@@ -458,7 +474,9 @@
       (str/replace #"\{\{(\[\[)?embed(\]\])?\:" "")
       (str/replace #"\}\}" "")
 
-      ;; Trim whitespace
+
+      ;; Trim double spaces and whitespace
+      (str/replace #"\s\s" " ")
       (str/trim)))
 
 (defn parse-row-params [block-map settings]
@@ -469,7 +487,7 @@
         {:keys [duration cleaned-str]} (parse-duration cleaned-str settings)
         {:keys [done-at cleaned-str]} (parse-done-time cleaned-str)
         {:keys [done cleaned-str]} (parse-DONE cleaned-str)
-        ;; {:keys [progress cleaned-str]} (parse-progress cleaned-str)
+        {:keys [progress cleaned-str]} (parse-progress cleaned-str)
         description (parse-rest cleaned-str)
         event-type (if range :meeting :todo)]
     (-> {:description description
@@ -478,6 +496,7 @@
          :start (if done-at (abs (- done-at duration)) (first range))
          :end (or done-at (second range))
          :done done
+         :progress progress
          :bg-color custom-color
          :done-at (if done done-at nil)}
          ;; :progress (or progress 0)
@@ -616,7 +635,8 @@
        :style (when uid {:cursor "pointer"})
        :stroke-dasharray stroke-dasharray
        :fill bg-color
-       :on-click #(add-to-block uid "=")
+       :on-click #(update-block-progress uid 10)
+       ; #(add-to-block uid "=")
        ; #_#_:on-mouse-enter (fn [_] (reset! hovered true))
        ; #_#_:on-mouse-leave (fn [_] (reset! hovered false))
        :stroke border-color}
@@ -816,7 +836,7 @@
                                    [{:block/children [:block/uid :block/string :block/order {:block/refs [:block/string :block/uid]}]}]
                                    [:block/uid block-uid])
                *children (r/track eval-state *get-children-atom)]
-    (map #(hash-map :s (str-with-resolved-block-refs %) :uid (:block/uid %)) ;; a mělo by to vracet vektor map
+    (map #(hash-map :s (str-with-resolved-block-refs %) :uid (:block/uid %)) ;; returns vector of maps with keys :s and :uid
          (->> @*children
               (sort-by :block/order)))))
 
