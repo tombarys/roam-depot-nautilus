@@ -1,7 +1,8 @@
-(ns nautilus-roam-11-2-2024
+(ns nautilus-roam-28-2-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
+            [roam.block :as block]
             [roam.datascript.reactive :as rdr]))
 
 ;; ------- default settings -------
@@ -276,7 +277,7 @@
 
 
 
-;; --------------- reading Roam database ----------------------
+;; --------------- reading / writing Roam database ----------------------
 
 (defn eval-state [*get-children]
   (:block/children @*get-children))
@@ -314,6 +315,30 @@
          (js/window.roamAlphaAPI.util.dateToPageTitle (new js/Date (.now js/Date))))
     true
     false))
+
+(defn get-block-str-naked [block-uid]
+  (-> (rd/q '[:find ?s
+              :in $ ?uid
+              :where
+              [?b :block/uid ?uid]
+              [?b :block/string ?s]]
+            block-uid)
+      first
+      first))
+
+(defn add-to-block [block-uid add]
+  (let [block-str (get-block-str-naked block-uid)
+        new-str (str block-str " " add)]
+    (block/update {:block 
+                   {:uid block-uid
+                    :string new-str}})))
+
+
+#_(defn update-block-progress [block-uid progress] ;; FIXME! this is not working
+  (block/update {:block 
+                 {:uid block-uid
+                  :string (str block-str " " progress)}}))
+
 
 ;; ---------------- helpers ----------------------
 
@@ -371,6 +396,16 @@
         {:duration (int (second duration-match))
          :cleaned-str cleaned-str})
       {:duration (:default-duration settings) :cleaned-str s})))
+
+(defn parse-progress [s settings]
+  (let [progress-format #"(\%)(\d{1,3})"]
+    (if-let [progress-match (re-find progress-format s)]
+      (let [progress-str (second progress-match)
+            cleaned-str (str/replace s progress-str "")
+            prog-int (int (second progress-match))]
+        {:progress (if (> prog-int 100) 100 prog-int)
+         :cleaned-str cleaned-str})
+      {:progress 0 :cleaned-str s})))
 
 (defn parse-done-time [s]
   (let [done-time-format #"d(\d{1,2}(?::\d{1,2})?)"
@@ -538,6 +573,7 @@
              font-weight
              shaky            ;; "unsure hand style" allowed
              done?
+             uid              ;; roam block uid
              #_progress]}]  ;; has the todo been done?
   (let [; hovered (r/atom false)
         start-radians (angle->rad (+ start-angle (shake-if shaky)))
@@ -575,10 +611,12 @@
      (when @debug-state-atom  [:circle {:cx center-x :cy center-y :r 4 :fill "red"}])              
      ;; ⤵ this is the main component - slice
      [:path
+      
       {:d path
+       :style (when uid {:cursor "pointer"})
        :stroke-dasharray stroke-dasharray
        :fill bg-color
-       ; :on-click #(js/console.log "Slice " text " clicked!")
+       :on-click #(add-to-block uid "=")
        ; #_#_:on-mouse-enter (fn [_] (reset! hovered true))
        ; #_#_:on-mouse-leave (fn [_] (reset! hovered false))
        :stroke border-color}
@@ -667,6 +705,7 @@
 (defn event-slice-component [event index legend-rect inner-radius daily-page? center settings]
   (let [{:keys [start-angle end-angle bg-color done outer-radius]} (calculate-slice-params event index daily-page?)
         description (:description event)
+        uid (:uid event)
         progress (:progress event)]
     [slice
      [start-angle end-angle inner-radius outer-radius center settings]
@@ -674,6 +713,7 @@
      :text description
      :shaky shaky
      :done? done
+     :uid uid
      :font-weight "bold"
      :legend-rect legend-rect
      :progress progress]))
