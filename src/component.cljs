@@ -1,4 +1,4 @@
-(ns nautilus-roam-28-2-2024
+(ns nautilus-roam-29-2-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -326,12 +326,16 @@
       first
       first))
 
-(defn add-to-block [block-uid add]
-  (let [block-str (get-block-str-naked block-uid)
-        new-str (str block-str " " add)]
-    (block/update {:block 
-                   {:uid block-uid
-                    :string new-str}})))
+(defn minutes->time [minutes]
+  (let [h (int (/ minutes 60))
+        m (mod minutes 60)]
+    (str (if (< h 10) (str "0" h) h) ":" (if (< m 10) (str "0" m) m))))
+
+(defn rm-prog-from-block-if-done [uid]
+  (let [str (str/replace (get-block-str-naked uid)#"\s\%\d{1,3}" "")]
+    (block/update {:block
+                   {:uid uid
+                    :string str}})))
 
 (defn update-block-progress [block-uid increment] 
    (let [s (get-block-str-naked block-uid)
@@ -343,13 +347,15 @@
                                             (= prog-incremented 100) "done"
                                             (> prog-incremented 100) ""
                                             :else (str " %" prog-incremented))]
-                         (if (not= prog-new-str "done") 
-                            (str/replace s old-progress-str prog-new-str)
-                           (->
-                            (str/replace s old-progress-str "")
-                            (str/replace #"\{\{\[\[TODO\]\]\}\}" "{{[[DONE]]}}"))))
+                         (if (not= prog-new-str "done")
+                           (str/replace s old-progress-str prog-new-str)
+                           (str (->
+                                 (str/replace s old-progress-str "")
+                                 (str/replace #"\{\{\[\[TODO\]\]\}\}" "{{[[DONE]]}}"))
+                                " d" (minutes->time @now-time-atom))))
                        (-> (str s " %" increment)
-                           (str/replace #"\{\{\[\[DONE\]\]\}\}" "{{[[TODO]]}}")))]
+                           (str/replace #"\{\{\[\[DONE\]\]\}\}" "{{[[TODO]]}}")
+                           (str/replace #"\s{0,1}d(\d{1,2}(?::\d{1,2})?)" "")))]
      (block/update {:block
                     {:uid block-uid
                      :string updated-str}})))
@@ -439,7 +445,9 @@
         done-found? (re-find done-format s)]
     (if done-found?
       {:done true
-       :cleaned-str (str/replace s done-format "")}
+       :cleaned-str (-> s
+                     (str/replace done-format "")
+                     (str/replace #"\s\%\d{1,3}" ""))}
       {:done false :cleaned-str s})))
 
 (defn parse-custom-color-1 [s {:keys [custom-color-1-tag]}]
@@ -490,6 +498,8 @@
         {:keys [progress cleaned-str]} (parse-progress cleaned-str)
         description (parse-rest cleaned-str)
         event-type (if range :meeting :todo)]
+    (when done
+      (rm-prog-from-block-if-done (:uid block-map)))
     (-> {:description description
          :duration duration
          :uid (:uid block-map)
@@ -499,7 +509,6 @@
          :progress progress
          :bg-color custom-color
          :done-at (if done done-at nil)}
-         ;; :progress (or progress 0)
         (assoc event-type true))))
 
 ;; --------------- fill day with events and todos ----------------------

@@ -9,8 +9,8 @@
 ; You can make Calva auto-select this.
 ;   - See https://calva.io/connect-sequences/
 ; 
-; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 63864 ; popd
-; Using host:port 127.0.0.1:63864 ...
+; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 56472 ; popd
+; Using host:port 127.0.0.1:56472 ...
 ; Hooking up nREPL sessions ...
 ; Connected session: clj
 ; TIPS:
@@ -26,84 +26,11 @@ clj꞉user꞉>  ; Use `alt+enter` to evaluate
 clj꞉user꞉> 
 ; Jack-in done.
 clj꞉user꞉> 
-#<Var@308cbdc7: #object[sci.impl.fns$fun$arity_2__1196 0x70b9b6a5 "sci.impl.fns$fun$arity_2__1196@70b9b6a5"]>
+#<Var@2eb3c95d: #object[sci.impl.fns$fun$arity_1__1191 0x73664699 "sci.impl.fns$fun$arity_1__1191@73664699"]>
 clj꞉nautilus-roam-28-2-2024꞉> 
-(parse-progress "djaldjaslkdj %20 něco" nil)                
-; clojure.lang.ArityException: Wrong number of args (1) passed to: sci.impl.fns/fun/arity-2--1196 user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+(minutes->time 300)
+"05:00"
 clj꞉nautilus-roam-28-2-2024꞉> 
-; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:6:22
-clj꞉nautilus-roam-28-2-2024꞉> 
-(parse-progress "djaldjaslkdj %20 něco" {})
-; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:6:22
-clj꞉nautilus-roam-28-2-2024꞉> 
-#<Var@308cbdc7: #object[sci.impl.fns$fun$arity_1__1191 0x671766e3 "sci.impl.fns$fun$arity_1__1191@671766e3"]>
-clj꞉nautilus-roam-28-2-2024꞉> 
-(parse-progress "djaldjaslkdj %20 něco")
-; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:6:22
-clj꞉nautilus-roam-28-2-2024꞉> 
-(let [progress-format #"(\%)(\d{1,3})"]
-  (re-find progress-format "djaldjaslkdj %20 něco"))
-["%20" "%" "20"]
-clj꞉nautilus-roam-28-2-2024꞉> (str/replace s progress-str "")#<Var@308cbdc7: #object[sci.impl.fns$fun$arity_1__1191 0x219486bb "sci.impl.fns$fun$arity_1__1191@219486bb"]>
-clj꞉nautilus-roam-28-2-2024꞉> 
-(parse-progress "djaldjaslkdj %20 něco")
-; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:6:22
-clj꞉nautilus-roam-28-2-2024꞉> 
-#<Var@308cbdc7: #object[sci.impl.fns$fun$arity_1__1191 0x696d57f "sci.impl.fns$fun$arity_1__1191@696d57f"]>
-clj꞉nautilus-roam-28-2-2024꞉> 
-(parse-progress "djaldjaslkdj %20 něco")
-; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:6:22
-clj꞉nautilus-roam-28-2-2024꞉> 
-#<Var@308cbdc7: #object[sci.impl.fns$fun$arity_1__1191 0x5b7143c7 "sci.impl.fns$fun$arity_1__1191@5b7143c7"]>
-clj꞉nautilus-roam-28-2-2024꞉> 
-(parse-progress "djaldjaslkdj %20 něco")
-; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:6:22
-clj꞉nautilus-roam-28-2-2024꞉> 
-#<Var@308cbdc7: #object[sci.impl.fns$fun$arity_1__1191 0x6ac519eb "sci.impl.fns$fun$arity_1__1191@6ac519eb"]>
-clj꞉nautilus-roam-28-2-2024꞉> 
-(parse-progress "djaldjaslkdj %20 něco")
-djaldjaslkdj  něco
-; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:7:22
-clj꞉nautilus-roam-28-2-2024꞉> 
-#<Var@308cbdc7: #object[sci.impl.fns$fun$arity_1__1191 0x6c8c0b "sci.impl.fns$fun$arity_1__1191@6c8c0b"]>
-clj꞉nautilus-roam-28-2-2024꞉> 
-(parse-progress "djaldjaslkdj %20 něco")
-djaldjaslkdjněco
-; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:8:22
-clj꞉nautilus-roam-28-2-2024꞉> 
-#<Var@308cbdc7: #object[sci.impl.fns$fun$arity_1__1191 0x575c29ca "sci.impl.fns$fun$arity_1__1191@575c29ca"]>
-clj꞉nautilus-roam-28-2-2024꞉> 
-(parse-progress "djaldjaslkdj %20 něco")
-djaldjaslkdj něco
-; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:8:22
-clj꞉nautilus-roam-28-2-2024꞉> 
-; clojure.lang.ExceptionInfo: let requires an even number of forms in binding vector user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:4:7
-clj꞉nautilus-roam-28-2-2024꞉> 
-#<Var@308cbdc7: #object[sci.impl.fns$fun$arity_1__1191 0x49527047 "sci.impl.fns$fun$arity_1__1191@49527047"]>
-clj꞉nautilus-roam-28-2-2024꞉> 
-(parse-progress "djaldjaslkdj %20 něco")
-djaldjaslkdj něco
-nil
-clj꞉nautilus-roam-28-2-2024꞉> 
-#<Var@308cbdc7: #object[sci.impl.fns$fun$arity_1__1191 0x255aaf37 "sci.impl.fns$fun$arity_1__1191@255aaf37"]>
-clj꞉nautilus-roam-28-2-2024꞉> 
-(parse-progress "djaldjaslkdj %20 něco")
-djaldjaslkdj něco
-; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:8:22
-clj꞉nautilus-roam-28-2-2024꞉> 
-#<Var@308cbdc7: #object[sci.impl.fns$fun$arity_1__1191 0x7bd17150 "sci.impl.fns$fun$arity_1__1191@7bd17150"]>
-clj꞉nautilus-roam-28-2-2024꞉> 
-(parse-progress "djaldjaslkdj %20 něco")
-; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:7:22
-clj꞉nautilus-roam-28-2-2024꞉> 
-(int "20")
-; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
-clj꞉nautilus-roam-28-2-2024꞉> 
-(js/parseInt "20")
-; clojure.lang.ExceptionInfo: Could not resolve symbol: js/parseInt user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
-clj꞉nautilus-roam-28-2-2024꞉> 
-(integer "20")
-; clojure.lang.ExceptionInfo: Could not resolve symbol: integer user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
-clj꞉nautilus-roam-28-2-2024꞉> 
-#<Var@308cbdc7: #object[sci.impl.fns$fun$arity_1__1191 0x366544c5 "sci.impl.fns$fun$arity_1__1191@366544c5"]>
+(minutes->time 320)
+"05:20"
 clj꞉nautilus-roam-28-2-2024꞉> 
