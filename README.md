@@ -70,7 +70,8 @@ Press `Enter` again and `Tab` to indent the first child block under the componen
 
 Enjoy!
 
-## Additional Info 
+## Additional Info
+- I published an [article How I learned to plan better (and what to do when your head doesn’t get lists)](https://medium.com/@tombarys/how-i-learned-to-plan-better-and-what-to-do-when-your-head-doesnt-get-lists-21b79de56464) about my Nautilus story recently. 
 - The order and the duration of your tasks **can be changed only by you**. The app does not change it.  
 - A notable and the only "automatic" feature of Nautilus is the task **push-forward: relocating uncompleted tasks** within open time slots in your day – taking the present moment into account. The spiral constantly reflects time without your intervention.
 - If the Nautilus is **not placed into _today’s_ Daily Page**, the red time beam is not shown, and tasks are not pushed into the future. 
