@@ -1,4 +1,4 @@
-(ns nautilus-roam-29-2-2024
+(ns nautilus-roam-1-3-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -360,7 +360,6 @@
                     {:uid block-uid
                      :string updated-str}})))
 
-     
 
 ;; ---------------- helpers ----------------------
 
@@ -382,28 +381,32 @@
       (str "#" decoded))
     arg))
 
-(defn from-1224->min [time-str am2 pm2] ;; FIXME wow this is f*cking complicated – refactor later
-  (let [pm? (or (re-find #"(?:pm|PM)" time-str) pm2)
-        am?  (or (re-find #"(?:am|AM)" time-str) am2)
-        new-time-str (str/trim (str/replace time-str #"(?:am|AM|pm|PM)" ""))
+(defn from-1224->min [time-str h12] ;; if h12 is "am"/"pm" ; h12 = nil => h24
+  (let [pm? (re-find #"(?:pm|PM)" time-str)
+        am?  (re-find #"(?:am|AM)" time-str)
+        new-time-str (->
+                      (str/replace time-str #"(?:am|AM|pm|PM)" "")
+                      (str/trim))
         [hours new-mins] (if (re-find #"\:" new-time-str)
-                           (mapv int (str/split new-time-str ":"))
+                           (mapv int (str/split new-time-str #":"))
                            [(int new-time-str) 0])
-        new-hours (if pm?
+        new-hours (if (and (not am?) (or pm? (and h12 (= (clojure.string/lower-case h12) "pm"))))
                     (if (= hours 12) 12 (+ hours 12))
                     (if am?
-                      (if (= hours 12) 0 hours) hours))
+                      (if (= hours 12) 0 hours)
+                      hours))
         [h m] [(mod new-hours 24) (mod new-mins 60)]]
-    [(+ m (* 60 h)) am? pm?]))
+    [(+ m (* 60 h)) (or am? pm?)]))
 
 (defn parse-time-range [s]
   (let [range-format #"(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\s?AM|\s?PM|\s?am|\s?pm))?)\s*(?:-|–|až|to)\s*(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\s?AM|\s?PM|\s?am|\s?pm))?)"
         range-str (re-find range-format s)]
     (if range-str
-      (let [cleaned-str (str/replace s range-str "")
+      (let [cleaned-str (-> (str/replace s range-str "")
+                            (str/replace #"\s\s" " "))
             [_ from-str to-str] (re-find #"(.*)(?:-|–|až|to)(.*)" range-str)
-            [to-min am? pm?] (from-1224->min to-str nil nil)
-            [from-min _ _] (from-1224->min from-str am? pm?)]
+            [to-min h12] (from-1224->min to-str nil)
+            [from-min _] (from-1224->min from-str h12)]
         {:range (if (> to-min from-min)
                   [from-min to-min]
                   [from-min from-min])
@@ -602,7 +605,7 @@
              shaky            ;; "unsure hand style" allowed
              done?
              uid              ;; roam block uid
-             #_progress]}]  ;; has the todo been done?
+             click-to-progress ]}]
   (let [; hovered (r/atom false)
         start-radians (angle->rad (+ start-angle (shake-if shaky)))
         end-radians (angle->rad (+ end-angle (shake-if shaky)))
@@ -641,10 +644,10 @@
      [:path
       
       {:d path
-       :style (when uid {:cursor "pointer"})
+       :style (when click-to-progress {:cursor "pointer"})
        :stroke-dasharray stroke-dasharray
        :fill bg-color
-       :on-click #(update-block-progress uid 10)
+       :on-click #(when click-to-progress (update-block-progress uid 10))
        ; #(add-to-block uid "=")
        ; #_#_:on-mouse-enter (fn [_] (reset! hovered true))
        ; #_#_:on-mouse-leave (fn [_] (reset! hovered false))
@@ -718,10 +721,10 @@
         done-at (:done-at event)
         done? (if (:done event) true false)
         meeting? (:meeting event)
+        click-to-progress (if (and daily-page? todo?) true false)
         expired? (and meeting? (>= @now-time-atom (:end event)))
         todo-bg-color (or (:bg-color event ) (nth todo-color-palette (mod index (count todo-color-palette))))
         meeting-color (or (:bg-color event) (nth meeting-color-palette (mod index (count meeting-color-palette))))]
-    ; (pprint-all "calc-slice-params:::: start " (:start event) " end-angle: " (:end event) " outer-radius: " outer-radius)
     {:start-angle start-angle
      :end-angle end-angle
      :bg-color (cond
@@ -729,10 +732,11 @@
                  todo? (if done-at "rgba(128,128,128,0.1)" todo-bg-color)
                  :else nil)
      :done done?
-     :outer-radius outer-radius}))
+     :outer-radius outer-radius
+     :click-to-progress click-to-progress}))
 
 (defn event-slice-component [event index legend-rect inner-radius daily-page? center settings]
-  (let [{:keys [start-angle end-angle bg-color done outer-radius]} (calculate-slice-params event index daily-page?)
+  (let [{:keys [start-angle end-angle bg-color done outer-radius click-to-progress]} (calculate-slice-params event index daily-page?)
         description (:description event)
         uid (:uid event)
         progress (:progress event)]
@@ -745,7 +749,8 @@
      :uid uid
      :font-weight "bold"
      :legend-rect legend-rect
-     :progress progress]))
+     :progress progress
+     :click-to-progress click-to-progress]))
 
 (defn events->slices
   "Returns svg vector of all slice components + list of legend rectangles"
