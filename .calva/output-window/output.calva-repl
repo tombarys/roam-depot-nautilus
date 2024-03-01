@@ -144,3 +144,517 @@ clj꞉nautilus-roam-6-2-2024꞉> 
 (parse-time-range "mám tu text 10:34am-2:34pm")
 ; java.lang.ClassCastException: java.lang.Character cannot be cast to java.lang.CharSequence user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:2:27
 clj꞉nautilus-roam-6-2-2024꞉> 
+; clojure.lang.ExceptionInfo: Could not resolve symbol: build-range user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:8:9
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@51b910d4: #object[sci.impl.fns$fun$arity_2__1196 0x1b1c7c5d "sci.impl.fns$fun$arity_2__1196@1b1c7c5d"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@1f8e50cd: #object[sci.impl.fns$fun$arity_1__1191 0x37040053 "sci.impl.fns$fun$arity_1__1191@37040053"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4d36cdf7: #object[sci.impl.fns$fun$arity_3__1202 0x2c3c9f4 "sci.impl.fns$fun$arity_3__1202@2c3c9f4"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@1b40b18: #object[sci.impl.fns$fun$arity_1__1191 0x79122ae6 "sci.impl.fns$fun$arity_1__1191@79122ae6"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range "mám tu text 10:34am-2:34pm")
+; java.lang.NullPointerException user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:2:27
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@5d827b5f: #object[sci.impl.fns$fun$arity_2__1196 0x484b4972 "sci.impl.fns$fun$arity_2__1196@484b4972"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range "mám tu text 10:34am-2:34pm")
+; java.lang.NullPointerException user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:2:27
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@1b40b18: #object[sci.impl.fns$fun$arity_1__1191 0x68eda64f "sci.impl.fns$fun$arity_1__1191@68eda64f"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range "mám tu text 10:34am-2:34pm")
+; java.lang.NullPointerException user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:2:27
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@72b008d5: #object[sci.impl.fns$fun$arity_1__1191 0x3b925c67 "sci.impl.fns$fun$arity_1__1191@3b925c67"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range "mám tu text 10:34am-2:34pm")
+; java.lang.NullPointerException user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:2:27
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@1b40b18: #object[sci.impl.fns$fun$arity_1__1191 0x1164531f "sci.impl.fns$fun$arity_1__1191@1164531f"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range "mám tu text 10:34am-2:34pm")
+; java.lang.NullPointerException user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:2:27
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@51b910d4: #object[sci.impl.fns$fun$arity_2__1196 0x3925bb54 "sci.impl.fns$fun$arity_2__1196@3925bb54"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(adjust-for-ampm "10:34am")
+; clojure.lang.ArityException: Wrong number of args (1) passed to: sci.impl.fns/fun/arity-2--1196 user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉nautilus-roam-6-2-2024꞉> 
+(adjust-for-ampm "10:34" "am")
+"10:34"
+clj꞉nautilus-roam-6-2-2024꞉> 
+(adjust-for-ampm "10:34" "pm")
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Number user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:4:19
+clj꞉nautilus-roam-6-2-2024꞉> 
+(adjust-for-ampm 300 "pm")
+1020
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@1f8e50cd: #object[sci.impl.fns$fun$arity_1__1191 0x47a032e7 "sci.impl.fns$fun$arity_1__1191@47a032e7"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@72b008d5: #object[sci.impl.fns$fun$arity_1__1191 0x5256a2f7 "sci.impl.fns$fun$arity_1__1191@5256a2f7"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@72b008d5: #object[sci.impl.fns$fun$arity_1__1191 0x16dcc1a1 "sci.impl.fns$fun$arity_1__1191@16dcc1a1"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-text "10:20am")
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@6160204: #object[sci.impl.fns$fun$arity_1__1191 0xa512087 "sci.impl.fns$fun$arity_1__1191@a512087"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@72b008d5: #object[sci.impl.fns$fun$arity_1__1191 0x441c4267 "sci.impl.fns$fun$arity_1__1191@441c4267"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-text "10:20am")
+[10 20 "am"]
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@72b008d5: #object[sci.impl.fns$fun$arity_1__1191 0x443b9c12 "sci.impl.fns$fun$arity_1__1191@443b9c12"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-text "10:20am")
+[10 20 "am"]
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-text "10:20AM")
+[10 20 "AM"]
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-text "10:20PM
+                  ")
+; java.lang.NumberFormatException: For input string: "20
+;                   " user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-text "something 10:20PM")
+[10 20 "PM"]
+clj꞉nautilus-roam-6-2-2024꞉> 
+; java.lang.NumberFormatException: For input string: "something 10" user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@72b008d5: #object[sci.impl.fns$fun$arity_1__1191 0x3a7adad3 "sci.impl.fns$fun$arity_1__1191@3a7adad3"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@1b40b18: #object[sci.impl.fns$fun$arity_1__1191 0x742ff32d "sci.impl.fns$fun$arity_1__1191@742ff32d"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range "mám tu text 10:34am-2:34pm")
+; java.lang.NullPointerException user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:2:27
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@51b910d4: #object[sci.impl.fns$fun$arity_2__1196 0x5712c880 "sci.impl.fns$fun$arity_2__1196@5712c880"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@1f8e50cd: #object[sci.impl.fns$fun$arity_1__1191 0xdb7171f "sci.impl.fns$fun$arity_1__1191@db7171f"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time "12:30am")
+750
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time "12:30")
+; java.lang.NullPointerException user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:2:14
+clj꞉nautilus-roam-6-2-2024꞉> 
+; clojure.lang.ExceptionInfo: Could not resolve symbol: from-1224->min user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:7:30
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4a7a37d0: #object[sci.impl.fns$fun$arity_3__1202 0x23e8e142 "sci.impl.fns$fun$arity_3__1202@23e8e142"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x3aadcc84 "sci.impl.fns$fun$arity_1__1191@3aadcc84"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká událost 12:20-19:50")
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:6:38
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x61154456 "sci.impl.fns$fun$arity_1__1191@61154456"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká událost 12:20-19:50")
+12:20-19:50
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:6:38
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká událost 9:20am-2:50pm")
+9:20am-2:50pm
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:6:38
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x899714f "sci.impl.fns$fun$arity_1__1191@899714f"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká událost 9:20am-2:50pm")
+nějaká událost 
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:6:38
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x2200bbfe "sci.impl.fns$fun$arity_1__1191@2200bbfe"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x1cb1dca3 "sci.impl.fns$fun$arity_1__1191@1cb1dca3"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká událost 9:20am-2:50pm")
+9:20am
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:6:38
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x3d490121 "sci.impl.fns$fun$arity_1__1191@3d490121"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká událost 9:20am-2:50pm")
+2:50pm
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:6:38
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x2ef1b4ea "sci.impl.fns$fun$arity_1__1191@2ef1b4ea"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká událost 9:20am-2:50pm")
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:6:38
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "8:20" nil nil)
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:6:38
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4a7a37d0: #object[sci.impl.fns$fun$arity_3__1202 0x629465af "sci.impl.fns$fun$arity_3__1202@629465af"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "8:20" nil nil)
+nil   nil
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:7:38
+clj꞉nautilus-roam-6-2-2024꞉> 
+(str/trim (str/replace "8:30" #"(?:am|AM|pm|PM)" ""))
+"8:30"
+clj꞉nautilus-roam-6-2-2024꞉> 
+(str/trim (str/replace "8:30PM" #"(?:am|AM|pm|PM)" ""))
+"8:30"
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@6160204: #object[sci.impl.fns$fun$arity_1__1191 0x207cc515 "sci.impl.fns$fun$arity_1__1191@207cc515"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@6160204: #object[sci.impl.fns$fun$arity_1__1191 0x1fd3033e "sci.impl.fns$fun$arity_1__1191@1fd3033e"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "8:20" nil nil)
+nil   nil
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:7:38
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "8:20" nil nil)
+nil   nil
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.util.regex.Pattern user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:7:38
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4a7a37d0: #object[sci.impl.fns$fun$arity_3__1202 0x783f7938 "sci.impl.fns$fun$arity_3__1202@783f7938"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "8:20" nil nil)
+[500 nil nil]
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "8:20am" nil nil)
+[500 "am" nil]
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "8:20pm" nil nil)
+[1220 nil "pm"]
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x4f988ce1 "sci.impl.fns$fun$arity_1__1191@4f988ce1"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká událost 9:20am-2:50pm")
+890   nil   pm
+{:range [1280 1280], :cleaned-str "nějaká událost "}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká událost 9:20am-10:50am")
+650   am   nil
+{:range [560 650], :cleaned-str "nějaká událost "}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká událost 9:20am-10:50pm")
+1370   nil   pm
+{:range [1280 1370], :cleaned-str "nějaká událost "}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:20am-10:50pm událost")
+1370   nil   pm
+{:range [1280 1370], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:20am-10:50pm událost")
+1370   nil   pm
+{:range [1280 1370], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:20am-10:50am událost")
+650   am   nil
+{:range [560 650], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:20am-8pm událost")
+1200   nil   pm
+{:range [1280 1280], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4a7a37d0: #object[sci.impl.fns$fun$arity_3__1202 0x4a5e5bcf "sci.impl.fns$fun$arity_3__1202@4a5e5bcf"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "10:40" nil nil)
+[640 nil nil]
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "10:40" nil "pm")
+[1360 nil "pm"]
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "10:40" nil "am")
+[1360 nil "am"]
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "10:40" "am" nil)
+[640 "am" nil]
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "10:40" "pm" nil)
+[640 "pm" nil]
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4a7a37d0: #object[sci.impl.fns$fun$arity_3__1202 0x4a829c9e "sci.impl.fns$fun$arity_3__1202@4a829c9e"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "10:40" "pm" nil)
+[640 "pm" nil]
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "10:40" "am" nil)
+[640 "am" nil]
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "2:40" nil "pm")
+[880 "pm" "pm"]
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x473f44fb "sci.impl.fns$fun$arity_1__1191@473f44fb"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:20am-10:50am událost")
+650   am   nil
+{:range [560 650], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:20am-2pm událost")
+1200   nil   pm
+{:range [1280 1280], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+840   nil   pm
+{:range [1280 1280], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x42c2e8ad "sci.impl.fns$fun$arity_1__1191@42c2e8ad"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:20am-2pm událost")
+840   nil   pm
+1280   nil   pm
+{:range [1280 1280], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x15b945c6 "sci.impl.fns$fun$arity_1__1191@15b945c6"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:20am-2pm událost")
+1280   nil   pm
+840   nil   pm
+{:range [1280 1280], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x3c209d54 "sci.impl.fns$fun$arity_1__1191@3c209d54"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:20am-2pm událost")
+9:20am-2pm
+1280   nil   pm
+840   nil   pm
+{:range [1280 1280], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(re-find #"(.*)(?:-|–|až|to)(.*)" "9:20am-2pm")
+["9:20am-2pm" "9:20am" "2pm"]
+clj꞉nautilus-roam-6-2-2024꞉> 
+(re-find #"(.*)(?:-|–|až|to)(.*)" "2pm")
+nil
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "2pm" nil nil)
+[840 nil "pm"]
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4a7a37d0: #object[sci.impl.fns$fun$arity_3__1202 0x30df17c1 "sci.impl.fns$fun$arity_3__1202@30df17c1"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(from-1224->min "9:20am" nil "pm")
+[1280 "am" "pm"]
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4a7a37d0: #object[sci.impl.fns$fun$arity_2__1196 0x7d714f26 "sci.impl.fns$fun$arity_2__1196@7d714f26"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x6338a430 "sci.impl.fns$fun$arity_1__1191@6338a430"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x23dd48c3 "sci.impl.fns$fun$arity_1__1191@23dd48c3"](parse-time-range-old "nějaká 9:20am-2pm událost")
+clj꞉nautilus-roam-6-2-2024꞉> 
+>
+560  
+840
+{:range [560 840], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:20am-10am událost")
+560  
+600
+{:range [560 600], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1am-12am událost")
+60  
+0
+{:range [60 60], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x3bb72ea1 "sci.impl.fns$fun$arity_1__1191@3bb72ea1"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1-2pm událost")
+{:range [60 840], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1pm-2pm událost")
+{:range [780 840], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1pm-2pm událost")
+{:range [780 840], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(or nil "pm")
+"pm"
+clj꞉nautilus-roam-6-2-2024꞉> 
+(re-find #"(?:pm|PM)" "9:30am")
+nil
+clj꞉nautilus-roam-6-2-2024꞉> 
+(re-find #"(?:pm|PM)" "9:30pm")
+"pm"
+clj꞉nautilus-roam-6-2-2024꞉> 
+(re-find #"(?:pm|PM)" "9:30pmpm")
+"pm"
+clj꞉nautilus-roam-6-2-2024꞉> 
+(re-find #"(?:pm|PM)" "9:30pmam")
+"pm"
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4a7a37d0: #object[sci.impl.fns$fun$arity_2__1196 0x79acce92 "sci.impl.fns$fun$arity_2__1196@79acce92"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x2950ad4 "sci.impl.fns$fun$arity_1__1191@2950ad4"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1pm-2pm událost")
+{:range [780 840], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1-2pm událost")
+{:range [780 840], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1-2am událost")
+{:range [60 120], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 8:30am-2pm událost")
+{:range [1230 1230], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4a7a37d0: #object[sci.impl.fns$fun$arity_2__1196 0x58c7845e "sci.impl.fns$fun$arity_2__1196@58c7845e"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 8:30am-2pm událost")
+; java.lang.NullPointerException user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:3:14
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x1caa0714 "sci.impl.fns$fun$arity_1__1191@1caa0714"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 8:30am-2pm událost")
+; java.lang.NullPointerException user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:3:14
+clj꞉nautilus-roam-6-2-2024꞉> 
+; clojure.lang.ExceptionInfo: Unmatched delimiter: ], expected: ) to match ( at [3 22] user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:15:53
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4a7a37d0: #object[sci.impl.fns$fun$arity_2__1196 0x3ece603 "sci.impl.fns$fun$arity_2__1196@3ece603"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 8:30am-2pm událost")
+{:range [1230 1230], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4a7a37d0: #object[sci.impl.fns$fun$arity_2__1196 0x6192d106 "sci.impl.fns$fun$arity_2__1196@6192d106"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 8:30am-2pm událost")
+{:range [1230 1230], :cleaned-str "nějaká  událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x53f957cd "sci.impl.fns$fun$arity_1__1191@53f957cd"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 8:30am-2pm událost")
+{:range [1230 1230], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x1a4760c8 "sci.impl.fns$fun$arity_1__1191@1a4760c8"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 8:30am-2pm událost")
+to-min 840  h12 pm
+{:range [1230 1230], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4a7a37d0: #object[sci.impl.fns$fun$arity_2__1196 0x79203316 "sci.impl.fns$fun$arity_2__1196@79203316"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 8:30am-2pm událost")
+to-min 840  h12 pm
+{:range [510 840], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:30-2pm událost")
+to-min 840  h12 pm
+{:range [1290 1290], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:30am-2pm událost")
+to-min 840  h12 pm
+{:range [570 840], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:30-2pm událost")
+to-min 840  h12 pm
+{:range [1290 1290], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:30am-2pm událost")
+to-min 840  h12 pm
+{:range [570 840], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:30-14 událost")
+to-min 840  h12 nil
+{:range [570 840], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:30-14am událost")
+to-min 840  h12 am
+{:range [570 840], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 9:30-14pm událost")
+to-min 120  h12 pm
+{:range [1290 1290], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1-2pm událost")
+to-min 840  h12 pm
+{:range [780 840], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1-2a
+                       m událost")
+to-min 120  h12 nil
+{:range [60 120], :cleaned-str "nějaká a            m událost"}
+clj꞉nautilus-roam-6-2-2024꞉>()#<Var@4a7a37d0: #object[sci.impl.fns$fun$arity_2__1196 0x27c77f15 "sci.impl.fns$fun$arity_2__1196@27c77f15"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1-2pm událost")
+to-min 840  h12 pm
+{:range [780 840], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(contains? {"am" "AM"} nil)
+false
+clj꞉nautilus-roam-6-2-2024꞉> 
+(contains? {"am" "AM"} "am
+                      ")
+false
+clj꞉nautilus-roam-6-2-2024꞉> 
+(contains? {"am" "AM"} "am")
+true
+clj꞉nautilus-roam-6-2-2024꞉> 
+(contains? {"am" "AM"} "AM")
+false
+clj꞉nautilus-roam-6-2-2024꞉> 
+(contains? {"am" "AM"} "AM")
+false
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4a7a37d0: #object[sci.impl.fns$fun$arity_2__1196 0x54729f9e "sci.impl.fns$fun$arity_2__1196@54729f9e"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x2a9c6bd3 "sci.impl.fns$fun$arity_1__1191@2a9c6bd3"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1-2pm událost")
+to-min 840  h12 pm
+{:range [60 840], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x2de36c0b "sci.impl.fns$fun$arity_1__1191@2de36c0b"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1-2pm událost")
+{:range [60 840], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1-2 událost")
+{:range [60 120], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1-2pm událost")
+{:range [60 840], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4a7a37d0: #object[sci.impl.fns$fun$arity_2__1196 0x117ae1d9 "sci.impl.fns$fun$arity_2__1196@117ae1d9"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x3f70cebf "sci.impl.fns$fun$arity_1__1191@3f70cebf"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1-2pm událost")
+{:range [780 840], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1-2 událost")
+{:range [60 120], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1am-2pm událost")
+{:range [60 840], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 10:30-1pm událost")
+{:range [1350 1350], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 10:30-1pm událost")#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x7b28935f "sci.impl.fns$fun$arity_1__1191@7b28935f"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1am-2pm událost")
+{:range [60 840], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 10:30-2pm událost")
+{:range [630 840], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1-2pm událost")
+{:range [780 840], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 1-2am událost")
+{:range [60 120], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 0-2am událost")
+{:range [0 120], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 0-1am událost")
+{:range [0 60], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 11pm-1am událost")
+{:range [660 60], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@4c290df2: #object[sci.impl.fns$fun$arity_1__1191 0x3ac2837c "sci.impl.fns$fun$arity_1__1191@3ac2837c"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range-old "nějaká 11pm-1am událost")
+{:range [1380 1380], :cleaned-str "nějaká událost"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@1b40b18: #object[sci.impl.fns$fun$arity_1__1191 0x5aafc610 "sci.impl.fns$fun$arity_1__1191@5aafc610"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+; java.lang.Exception: Could not find namespace: reagent.core. user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:2:3
+clj꞉nautilus-roam-3-1-2024꞉> 

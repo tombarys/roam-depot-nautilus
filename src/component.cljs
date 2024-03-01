@@ -1,4 +1,4 @@
-(ns nautilus-roam-6-2-2024
+(ns nautilus-roam-3-1-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -317,97 +317,37 @@
 ;; --------------- text parsers --------------------
 
 
-(defn from-1224->min [time-str am2 pm2] ;; FIXME wow this is complicated – refactor later
-  (let [pm? (or (re-find #"(?:pm|PM)" time-str) pm2)
-        am?  (or (re-find #"(?:am|AM)" time-str) am2)
-        new-time-str (str/trim (str/replace time-str #"(?:am|AM|pm|PM)" ""))
+(defn from-1224->min [time-str h12] ;; if h12 is "am"/"pm" ; h12 = nil => h24
+  (let [pm? (re-find #"(?:pm|PM)" time-str)
+        am?  (re-find #"(?:am|AM)" time-str)
+        new-time-str (->
+                      (str/replace time-str #"(?:am|AM|pm|PM)" "")
+                      (str/trim))
         [hours new-mins] (if (re-find #"\:" new-time-str)
-                           (mapv int (str/split new-time-str ":"))
+                           (mapv int (str/split new-time-str #":"))
                            [(int new-time-str) 0])
-        new-hours (if pm?
+        new-hours (if (and (not am?) (or pm? (and h12 (= (clojure.string/lower-case h12) "pm")))) 
                     (if (= hours 12) 12 (+ hours 12))
                     (if am?
-                      (if (= hours 12) 0 hours) hours))
+                      (if (= hours 12) 0 hours) 
+                      hours))
         [h m] [(mod new-hours 24) (mod new-mins 60)]]
-    [(+ m (* 60 h)) am? pm?]))
+    [(+ m (* 60 h)) (or am? pm?)]))
 
-(defn parse-time-range-old [s]
+(defn parse-time-range [s]
   (let [range-format #"(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\s?AM|\s?PM|\s?am|\s?pm))?)\s*(?:-|–|až|to)\s*(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\s?AM|\s?PM|\s?am|\s?pm))?)"
         range-str (re-find range-format s)]
     (if range-str
-      (let [cleaned-str (str/replace s range-str "")
+      (let [cleaned-str (-> (str/replace s range-str "")
+                            (str/replace #"\s\s" " "))
             [_ from-str to-str] (re-find #"(.*)(?:-|–|až|to)(.*)" range-str)
-            [to-min am? pm?] (from-1224->min to-str nil nil)
-            [from-min _ _] (from-1224->min from-str am? pm?)]
-        {:range (if (> to-min from-min)
+            [to-min h12] (from-1224->min to-str nil)
+            [from-min _] (from-1224->min from-str h12)]
+        {:range (if (> to-min from-min) 
                   [from-min to-min]
                   [from-min from-min])
          :cleaned-str cleaned-str})
       {:range nil :cleaned-str s})))
-
-(defn- Int [s]
-  (Integer/parseInt s))
-
-(defn- parse-time-text [time-text]
-  (let [ampm (when-let [m (re-find #"(am|pm|AM|PM)" time-text)]
-               (second m))
-        [hours mins] (map Int (clojure.string/split
-                               (clojure.string/replace time-text #"(am|pm)" "")
-                               #":"))]
-    [hours mins ampm]))
-
-(defn- to-minutes [hours mins]
-  (+ mins (* hours 60)))
-
-(defn- adjust-for-ampm [mins ampm prev-ampm]
-  (cond
-    (and (= ampm "am") prev-ampm "pm") (+ mins 720)
-    (and (= ampm "pm") prev-ampm "am") (+ mins 1440)
-    :else mins))
-
-(defn- parse-time [time-text & [prev-ampm]]
-  (let [[hours mins ampm] (parse-time-text time-text)
-        mins (to-minutes hours mins)
-        adj-mins (adjust-for-ampm mins ampm prev-ampm)]
-    [adj-mins ampm]))
-
-
-
-(defn- build-range-result [from-mins from-ampm to-mins cleaned-text]
-  {:range (if (> to-mins from-mins)
-            [from-mins to-mins]
-            (if from-ampm
-              [from-mins (+ to-mins 720)]
-              [from-mins (+ to-mins 1440)]))
-   :cleaned-str cleaned-text})
-
-(defn parse-time-range [text]
-  (let [range-regex #"(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\s?AM|\s?PM|\s?am|\s?pm))?)\s*(?:-|–|až|to)\s*(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\s?AM|\s?PM|\s?am|\s?pm))?)"
-        match (re-find range-regex text)]
-    (if match
-      (let [[_ from-text to-text] match
-            cleaned-text (clojure.string/replace text range-regex "")
-
-            [from-mins from-ampm] (parse-time from-text)
-            [to-mins to-ampm] (parse-time to-text from-ampm)]
-
-        (if (= from-ampm to-ampm)
-          ;; both AM or both PM
-          {:range [from-mins to-mins]
-           :cleaned-str cleaned-text}
-
-          ;; crossed AM/PM boundary  
-          {:range (if from-ampm
-                    ;; PM to AM
-                    [from-mins (+ to-mins 720)]
-                    ;; AM to PM  
-                    [from-mins (+ to-mins 1440)])
-           :cleaned-str cleaned-text}))
-      {:range nil :cleaned-str text})))
-
-
-
-; ---
 
 
 (defn parse-duration [s settings]
@@ -640,41 +580,41 @@
                 :font-weight font-weight
                 :fill (if-not done? (update-opacity-str bg-color "1") (update-opacity-str bg-color "0.2"))}
          (if debug? (str dbg-radians-txt)                                            
-             (str #_progress-str (subs text 0 (:legend-len-limit settings))))        
-         ]])     
+             (str #_progress-str (subs text 0 (:legend-len-limit settings))))]])        
+              
      (when (seq timestamp)
        ;; ⤵ adds a clock label for the snail template
        [:text  {:x time-text-x :y time-text-y :font-size (- font-size 3) :font-family font-family :color border-color :fill border-color
                 :transform (str "rotate(" (if
                                            (or (>= start-angle 270)
                                                (<= start-angle 90))
-                                            start-angle
-                                            (- start-angle 180)) " " time-text-x "," time-text-y ")")
+                                           start-angle
+                                           (- start-angle 180)) " " time-text-x "," time-text-y ")")
                 :text-anchor "middle"
                 :alignment-baseline (if
                                      (or (>= start-angle 270)
                                          (<= start-angle 90))
-                                      "after-edge"
-                                      "before-edge")}
+                                     "after-edge"
+                                     "before-edge")}
         (if debug? (str (round2 start-radians) " / " start-angle) timestamp)])]))
 
 
 (defn snail-blueprint-component [color inner-radius center settings]
   (let
    [workday-start (:workday-start settings)]
-    [:g (mapcat (fn [[start end timestamp]]
-                  [[slice
-                    [start end inner-radius (outer-radius-at timestamp) center settings]
-                    :border-color color
-                    :timestamp (str timestamp)]])
-                (concat
-                 (cond (between workday-start 420 479) [(vector 300 330 7)]
-                       (between workday-start 360 419) [(vector 270 300 6) (vector 300 330 7)])
-                 (map vector
-                      (range 0 390 30)
-                      (range 30 390 30)
-                      (range 9 21))
-                 [(vector 0 30 21) (vector 330 360 8)]))]))
+   [:g (mapcat (fn [[start end timestamp]]
+                 [[slice
+                   [start end inner-radius (outer-radius-at timestamp) center settings]
+                   :border-color color
+                   :timestamp (str timestamp)]])
+               (concat
+                (cond (between workday-start 420 479) [(vector 300 330 7)]
+                      (between workday-start 360 419) [(vector 270 300 6) (vector 300 330 7)])
+                (map vector
+                     (range 0 390 30)
+                     (range 30 390 30)
+                     (range 9 21))
+                [(vector 0 30 21) (vector 330 360 8)]))]))
 
 (defn central-label-component [[first-row second-row] center]
   (let [[center-x center-y] [(:center-x center) (:center-y center)]
