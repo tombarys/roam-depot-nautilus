@@ -317,7 +317,7 @@
 ;; --------------- text parsers --------------------
 
 
-(defn from-1224->min [time-str am2 pm2] ;; FIXME wow this is f*cking complicated – refactor later
+(defn from-1224->min [time-str am2 pm2] ;; FIXME wow this is complicated – refactor later
   (let [pm? (or (re-find #"(?:pm|PM)" time-str) pm2)
         am?  (or (re-find #"(?:am|AM)" time-str) am2)
         new-time-str (str/trim (str/replace time-str #"(?:am|AM|pm|PM)" ""))
@@ -331,7 +331,7 @@
         [h m] [(mod new-hours 24) (mod new-mins 60)]]
     [(+ m (* 60 h)) am? pm?]))
 
-(defn parse-time-range [s]
+(defn parse-time-range-old [s]
   (let [range-format #"(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\s?AM|\s?PM|\s?am|\s?pm))?)\s*(?:-|–|až|to)\s*(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\s?AM|\s?PM|\s?am|\s?pm))?)"
         range-str (re-find range-format s)]
     (if range-str
@@ -344,6 +344,71 @@
                   [from-min from-min])
          :cleaned-str cleaned-str})
       {:range nil :cleaned-str s})))
+
+(defn- Int [s]
+  (Integer/parseInt s))
+
+(defn- parse-time-text [time-text]
+  (let [ampm (when-let [m (re-find #"(am|pm|AM|PM)" time-text)]
+               (second m))
+        [hours mins] (map Int (clojure.string/split
+                               (clojure.string/replace time-text #"(am|pm)" "")
+                               #":"))]
+    [hours mins ampm]))
+
+(defn- to-minutes [hours mins]
+  (+ mins (* hours 60)))
+
+(defn- adjust-for-ampm [mins ampm prev-ampm]
+  (cond
+    (and (= ampm "am") prev-ampm "pm") (+ mins 720)
+    (and (= ampm "pm") prev-ampm "am") (+ mins 1440)
+    :else mins))
+
+(defn- parse-time [time-text & [prev-ampm]]
+  (let [[hours mins ampm] (parse-time-text time-text)
+        mins (to-minutes hours mins)
+        adj-mins (adjust-for-ampm mins ampm prev-ampm)]
+    [adj-mins ampm]))
+
+
+
+(defn- build-range-result [from-mins from-ampm to-mins cleaned-text]
+  {:range (if (> to-mins from-mins)
+            [from-mins to-mins]
+            (if from-ampm
+              [from-mins (+ to-mins 720)]
+              [from-mins (+ to-mins 1440)]))
+   :cleaned-str cleaned-text})
+
+(defn parse-time-range [text]
+  (let [range-regex #"(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\s?AM|\s?PM|\s?am|\s?pm))?)\s*(?:-|–|až|to)\s*(?:\d{1,2}(?::\d{1,2})?(?:\s*(?:\s?AM|\s?PM|\s?am|\s?pm))?)"
+        match (re-find range-regex text)]
+    (if match
+      (let [[_ from-text to-text] match
+            cleaned-text (clojure.string/replace text range-regex "")
+
+            [from-mins from-ampm] (parse-time from-text)
+            [to-mins to-ampm] (parse-time to-text from-ampm)]
+
+        (if (= from-ampm to-ampm)
+          ;; both AM or both PM
+          {:range [from-mins to-mins]
+           :cleaned-str cleaned-text}
+
+          ;; crossed AM/PM boundary  
+          {:range (if from-ampm
+                    ;; PM to AM
+                    [from-mins (+ to-mins 720)]
+                    ;; AM to PM  
+                    [from-mins (+ to-mins 1440)])
+           :cleaned-str cleaned-text}))
+      {:range nil :cleaned-str text})))
+
+
+
+; ---
+
 
 (defn parse-duration [s settings]
   (let [duration-format #"(\d{1,3})(min|m)"]

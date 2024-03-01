@@ -35,3 +35,112 @@ clj꞉user꞉> 
 (str "#hoří")
 "#hoří"
 clj꞉user꞉> 
+#<Var@72b008d5: #object[sci.impl.fns$fun$arity_1__1191 0x175888ff "sci.impl.fns$fun$arity_1__1191@175888ff"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-text "něco je 12:34")
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉nautilus-roam-6-2-2024꞉> 
+; clojure.lang.ExceptionInfo: Could not resolve symbol: js/Math.int user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:4:22
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@72b008d5: #object[sci.impl.fns$fun$arity_1__1191 0xb79d378 "sci.impl.fns$fun$arity_1__1191@b79d378"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-text "něco je 12:34")
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉nautilus-roam-6-2-2024꞉> 
+(when-let [m (re-find #"(am|pm)" "toto je 12:34")]
+  (second m))
+nil
+clj꞉nautilus-roam-6-2-2024꞉> 
+(when-let [m (re-find #"(am|pm)" "toto je 7:34am")]
+  (second m))
+"am"
+clj꞉nautilus-roam-6-2-2024꞉> 
+(clojure.string/replace "toto je 7:34am" #"(am|pm)" "")
+"toto je 7:34"
+clj꞉nautilus-roam-6-2-2024꞉> 
+(clojure.string/split
+ (clojure.string/replace "toto je 7:34am" #"(am|pm)" "")
+ #":")
+["toto je 7" "34"]
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-text "12:34")
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-text "12:34am")
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉nautilus-roam-6-2-2024꞉> 
+(clojure.string/split
+ (clojure.string/replace "toto je 7:34am" #"(am|pm)" "")
+ #":")
+["toto je 7" "34"]
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-text "12:34am")
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉nautilus-roam-6-2-2024꞉> 
+(int "12")
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@72b008d5: #object[sci.impl.fns$fun$arity_1__1191 0x61e4aeea "sci.impl.fns$fun$arity_1__1191@61e4aeea"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(int "12")
+; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Character user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-text "12:34am")
+; java.lang.IllegalArgumentException: No matching field found: parseInt for class java.lang.Integer user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:4:22
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@72b008d5: #object[sci.impl.fns$fun$arity_1__1191 0x40021252 "sci.impl.fns$fun$arity_1__1191@40021252"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-text "12:34am")
+[12 34 "am"]
+clj꞉nautilus-roam-6-2-2024꞉> 
+; clojure.lang.ExceptionInfo: Could not resolve symbol: s user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:1:1
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@2fa23422: #object[sci.impl.fns$fun$arity_1__1191 0x59c7428b "sci.impl.fns$fun$arity_1__1191@59c7428b"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@72b008d5: #object[sci.impl.fns$fun$arity_1__1191 0x66635486 "sci.impl.fns$fun$arity_1__1191@66635486"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-text "12:34am")
+[12 34 "am"]
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@5d827b5f: #object[sci.impl.fns$fun$arity_2__1196 0x62daf6ee "sci.impl.fns$fun$arity_2__1196@62daf6ee"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@51b910d4: #object[sci.impl.fns$fun$arity_3__1202 0x7575022 "sci.impl.fns$fun$arity_3__1202@7575022"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@1f8e50cd: #object[sci.impl.fns$fun$arity_1__898 0x1b48361a "sci.impl.fns$fun$arity_1__898@1b48361a"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@51ebd860: #object[sci.impl.fns$fun$arity_4__1209 0x79fb4eb "sci.impl.fns$fun$arity_4__1209@79fb4eb"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@1b40b18: #object[sci.impl.fns$fun$arity_1__1191 0x43d7db88 "sci.impl.fns$fun$arity_1__1191@43d7db88"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range "mám tu text 10:34am-2:34pm")
+[12 34 "am"]
+{:range nil, :cleaned-str "mám tu text 10:34am-2:34pm"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range "10:34am-2:34pm")
+{:range nil, :cleaned-str "10:34am-2:34pm"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range "mám tu text 10:34am-2:34pm")
+{:range nil, :cleaned-str "mám tu text 10:34am-2:34pm"}
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@1b40b18: #object[sci.impl.fns$fun$arity_1__1191 0x70e68b24 "sci.impl.fns$fun$arity_1__1191@70e68b24"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range "mám tu text 10:34am-2:34pm")
+; java.lang.ClassCastException: java.lang.Character cannot be cast to java.lang.CharSequence user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:2:27
+clj꞉nautilus-roam-6-2-2024꞉> 
+; clojure.lang.ExceptionInfo: Could not resolve symbol: text user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:2:15
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@1b40b18: #object[sci.impl.fns$fun$arity_1__1191 0x7ec83775 "sci.impl.fns$fun$arity_1__1191@7ec83775"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range "mám tu text 10:34am-2:34pm")
+nil
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@1b40b18: #object[sci.impl.fns$fun$arity_1__1191 0x52d74daa "sci.impl.fns$fun$arity_1__1191@52d74daa"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range "mám tu text 10:34am-2:34pm")
+; java.lang.ClassCastException: java.lang.Character cannot be cast to java.lang.CharSequence user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:2:27
+clj꞉nautilus-roam-6-2-2024꞉> 
+#<Var@1b40b18: #object[sci.impl.fns$fun$arity_1__1191 0x2c120411 "sci.impl.fns$fun$arity_1__1191@2c120411"]>
+clj꞉nautilus-roam-6-2-2024꞉> 
+(parse-time-range "mám tu text 10:34am-2:34pm")
+; java.lang.ClassCastException: java.lang.Character cannot be cast to java.lang.CharSequence user /Users/tomas/Documents/Clojure/roam-depot-nautilus/src/component.cljs:2:27
+clj꞉nautilus-roam-6-2-2024꞉> 
