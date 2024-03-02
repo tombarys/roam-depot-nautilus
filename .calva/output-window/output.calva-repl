@@ -9,8 +9,8 @@
 ; You can make Calva auto-select this.
 ;   - See https://calva.io/connect-sequences/
 ; 
-; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 56472 ; popd
-; Using host:port 127.0.0.1:56472 ...
+; Starting Jack-in Terminal: pushd /Users/tomas/Documents/Clojure/roam-depot-nautilus ; bb --nrepl-server 51010 ; popd
+; Using host:port 127.0.0.1:51010 ...
 ; Hooking up nREPL sessions ...
 ; Connected session: clj
 ; TIPS:
@@ -26,11 +26,99 @@ clj꞉user꞉>  ; Use `alt+enter` to evaluate
 clj꞉user꞉> 
 ; Jack-in done.
 clj꞉user꞉> 
-#<Var@2eb3c95d: #object[sci.impl.fns$fun$arity_1__1191 0x73664699 "sci.impl.fns$fun$arity_1__1191@73664699"]>
-clj꞉nautilus-roam-28-2-2024꞉> 
-(minutes->time 300)
-"05:00"
-clj꞉nautilus-roam-28-2-2024꞉> 
-(minutes->time 320)
-"05:20"
-clj꞉nautilus-roam-28-2-2024꞉> 
+(int (*  (- 100 30) 100) 15)
+0
+clj꞉user꞉> 
+; clojure.lang.ArityException: Wrong number of args (2) passed to: clojure.core/int user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉user꞉> 
+(int (* (/ (- 100 30) 100)) 15)
+; clojure.lang.ArityException: Wrong number of args (2) passed to: clojure.core/int user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:1
+clj꞉user꞉> 
+(int (* (/ (- 100 30) 100) 15))
+10
+clj꞉user꞉> 
+(re-find #"(d)(\d{1,3})(\%)" "tady je něco jako 100%")
+nil
+clj꞉user꞉> 
+(re-find #"(\sd)(\d{1,3})(\%)" "tady je něco jako d20%")
+["d20%" "d" "20" "%"]
+clj꞉user꞉> 
+["d20%" "d" "20" "%"]
+clj꞉user꞉> 
+[" d20%" " d" "20" "%"]
+clj꞉user꞉> 
+(int (last (butlast [" d20%" " d" "20" "%"]))
+"20"
+clj꞉user꞉> 
+(re-find #"\s{0,1}d(\d{1,2}(?::\d{1,2}(^\%))?)" "tady je něco jako d20%")
+[" d20" "20" nil]
+clj꞉user꞉> 
+(re-find #"\s{0,1}d(\d{1,2}(?::\d{1,2}^\%)?)" "tady je něco jako d20%")
+[" d20" "20"]
+clj꞉user꞉> 
+(re-find #"\s{0,1}d(\d{1,2}(?::\d{1,2})?)^\%" "tady je něco jako d20%")
+nil
+clj꞉user꞉> 
+(re-find #"\s{0,1}d(\d{1,2}(?::\d{1,2})?)^\%" "tady je něco jako d20")
+nil
+clj꞉user꞉> 
+(re-find #"\s{0,1}d(\d{1,2}(?::\d{1,2})?)(^\%)" "tady je něco jako d20")
+nil
+clj꞉user꞉> 
+(re-find #"\s{0,1}d(\d{1,2}(?::\d{1,2})?)(^\%)" "tady je něco jako d20:30")
+nil
+clj꞉user꞉> 
+(re-find #"\s{0,1}d(\d{1,2}(?::\d{1,2})?)(^%)" "tady je něco jako d20:30")
+nil
+clj꞉user꞉> 
+(re-find #"\s{0,1}d(\d{1,2}(?::\d{1,2})?)(^%)" "tady je něco jako d20")
+nil
+clj꞉user꞉> 
+(re-find #"\s{0,1}d(\d{1,2}(?::\d{1,2})?)(?!%)" "tady je něco jako d20")
+[" d20" "20"]
+clj꞉user꞉> 
+(re-find #"\s{0,1}d(\d{1,2}(?::\d{1,2})?)(?!%)" "tady je něco jako d20%")
+[" d2" "2"]
+clj꞉user꞉> 
+(re-find \s{0,1}d(\d{1,2}(?::\d{1,2})?)(?!%) "tady je něco jako d20%")
+; clojure.lang.ExceptionInfo: Invalid symbol: ?:: user /Users/tomas/Documents/Clojure/roam-depot-nautilus/.calva/output-window/output.calva-repl:1:30
+clj꞉user꞉> 
+(re-find #"\s{0,1}d(\d{1,2}(?::\d{1,2})??)(?!%)" "tady je něco jako d20%")
+[" d2" "2"]
+clj꞉user꞉> 
+[" d2" "2"]
+clj꞉user꞉> 
+(re-find #"\s{0,1}d(\d{1,2}(?::\d{1,2})??)(?!\%)" "tady je něco jako d20%")
+[" d2" "2"]
+clj꞉user꞉> 
+(re-find #"\s{0,1}d(\d{1,2}(?::\d{1,2})??)(^\%)" "tady je něco jako d20%")
+nil
+clj꞉user꞉> 
+(re-find #"\s{0,1}d(\d{1,2}(?::\d{1,2})??)(^\%)" "tady je něco jako d20")
+nil
+clj꞉user꞉> 
+(re-find #"\b(d\d{1,2}(:\d{1,2})?)\b(?!%)" "tady je něco jako d20")
+["d20" "d20" nil]
+clj꞉user꞉> 
+(re-find #"\b(d\d{1,2}(:\d{1,2})?)\b(?!%)" "tady je něco jako d20%")
+nil
+clj꞉user꞉> 
+(re-find #"\b(d\d{1,2}(:\d{1,2})?)\b(?!%)" "tady je něco jako d20:30%")
+["d20" "d20" nil]
+clj꞉user꞉> 
+(re-find #"\b(d\d{1,2}(:\d{1,2})?)\b(?!%)" "tady je něco jako d20:30")
+["d20:30" "d20:30" ":30"]
+clj꞉user꞉> 
+(re-find #"\b(d\d{1,2}(:\d{1,2})?)\b(?!%)" "tady je něco jako d20%")
+nil
+clj꞉user꞉> 
+(re-find #"\b(d\d{1,2}(:\d{1,2})?)\b(?!%)" "tady je něco jako d12%")
+nil
+clj꞉user꞉> 
+(re-find #"\b(d\d{1,2}(:\d{1,2})?)\b(?!%)" "tady je něco jako d12")
+["d12" "d12" nil]
+clj꞉user꞉> 
+(re-find #"\b(d\d{1,2}(:\d{1,2})?)\b(?!%)" "tady je něco jako d12:30")
+["d12:30" "d12:30" ":30"]
+clj꞉user꞉> 
+(re-find #"\b(d\d{1,2}(:\d{1,2})?)\b(?!%)" "tady je něco jako d12:30")

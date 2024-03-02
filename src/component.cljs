@@ -1,4 +1,4 @@
-(ns nautilus-roam-1-3-2024
+(ns nautilus-roam-2-3-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -332,30 +332,30 @@
     (str (if (< h 10) (str "0" h) h) ":" (if (< m 10) (str "0" m) m))))
 
 (defn rm-prog-from-block-if-done [uid]
-  (let [str (str/replace (get-block-str-naked uid)#"\s\%\d{1,3}" "")]
+  (let [str (str/replace (get-block-str-naked uid) #"\sd\d{1,3}\%" "")]
     (block/update {:block
                    {:uid uid
                     :string str}})))
 
 (defn update-block-progress [block-uid increment] 
    (let [s (get-block-str-naked block-uid)
-         progress-format #"(\s\%)(\d{1,3})"
+         progress-format #"(\sd)(\d{1,3})(\%)" ; #"(\s\%)(\d{1,3})"
          updated-str (if-let [progress-match (re-find progress-format s)]
                        (let [old-progress-str (first progress-match)
-                             prog-incremented (+ (int (last progress-match)) increment)
+                             prog-incremented (+ (int (last (butlast progress-match))) increment)
                              prog-new-str (cond
                                             (= prog-incremented 100) "done"
                                             (> prog-incremented 100) ""
-                                            :else (str " %" prog-incremented))]
+                                            :else (str " d" prog-incremented "%"))]
                          (if (not= prog-new-str "done")
                            (str/replace s old-progress-str prog-new-str)
                            (str (->
                                  (str/replace s old-progress-str "")
                                  (str/replace #"\{\{\[\[TODO\]\]\}\}" "{{[[DONE]]}}"))
                                 " d" (minutes->time @now-time-atom))))
-                       (-> (str s " %" increment)
+                       (-> (str s " d" increment "%")
                            (str/replace #"\{\{\[\[DONE\]\]\}\}" "{{[[TODO]]}}")
-                           (str/replace #"\s{0,1}d(\d{1,2}(?::\d{1,2})?)" "")))]
+                           (str/replace #"\b(d\d{1,2}(:\d{1,2})?)\b(?!%)" "")))]
      (block/update {:block
                     {:uid block-uid
                      :string updated-str}})))
@@ -423,11 +423,11 @@
       {:duration (:default-duration settings) :cleaned-str s})))
 
 (defn parse-progress [s]
-  (let [progress-format #"(\s\%)(\d{1,3})"]
+  (let [progress-format #"(\sd)(\d{1,3})(\%)"]
     (if-let [progress-match (re-find progress-format s)]
       (let [progress-str (first progress-match)
             cleaned-str (str/replace s progress-str "")
-            prog-int (int (last progress-match))]
+            prog-int (int (last (butlast progress-match)))]
         {:progress (if (> prog-int 100) 100 prog-int)
          :cleaned-str cleaned-str})
       {:progress 0 :cleaned-str s})))
@@ -496,20 +496,20 @@
         {:keys [custom-color cleaned-str]} (parse-custom-color-1 cleaned-str settings)
         {:keys [range cleaned-str]} (parse-time-range cleaned-str)
         {:keys [duration cleaned-str]} (parse-duration cleaned-str settings)
+        {:keys [progress cleaned-str]} (parse-progress cleaned-str)
         {:keys [done-at cleaned-str]} (parse-done-time cleaned-str)
         {:keys [done cleaned-str]} (parse-DONE cleaned-str)
-        {:keys [progress cleaned-str]} (parse-progress cleaned-str)
         description (parse-rest cleaned-str)
         event-type (if range :meeting :todo)]
     (when done
       (rm-prog-from-block-if-done (:uid block-map)))
     (-> {:description description
-         :duration duration
+         :progress progress
+         :duration (int (* (/ (- 100 progress) 100) duration))
          :uid (:uid block-map)
          :start (if done-at (abs (- done-at duration)) (first range))
          :end (or done-at (second range))
          :done done
-         :progress progress
          :bg-color custom-color
          :done-at (if done done-at nil)}
         (assoc event-type true))))
@@ -605,7 +605,8 @@
              shaky            ;; "unsure hand style" allowed
              done?
              uid              ;; roam block uid
-             click-to-progress ]}]
+             non-zero-progress?
+             click-to-progress ]}] ;; click to progress feature allowed for the slice?
   (let [; hovered (r/atom false)
         start-radians (angle->rad (+ start-angle (shake-if shaky)))
         end-radians (angle->rad (+ end-angle (shake-if shaky)))
@@ -639,21 +640,29 @@
                                         "–>" (round2 end-radians) "/ leg:" (round2 legend-radians)) "") 
         on-left? (or (<= legend-radians (- (/ pi 2))) (>= legend-radians (/ pi 2)))] 
     [:g
+     [:defs
+      [:pattern
+       {:id "dot-pattern" :width "4" :height "4" :patternUnits "userSpaceOnUse"}
+       [:circle {:r "0.5" :cx "1" :cy "1" :fill "gray"}]
+       [:circle {:r "0.5" :cx "5" :cy "5" :fill "gray"}]]]
      (when @debug-state-atom  [:circle {:cx center-x :cy center-y :r 4 :fill "red"}])              
      ;; ⤵ this is the main component - slice
+     
+     (when non-zero-progress? [:path
+      {:d path
+       :fill "url(#dot-pattern)"}])
+     
      [:path
-      
       {:d path
        :style (when click-to-progress {:cursor "pointer"})
        :stroke-dasharray stroke-dasharray
        :fill bg-color
        :on-click #(when click-to-progress (update-block-progress uid 10))
-       ; #(add-to-block uid "=")
-       ; #_#_:on-mouse-enter (fn [_] (reset! hovered true))
-       ; #_#_:on-mouse-leave (fn [_] (reset! hovered false))
-       :stroke border-color}
-      #_(when @hovered [:g [:text {:x 20 :y 20} text]])]
+       ; :on-mouse-enter (fn [_] (reset! hovered true))
+       ; :on-mouse-leave (fn [_] (reset! hovered false))
+       :stroke border-color}]
      ;; ⤵ adds an event legend
+     ;; (when @hovered [:g [:text {:x center-x :y center-y} (str progress)]])
      (when (and text (not done?))
        [:g
         [bent-line-component legend-line-start-x legend-line-start-y legend-line-end-x legend-line-end-y legend-color]
@@ -663,6 +672,8 @@
                                (if on-left? "end" "start"))
                 :alignment-baseline "baseline"
                 :font-weight font-weight
+                :style (when click-to-progress {:cursor "pointer"})
+                :on-click #(when click-to-progress (update-block-progress uid 10))
                 :fill (if-not done? (update-opacity-str bg-color "1") (update-opacity-str bg-color "0.2"))}
          (if debug? (str dbg-radians-txt)                                            
              (str #_progress-str (subs text 0 (:legend-len-limit settings))))        
@@ -721,6 +732,7 @@
         done-at (:done-at event)
         done? (if (:done event) true false)
         meeting? (:meeting event)
+        progress (:progress event)
         click-to-progress (if (and daily-page? todo?) true false)
         expired? (and meeting? (>= @now-time-atom (:end event)))
         todo-bg-color (or (:bg-color event ) (nth todo-color-palette (mod index (count todo-color-palette))))
@@ -733,6 +745,7 @@
                  :else nil)
      :done done?
      :outer-radius outer-radius
+     :progress progress
      :click-to-progress click-to-progress}))
 
 (defn event-slice-component [event index legend-rect inner-radius daily-page? center settings]
@@ -747,9 +760,11 @@
      :shaky shaky
      :done? done
      :uid uid
+     :progress progress
      :font-weight "bold"
      :legend-rect legend-rect
      :progress progress
+     :non-zero-progress? (if (> progress 0) true false)
      :click-to-progress click-to-progress]))
 
 (defn events->slices

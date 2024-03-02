@@ -16,7 +16,8 @@ _Events are yellow, tasks are blue – and done tasks are light gray_
 - start inserting tasks, then folow up with events
 - use e.g. "12:30-14:20" or "9am to 1:45pm" to anchor fixed time events
 - use e.g. "10m" or "20min" to set the task duration (other than default)
-- use e.g. "d18:30" or "d9:05" in tasks to denote the time when they were finished (or use extension for it)
+- add e.g. "d18:30" or "d9:05" in tasks to denote the time when they were finished (or use extension for it)
+- add e.g. "d30%" or "d90%" (or click task) to track progress as the task duration is shown appropriatelly shorter in spiral
 - during a day: reorder tasks and move some of them after fixed events to ensure they will not be planned earlier
 
 
@@ -47,6 +48,7 @@ Additionally, you can easily change parameters to better suit your needs (in the
 - the text (e.g. tag) prefix that will inserted above the the spiral 
 - the length of the legend text (longer task description than specified will be stripped from spiral legend)
 - the default duration of the task (when creating a new to-do, you can leave it without specifics and it will default to the setting)
+- the trigger word or #tag that will enforce red color ovewrite for important tasks in spiral
 
 Important: All settings will not manifest retroactively in old Nautiluses, but just when creating a new instance using the `;;Nautilus` template. 
 
@@ -71,7 +73,7 @@ Press `Enter` again and `Tab` to indent the first child block under the componen
 Enjoy!
 
 ## Additional Info
-- I published an [article How I learned to plan better (and what to do when your head doesn’t get lists)](https://medium.com/@tombarys/how-i-learned-to-plan-better-and-what-to-do-when-your-head-doesnt-get-lists-21b79de56464) about my Nautilus story recently. 
+- I published an [article How I learned to plan better (and what to do when your head doesn’t get lists)](https://medium.com/@tombarys/how-i-learned-to-plan-better-and-what-to-do-when-your-head-doesnt-get-lists-21b79de56464) about my Nautilus journey recently. 
 - The order and the duration of your tasks **can be changed only by you**. The app does not change it.  
 - A notable and the only "automatic" feature of Nautilus is the task **push-forward: relocating uncompleted tasks** within open time slots in your day – taking the present moment into account. The spiral constantly reflects time without your intervention.
 - If the Nautilus is **not placed into _today’s_ Daily Page**, the red time beam is not shown, and tasks are not pushed into the future. 
@@ -79,6 +81,7 @@ Enjoy!
   - **events** are rows containing a *time range* in 24h or 12h format (`HH:MM-HH:MM`, minutes can be omitted) and are fixed until the time range is changed by the user (e.g., "12:30-13 Meeting with JK", "9-10am Breakfast", "11am-14pm Presentation"). 
   - **tasks** are all residual rows that are not events; undone tasks move through a day (e.g., "nearly empty task" "{{[[TODO]]}} another, but important task").
 - **Tasks duration defaults to a 15-minute time allocation**, but this can be adjusted in the Roam Depot extension Settings or **individually for each task in your task list** with the simple notation `Mm` or `Mmin` where M is the length of a task in minutes (e.g., "Call Jack 10m", "Daily workout 45min").
+- Especially when working on long tasks, you can **track the progress by clicking task on daily page or adding** the `dXX%` marker where XX denotes percentage of the task done. E.g. "Writing a memo 120m d50%" means you dedicated 2 hours for the task and half of it is done – so the task occupies only 1/2 of the space in spiral.
 - The **order of tasks** in a Nautilus spiral **reflects exactly the order of tasks in the list.** You have to prioritize them by itself – in the morning and later during a day. 
 - Tasks can be **forced to follow after a particular event** too – simply by placing them after the event in the task list; for example: to plan "Nap" not before lunch, just put it after it in the list. This does not change the order of tasks.
 - Once a task is marked 'DONE' in Roam, (and if you have installed the [Todo Trigger extension](https://github.com/tombarys/roam-depot-nautilus/blob/main/README.md#1-install-todo-trigger-extension-for-better-experience)) it's **tagged with the completion time** in the format dHH:MM (e.g. d14:30), which is visually interpreted as a light grey section on the spiral. It can serve as a visual log of tasks that have been completed.
@@ -98,7 +101,8 @@ Enjoy!
 
 - 31/1/2024 – now autodetects 12h format in time-range (supports both 24h and 12h time format – if no am/pm specified in the task, defaults to 24h format)
 - 1/2/2024 – added an option to change workday start time (the first select option in Settings now, defaults to 8am) – I think the prettiest proportions has a 8am-Nautilus but I understand some of us are early birds!
-- 9/2/2024 – added an option to set a trigger string or tag (no spaces allowed!) to individually rewrite task/event color to red
+- 2/3/2024 – added an option to set a trigger string or tag (no spaces allowed!) to individually rewrite task/event color to red
+- 2/3/2024 – added an progress tracking option (increases progress by 10 % clicking on task slice until done)
 
 # Feature Requests, Bugs, and Feedback and Credits
 Nautilus is work in progress. I am happy to remove bugs or listen to your feedback! Contact me via https://barys.me.
