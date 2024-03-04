@@ -1,4 +1,4 @@
-(ns nautilus-roam-2-3-2024
+(ns nautilus-roam-4-3-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -47,7 +47,7 @@
 
 (def bent-line-gap 3) ;; the space between the bent line and the legend rectangle
 
-(def rect-width-coef 1.65) ;; bigger number = narrower text rect (for legend)
+(def rect-width-coef 1.55) ;; bigger number = narrower text rect (for legend)
 
 (def rect-height-coef 1.15) ;; bigger number = taller text rect (for legend)
 
@@ -374,12 +374,7 @@
 
 ;; --------------- text parsers --------------------
 
-(defn arg-tag->str [arg]
-  (if (= (first arg) :block/uid)
-    (let [uid (second arg)
-          decoded (get-page-title uid)]
-      (str "#" decoded))
-    arg))
+
 
 (defn from-1224->min [time-str h12] ;; if h12 is "am"/"pm" ; h12 = nil => h24
   (let [pm? (re-find #"(?:pm|PM)" time-str)
@@ -909,6 +904,13 @@
    (if @debug-state-atom                               
      (str "debug is on")                               
      (str "🪲 debug is off"))])                        
+
+(defn arg-tag->str [arg]
+  (if (vector? arg)
+    (let [uid (second arg)
+          decoded (get-page-title uid)]
+      (str "#" decoded))
+    arg))
 
 (defn args->settings [[a1 a2 a3 a4]]
   (let [a1 (when a1 (int a1))
