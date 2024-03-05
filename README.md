@@ -22,13 +22,13 @@ _Events are yellow, tasks are blue – and done tasks are light gray_
 - use e.g. "10m" or "20min" to set the task duration (other than default)
 - use your custom trigger word specified in Settings to change color of some tasks to red
 - add e.g. "d18:30" or "d9:05" in tasks to denote the time when they were finished (or use extension for it)
-- if needed add e.g. "d30%" or "d90%" (or click task) to track progress as the task duration is shown appropriatelly shorter in spiral
+- if needed, add e.g. "d30%" or "d90%" (or click task) to track progress – the task duration will be shown shorter in spiral until the progress reaches 100% and changes to DONE
 - during a day: reorder tasks and move some of them after fixed events to ensure they will not be planned earlier
 
 
 ## Quick Start Videos
 
-### General use
+### Basic usage
 
 <img src="https://github.com/tombarys/roam-depot-nautilus/blob/e5517dbdf8f873e1e5041219de3da36f376dcfca/videothumb.png?raw=true" width="600"></img>
 
@@ -58,11 +58,11 @@ I strongly suggest installing [David Vargas](https://github.com/dvargas92495/roa
 ### 3. Adjust your settings
 
 Additionally, you can easily change parameters to better suit your needs (in the Roam Depot extension Settings):
-- your workday start time; choices are 6am, 7am, 8am (default)
-- the text (e.g. tag) prefix that will inserted above the the spiral 
-- the length of the legend text (longer task description than specified will be stripped from spiral legend)
-- the default duration of the task (when creating a new to-do, you can leave it without specifics and it will default to the setting)
-- the custom word or #tag that will enforce red color ovewrite for important tasks in spiral (use simple word or #word tag _without_ spaces and brackets in the Settings; then use the same notation in your text blocks; do not use [[word]] or #[[word]], it will not work.)
+- set your workday start time; choices are 6am, 7am, 8am (default)
+- set the text (e.g. tag) prefix that will be inserted above the the spiral 
+- set the length of the legend text (longer task description than specified will be stripped from spiral legend)
+- set the default duration of the task (when creating a new to-do, you can leave it without specifics and it will default to the setting)
+- set the custom word or #tag that will enforce red color ovewrite for important tasks in spiral (choose simple word or #word tag _without_ spaces and brackets in the Settings; then activate the same notation in your text blocks; do not use [[word]] or #[[word]], it will not match.)
 
 Important: All settings will not manifest retroactively in old Nautiluses, but just when creating a new instance using the `;;Nautilus` template. 
 
