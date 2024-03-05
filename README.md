@@ -1,6 +1,6 @@
 # ꩜ Nautilus for Roam
 
-Nautilus is a Roam Research extension for stress-free task planning, visually representing tasks and calendar events in the Roam Daily Page, and recognizing task duration variabilities. This flexible tool uses the present moment as a threshold to dynamically push unfinished tasks into the available time until tonight while keeping them in a user-defined order with user-estimated durations (no AI!).  
+Nautilus is a Roam Research extension for stress-free task planning/tracking, visually representing tasks and calendar events in the Roam Daily Page, and recognizing task duration variabilities. This flexible tool uses the present moment as a threshold to dynamically push unfinished tasks into the available time until tonight while keeping them in a user-defined order with user-estimated durations (no AI!).  
 
 This visual approach reduces the feeling of being overwhelmed, enhances task-effort estimating skills, and clearly shows what the feasible tasks are for the rest of the day. The spiral shape mirrors one's diminishing energy for creative tasks over a given day.
 
@@ -10,7 +10,7 @@ _Events are yellow, tasks are blue – and done tasks are light gray_
 
 ## Quick Start Guide
 
-- only once: install **Nautilus** and **TODO Trigger** extension
+- do only once: install **Nautilus** and **TODO Trigger** extension
 - insert the component at the top of your Daily Page using `;;Nautilus` template
 - indent all events and tasks that you want to accomplish below the component as its children 
 - start inserting tasks, then folow up with events
@@ -21,11 +21,15 @@ _Events are yellow, tasks are blue – and done tasks are light gray_
 - during a day: reorder tasks and move some of them after fixed events to ensure they will not be planned earlier
 
 
-## Quick Start Video
+## Quick Start Videos
 
 <img src="https://github.com/tombarys/roam-depot-nautilus/blob/e5517dbdf8f873e1e5041219de3da36f376dcfca/videothumb.png?raw=true" width="600"></img>
 
 [Click here to see the video.](https://www.loom.com/embed/c66b99a39a5a4f74b2889ccab467e9eb?sid=5809279e-7deb-44e2-a448-f9de33ba8510)
+
+<img src="https://github.com/tombarys/roam-depot-nautilus/blob/e5517dbdf8f873e1e5041219de3da36f376dcfca/videothumb.png?raw=true" width="600"></img>
+
+https://www.loom.com/share/6dbd9c14d99245be892b5bd591b76f17?sid=3bb1e6a1-521b-48bd-baa2-925faca6532f
 
 ## Setup (you do this only once)
 ### 1. First, make sure that __User code__ is enabled in your settings. 
