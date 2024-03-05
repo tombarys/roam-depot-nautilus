@@ -10,19 +10,23 @@ _Events are yellow, tasks are blue – and done tasks are light gray_
 
 ## Quick Start Guide
 
-- do only once: install **Nautilus** and **TODO Trigger** extension
+### Do once
+- install **Nautilus** and **TODO Trigger** extension
+- set your custom settings in the Settings section
+
+### Do on daily basis
 - insert the component at the top of your Daily Page using `;;Nautilus` template
 - indent all events and tasks that you want to accomplish below the component as its children 
 - start inserting tasks, then folow up with events
 - use e.g. "12:30-14:20" or "9am to 1:45pm" to anchor fixed time events
 - use e.g. "10m" or "20min" to set the task duration (other than default)
+- use your custom trigger word specified in Settings to change color of some tasks to red
 - add e.g. "d18:30" or "d9:05" in tasks to denote the time when they were finished (or use extension for it)
-- add e.g. "d30%" or "d90%" (or click task) to track progress as the task duration is shown appropriatelly shorter in spiral
+- if needed add e.g. "d30%" or "d90%" (or click task) to track progress as the task duration is shown appropriatelly shorter in spiral
 - during a day: reorder tasks and move some of them after fixed events to ensure they will not be planned earlier
 
 
 ## Quick Start Videos
-
 
 ### General use
 
