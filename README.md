@@ -23,13 +23,19 @@ _Events are yellow, tasks are blue – and done tasks are light gray_
 
 ## Quick Start Videos
 
+
+### General use
+
 <img src="https://github.com/tombarys/roam-depot-nautilus/blob/e5517dbdf8f873e1e5041219de3da36f376dcfca/videothumb.png?raw=true" width="600"></img>
 
 [Click here to see the video.](https://www.loom.com/embed/c66b99a39a5a4f74b2889ccab467e9eb?sid=5809279e-7deb-44e2-a448-f9de33ba8510)
 
-<img src="https://github.com/tombarys/roam-depot-nautilus/blob/e5517dbdf8f873e1e5041219de3da36f376dcfca/videothumb.png?raw=true" width="600"></img>
+### Using progress tracker and red color overwrite
 
-https://www.loom.com/share/6dbd9c14d99245be892b5bd591b76f17?sid=3bb1e6a1-521b-48bd-baa2-925faca6532f
+<img src="https://github.com/tombarys/roam-depot-nautilus/blob/bedfd6f37a33ac187edfaa2c086eff4c8a99342c/progress.png?raw=true" width="600"></img>
+
+[Click here to see the video.](https://www.loom.com/share/6dbd9c14d99245be892b5bd591b76f17?sid=3bb1e6a1-521b-48bd-baa2-925faca6532f)
+
 
 ## Setup (you do this only once)
 ### 1. First, make sure that __User code__ is enabled in your settings. 
@@ -52,7 +58,7 @@ Additionally, you can easily change parameters to better suit your needs (in the
 - the text (e.g. tag) prefix that will inserted above the the spiral 
 - the length of the legend text (longer task description than specified will be stripped from spiral legend)
 - the default duration of the task (when creating a new to-do, you can leave it without specifics and it will default to the setting)
-- the trigger word or #tag that will enforce red color ovewrite for important tasks in spiral
+- the custom word or #tag that will enforce red color ovewrite for important tasks in spiral (use simple word or #word tag _without_ spaces and brackets in the Settings; then use the same notation in your text blocks; do not use [[word]] or #[[word]], it will not work.)
 
 Important: All settings will not manifest retroactively in old Nautiluses, but just when creating a new instance using the `;;Nautilus` template. 
 
