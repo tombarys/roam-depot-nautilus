@@ -1,4 +1,4 @@
-(ns nautilus-roam-4-3-2024
+(ns nautilus-roam-6-3-2024
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -482,6 +482,7 @@
 
 
       ;; Trim double spaces and whitespace
+      (str/replace #"---" "")
       (str/replace #"\s\s" " ")
       (str/trim)))
 
@@ -862,12 +863,15 @@
                *children (r/track eval-state *get-children-atom)]
     (map #(hash-map :s (str-with-resolved-block-refs %) :uid (:block/uid %)) ;; returns vector of maps with keys :s and :uid
          (->> @*children
+              (filter #(not= "" (:block/string %)))
               (sort-by :block/order)))))
 
 (defn populate-events
   "Returns vector [events, done_with_done-at]"
   [block-uid plan-from-time settings]
   (let [text->events (-> (mapv #(parse-row-params % settings) (get-children-maps block-uid))
+                         (as-> coll
+                               (filterv #(not= "" (:description %)) coll))
                          (add-start-after))
         filled-day [(-> text->events
                         (fill-day (:workday-start settings) plan-from-time)) (filter #(:done-at %) text->events)]]
