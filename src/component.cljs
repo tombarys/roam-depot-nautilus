@@ -1,4 +1,4 @@
-(ns nautilus-roam-6-4-2024
+(ns nautilus-roam-7-4-2024-v5a
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -935,7 +935,7 @@
                   (catch :default e))]
     (if (or (nil? running) (not js/window.nautilusExtensionData.running))
       [:div
-       [:strong {:style {:color "red"}} "Extension not installed. To use, please install “Nautilus” from Roam depot."]]
+       [:strong {:style {:color "red"}} "Extension not installed. To use, please install “Nautilus” from Roam Depot."]]
       (do
         (reset-now-time-atom now-time-atom)
         (let [dimensions {:width (if mobile? mob-width desk-width)

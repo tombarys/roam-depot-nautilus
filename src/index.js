@@ -7,7 +7,7 @@ const renderStringCore = `{{[[roam/render]]:((${codeBlockUID}))`;
 const disabledStr = `-disabled`;
 const disabledReplacementString = `{{${componentName}${disabledStr}`;
 
-const version = 'v1';
+const version = 'v5';
 const titleblockUID = `roam-render-${componentName}`;
 
 const defaults = {'prefix-str': '', 'desc-length': 22, 'todo-duration': 15, 'workday-start': 8, 'color-1-trigger': ''};
@@ -159,18 +159,13 @@ async function onload({extensionAPI}) {
   setDefaultSettings(extensionAPI, defaults);
   extensionAPI.settings.panel.create(panelConfig);
 
-  if (!roamAlphaAPI.data.pull("[*]", [":block/uid", titleblockUID])) {
-    // component hasn't been loaded so we add it to the graph
-    toggleRenderComponent(true, titleblockUID, version, renderStringCore, disabledReplacementString, codeBlockUID, componentName, await generateTemplateString(extensionAPI));
-    // console.log("getting template string:" + await getTemplateString(extensionAPI));
-  }
-
-  console.log(`load ${componentName} plugin`)
+  toggleRenderComponent(true, titleblockUID, version, renderStringCore, disabledReplacementString, codeBlockUID, componentName, await generateTemplateString(extensionAPI));
+  
 }
 
 function onunload() {
   console.log(`unload ${componentName} plugin`)
-  // toggleRenderComponent(false, titleblockUID, version, renderStringCore, disabledReplacementString, codeBlockUID, componentName, '')
+  toggleRenderComponent(false, titleblockUID, version, renderStringCore, disabledReplacementString, codeBlockUID, componentName, '')
   window.nautilusExtensionData.running = false;
 }
 
