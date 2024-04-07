@@ -30,7 +30,7 @@ function getBlockContentStringByUID(uid){
 }
 
 
-function createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID, componentName, templateString){
+async function createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID, componentName, templateString){
     let renderPageUID = getPageUidByPageTitle(renderPageName)|| createPage(renderPageName);
     let templateBlockUID = roamAlphaAPI.util.generateUID()
     let codeBlockHeaderUID = roamAlphaAPI.util.generateUID()
@@ -80,7 +80,7 @@ function createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID,
     // create codeblock for the component
     let cljs = cljsFile
     let blockString = "```clojure\n " + cljs + " ```"
-    roamAlphaAPI.createBlock(
+    await roamAlphaAPI.createBlock(
         {"location": 
             {"parent-uid": codeBlockHeaderUID, 
             "order": 0}, 
@@ -138,33 +138,14 @@ function replaceRenderString(searchString, replacementString){
     });
 }
 
-function replaceRenderStringsOnUnload(renderString, replacementString){
-// replaces all render strings excluding these on the roam/render page 
-    let query = `[:find    
-        (pull ?node [:block/string :node/title :block/uid])   
-        :where   
-          [?node :block/string ?node-String]   
-          [(clojure.string/includes? ?node-String "${renderString}")]   
-        (not        
-            [?node :block/parents ?parent]       
-            [?parent :node/title "roam/render"])]`;
-    
-    let result = window.roamAlphaAPI.q(query).flat();
-    result.forEach(block => {
-        const updatedString = block.string.replace(renderString, replacementString);
-        window.roamAlphaAPI.updateBlock({
-          block: {
-            uid: block.uid,
-            string: updatedString
-          }
-        });
-    });
+async function updateBlockContentByUID(uid, content){
+    roamAlphaAPI.updateBlock({"block": {"uid": uid, "string": content}});
 }
 
 export function toggleRenderComponent(state, titleblockUID, version, renderStringCore, disabledReplacementString, codeBlockUID, componentName, templateString) {
     let renderPageName = 'roam/render'
     if (state==true) {
-        replaceRenderString(disabledReplacementString, renderStringCore); // replaces all {{Nautilus-disabled}} with render component call string – for older versions
+        replaceRenderString(disabledReplacementString, renderStringCore); // replaces all {{Nautilus-disabled}} with render component call string – backward compatibility with older versions
         if (!roamAlphaAPI.data.pull("[*]", [":block/uid", codeBlockUID])) { // if the code block does not exist 
             removeTheBlock(titleblockUID); // remove the remains if these exist
             createRenderBlock(renderPageName, titleblockUID, version, codeBlockUID, componentName, templateString);
@@ -172,13 +153,12 @@ export function toggleRenderComponent(state, titleblockUID, version, renderStrin
         } else { // if the code block already exists
             // check if the codeBlockUIDs child content is the same as the current code block and update if not
             if ((getBlockContentStringByUID(codeBlockUID)) != "```clojure\n " + cljsFile + " ```") {
-                roamAlphaAPI.updateBlock({"block": {"uid": codeBlockUID, "string": "```clojure\n " + cljsFile + " ```"}});
+                updateBlockContentByUID(codeBlockUID, "```clojure\n " + cljsFile + " ```");
                 console.log(`load ${componentName} plugin via update`);
             }
         }
     }  
     else if(state==false){
-        // replaceRenderStringsOnUnload(renderStringCore, disabledReplacementString),
         removeTheBlock(titleblockUID);
     }
 }

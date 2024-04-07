@@ -14,7 +14,6 @@ const defaults = {'prefix-str': '', 'desc-length': 22, 'todo-duration': 15, 'wor
 
 if (!window.nautilusExtensionData) {  
   window.nautilusExtensionData = {};
-  window.nautilusExtensionData.running = false; 
 } 
 
 window.nautilusExtensionData.running = true;
@@ -86,7 +85,6 @@ async function onload({extensionAPI}) {
             onChange: async (evt) => {
               let newString = await generateUpdatedRenderString(renderStringCore, extensionAPI, 'workday-start', evt);
               updateTemplateString(renderStringCore, newString);
-              // console.log("Todo duration changed to: ", evt, " and the new renderString is", newString);
             },
           }
         },
@@ -95,11 +93,9 @@ async function onload({extensionAPI}) {
         description: "Your custom text preceding every newly created Nautilus spiral. E.g. #Agenda.",
         action: {type:  "input",
                  default: defaults['prefix-str'],
-                 // placeholder: extensionAPI.settings.get('prefix-str') || defaults['prefix-str'],
                  onChange: async (evt) => {
                    let newString = await generateUpdatedRenderString(renderStringCore, extensionAPI, 'prefix-str', evt.target.value);
                    updateTemplateString(renderStringCore, newString.trim());
-                 // console.log("Input Changed!", evt); 
             }
           }
         },
@@ -113,7 +109,6 @@ async function onload({extensionAPI}) {
             onChange: async (evt) => {
               let newString = await generateUpdatedRenderString(renderStringCore, extensionAPI, 'desc-length', evt);
               updateTemplateString(renderStringCore, newString);
-              // console.log("Desc-length changed to: ", evt, " and the new renderString is", newString);
             },
           }
         },
@@ -136,12 +131,10 @@ async function onload({extensionAPI}) {
         description: "Beta. Custom word that causes todo/event to show in red. E.g. important, #red etc. WARNING: cannot contain spaces. ",
         action: {type:  "input",
                  default: defaults['color-1-trigger'],
-                 // placeholder: extensionAPI.settings.get('prefix-str') || defaults['prefix-str'],
                  onChange: async (evt) => {
                    let cleanedValue = evt.target.value.replace(/ /g, ''); // Remove spaces from input
                    let newString = await generateUpdatedRenderString(renderStringCore, extensionAPI, 'color-1-trigger', '\"' + cleanedValue + '\"');
                    updateTemplateString(renderStringCore, newString);
-                 // console.log("Input Changed!", evt); 
             }
           }
         },
