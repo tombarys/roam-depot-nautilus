@@ -930,21 +930,28 @@
                                (arg-tag->str a4)))}))
 
 (defn main [{:keys [:block-uid]} & args]
-  (reset-now-time-atom now-time-atom)
-  (let [dimensions {:width (if mobile? mob-width desk-width)
-                    :height (* start-svg-rect-ratio (if mobile? mob-width desk-width))}
-        show-debug-button? (= :debug (first args))              
-        settings (args->settings args)
+  (let [running (try
+                  (.-running js/window.nautilusExtensionData)
+                  (catch :default e))]
+    (if (or (nil? running) (not js/window.nautilusExtensionData.running))
+      [:div
+       [:strong {:style {:color "red"}} "Extension not installed. To use, please install “Nautilus” from Roam depot."]]
+      (do
+        (reset-now-time-atom now-time-atom)
+        (let [dimensions {:width (if mobile? mob-width desk-width)
+                          :height (* start-svg-rect-ratio (if mobile? mob-width desk-width))}
+              show-debug-button? (= :debug (first args))
+              settings (args->settings args)
         ;; _ (println settings)
-        show-done-state (r/atom true)
-        daily-page-atom? (r/atom (daily-page? block-uid))
-        page-title (page-title block-uid)
-        plan-from-time (if @daily-page-atom? @now-time-atom (:workday-start settings))
-        events-state (r/atom (populate-events block-uid plan-from-time settings))]
-    [:div
-     (if-not (nil? @events-state)
-       [show-events events-state daily-page-atom? show-done-state page-title dimensions settings]
-       (reset! events-state (populate-events block-uid plan-from-time settings)))
-     [:div
-      [switch-done-visibility-button show-done-state]
-      (when show-debug-button? [switch-debug-button])]]))
+              show-done-state (r/atom true)
+              daily-page-atom? (r/atom (daily-page? block-uid))
+              page-title (page-title block-uid)
+              plan-from-time (if @daily-page-atom? @now-time-atom (:workday-start settings))
+              events-state (r/atom (populate-events block-uid plan-from-time settings))]
+          [:div
+           (if-not (nil? @events-state)
+             [show-events events-state daily-page-atom? show-done-state page-title dimensions settings]
+             (reset! events-state (populate-events block-uid plan-from-time settings)))
+           [:div
+            [switch-done-visibility-button show-done-state]
+            (when show-debug-button? [switch-debug-button])]])))))
