@@ -2,7 +2,7 @@ import cljsFile from "./component.cljs";
 import { getTemplateString } from "./index.js";
 
 
-function removeTheBlock(uid){
+async function removeTheBlock(uid){
     roamAlphaAPI.deleteBlock({"block":{"uid": uid}})
 }
 
@@ -159,6 +159,7 @@ export function toggleRenderComponent(state, titleblockUID, version, renderStrin
         }
     }  
     else if(state==false){
+        removeTheBlock(codeBlockUID);
         removeTheBlock(titleblockUID);
     }
 }
