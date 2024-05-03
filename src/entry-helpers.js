@@ -157,9 +157,7 @@ export function toggleRenderComponent(state, titleblockUID, version, renderStrin
                 console.log(`load ${componentName} plugin via update`);
             }
         }
-    }  
-    else if(state==false){
-        removeTheBlock(codeBlockUID);
-        removeTheBlock(titleblockUID);
+    } else if (state = false) {
+        // TODO: since we're not doing anything on state=false maybe call this fn onLoadHelper?
     }
 }
