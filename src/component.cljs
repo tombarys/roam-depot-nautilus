@@ -1,4 +1,4 @@
-(ns nautilus-roam-7-4-2024-v5a
+(ns nautilus-roam-3-5-2024-v5d
   (:require [clojure.string :as str]
             [reagent.core :as r]
             [roam.datascript :as rd]
@@ -930,10 +930,21 @@
                                (arg-tag->str a4)))}))
 
 (defn main [{:keys [:block-uid]} & args]
-  (let [running (try
-                  (.-running js/window.nautilusExtensionData)
-                  (catch :default e))]
-    (if (or (nil? running) (not js/window.nautilusExtensionData.running))
+  (r/with-let [is-running?    #(try
+                                  (.-running js/window.nautilusExtensionData)
+                                 (catch :default _e
+                                   false))
+               *running?      (r/atom (or (is-running?)
+                                          ;; if not running, we set to nil so that "Loading nautilius extension ..." is shown at first
+                                          nil))
+               check-interval (js/setInterval #(reset! *running? (is-running?))
+                                              ;; check if the value has changed every 5 seconds
+                                              5000)]
+    (case @*running?
+      nil
+      [:div
+       [:strong "Loading nautilus extension..."]]
+      false
       [:div
        [:strong {:style {:color "red"}} "Extension not installed. To use, please install “Nautilus” from Roam Depot."]]
       (do
@@ -942,7 +953,7 @@
                           :height (* start-svg-rect-ratio (if mobile? mob-width desk-width))}
               show-debug-button? (= :debug (first args))
               settings (args->settings args)
-        ;; _ (println settings)
+              ;; _ (println settings)
               show-done-state (r/atom true)
               daily-page-atom? (r/atom (daily-page? block-uid))
               page-title (page-title block-uid)
@@ -954,4 +965,6 @@
              (reset! events-state (populate-events block-uid plan-from-time settings)))
            [:div
             [switch-done-visibility-button show-done-state]
-            (when show-debug-button? [switch-debug-button])]])))))
+            (when show-debug-button? [switch-debug-button])]]))) 
+    (finally
+      (js/clearInterval check-interval))))

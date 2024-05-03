@@ -12,12 +12,6 @@ const titleblockUID = `roam-render-${componentName}`;
 
 const defaults = {'prefix-str': '', 'desc-length': 22, 'todo-duration': 15, 'workday-start': 8, 'color-1-trigger': ''};
 
-if (!window.nautilusExtensionData) {  
-  window.nautilusExtensionData = {};
-} 
-
-window.nautilusExtensionData.running = true;
-
 async function generateUpdatedRenderString(renderStringCore, extensionAPI, replacementKey, newValue) {
   const keys = Object.keys(defaults);
   let values = [];
@@ -72,6 +66,8 @@ async function generateTemplateString(extensionAPI) { // returns the whole templ
 }
 
 async function onload({extensionAPI}) {
+  window.nautilusExtensionData = {running: true};
+
   const panelConfig = {
       tabTitle: componentName,
       settings: 
@@ -158,8 +154,8 @@ async function onload({extensionAPI}) {
 
 function onunload() {
   console.log(`unload ${componentName} plugin`)
-  toggleRenderComponent(false, titleblockUID, version, renderStringCore, disabledReplacementString, codeBlockUID, componentName, '')
-  window.nautilusExtensionData.running = false;
+  window.nautilusExtensionData = null;
+  toggleRenderComponent(false, titleblockUID, version, renderStringCore, disabledReplacementString, codeBlockUID, componentName, '');
 }
 
 export default {
