@@ -332,10 +332,15 @@
     (str (if (< h 10) (str "0" h) h) ":" (if (< m 10) (str "0" m) m))))
 
 (defn rm-prog-from-block-if-done [uid]
-  (let [str (str/replace (get-block-str-naked uid) #"\sd\d{1,3}\%" "")]
-    (block/update {:block
-                   {:uid uid
-                    :string str}})))
+  (let [current  (get-block-str-naked uid)
+        stripped (str/replace current #"\sd\d{1,3}\%" "")]
+    ;; Only write when the marker was actually present. Without this guard the
+    ;; block is rewritten to an identical string on every render, churning
+    ;; :edit/time once per minute while a DNP is open.
+    (when (not= current stripped)
+      (block/update {:block
+                     {:uid uid
+                      :string stripped}}))))
 
 (defn update-block-progress [block-uid increment] 
    (let [s (get-block-str-naked block-uid)
